@@ -1,17 +1,13 @@
 import express from "express";
+import {
+  getProducts,
+  getProduct,
+  createProduct,
+  deleteProduct,
+  updateProduct,
+} from "../controllers/productController.js";
 
 const router = express.Router();
-
-// ----------------------------------------
-// Functions to prevent errors until the controllers are created
-let getProducts, getProduct, createProduct, deleteProduct, updateProduct;
-getProducts =
-  getProduct =
-  createProduct =
-  deleteProduct =
-  updateProduct =
-    () => {};
-// ----------------------------------------
 
 // "/" refers to "/products"
 router.get("/", getProducts);
