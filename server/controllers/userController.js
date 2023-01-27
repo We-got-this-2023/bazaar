@@ -1,21 +1,36 @@
-function getUsers(req, res) {
+const getUsers = async (req, res) => {
   res.send("getUsers");
-}
+};
 
-function getUser(req, res) {
-  res.send("getUser");
-}
+const getUser = async (req, res) => {
+  const { id } = req.params;
+  const user = await prisma.user.findUnique({
+    where: { id: Number(id) },
+  });
+  res.json(user);
+};
 
-function createUser(req, res) {
-  res.send("createUser");
-}
+const createUser = async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+      },
+    });
+    res.json(user);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
 
-function deleteUser(req, res) {
+const deleteUser = async (req, res) => {
   res.send("deleteUser");
-}
+};
 
-function updateUser(req, res) {
+const updateUser = async (req, res) => {
   res.send("updateUser");
-}
+};
 
 export { getUsers, getUser, createUser, deleteUser, updateUser };
