@@ -1,3 +1,5 @@
+import prisma from "../server.js";
+
 const getUsers = async (req, res) => {
   res.send("getUsers");
 };
