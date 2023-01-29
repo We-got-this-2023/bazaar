@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-
-const prisma = new PrismaClient();
+import prisma from "../prisma/prisma.js";
 
 const getUsers = async (req: Request, res: Response) => {
   res.send("getUsers");

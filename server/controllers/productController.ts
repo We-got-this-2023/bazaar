@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import prisma from "../prisma/prisma.js";
 
 async function getProducts(req: Request, res: Response) {
   res.send("getProducts");
