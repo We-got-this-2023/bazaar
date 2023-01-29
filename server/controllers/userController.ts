@@ -1,13 +1,13 @@
-import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
-const getUsers = async (req, res) => {
+const getUsers = async (req: Request, res: Response) => {
   res.send("getUsers");
 };
 
-const getUser = async (req, res) => {
+const getUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   const user = await prisma.user.findUnique({
     where: { id: Number(id) },
@@ -27,11 +27,11 @@ const createUser = async (req: Request, res: Response) => {
   res.json(user);
 };
 
-const deleteUser = async (req, res) => {
+const deleteUser = async (req: Request, res: Response) => {
   res.send("deleteUser");
 };
 
-const updateUser = async (req, res) => {
+const updateUser = async (req: Request, res: Response) => {
   res.send("updateUser");
 };
 
