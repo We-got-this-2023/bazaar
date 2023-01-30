@@ -1,7 +1,3 @@
 export default function Home() {
-  return (
-    <div className="navbar">
-      <div className="home">Home</div>
-    </div>
-  );
+  return <h1>Home</h1>;
 }
