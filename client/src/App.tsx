@@ -4,7 +4,7 @@ import Products from "./pages/Products";
 import Home from "./pages/Home";
 import About from "./pages/About";
 
-function App() {
+export default function App() {
   return (
     <div className="bg-white">
       <Routes>
@@ -16,5 +16,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
