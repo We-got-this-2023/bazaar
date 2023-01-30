@@ -1,36 +1,69 @@
 import { Request, Response } from "express";
 import prisma from "../prisma/prisma.js";
 
-const getUsers = async (req: Request, res: Response) => {
-  res.send("getUsers");
+export const getUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await prisma.user.findMany();
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(404).json({ message: "Users not found" });
+  }
 };
 
-const getUser = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const user = await prisma.user.findUnique({
-    where: { id: Number(id) },
-  });
-  res.json(user);
+export const getUser = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const user = await prisma.user.findUnique({
+      where: { id: Number(id) },
+    });
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).json({ message: "User not found" });
+  }
 };
 
-const createUser = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
-  const user = await prisma.user.create({
-    data: {
-      name,
-      email,
-      password,
-    },
-  });
-  res.json(user);
+export const createUser = async (req: Request, res: Response) => {
+  try {
+    const { name, email, password } = req.body;
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password,
+      },
+    });
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).json({ message: "User not found" });
+  }
 };
 
-const deleteUser = async (req: Request, res: Response) => {
-  res.send("deleteUser");
+export const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const user = await prisma.user.delete({
+      where: { id: Number(id) },
+    });
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).json({ message: "User not found" });
+  }
 };
 
-const updateUser = async (req: Request, res: Response) => {
-  res.send("updateUser");
+export const updateUser = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { name, email, password } = req.body;
+    const user = await prisma.user.update({
+      where: { id: Number(id) },
+      data: {
+        name: name,
+        email: email,
+        password: password,
+      },
+    });
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).json({ message: "User not found" });
+  }
 };
-
-export { getUsers, getUser, createUser, deleteUser, updateUser };
