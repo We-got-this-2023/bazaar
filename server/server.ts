@@ -21,5 +21,5 @@ app.use("/users", userRoutes);
 app.use("/products", productRoutes);
 
 app.listen(port, () => {
-  console.log("Server running . . .");
+  console.log(`Server is running on port ${port}`);
 });
