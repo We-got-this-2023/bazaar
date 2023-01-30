@@ -1,7 +1,3 @@
 export default function Products() {
-  return (
-    <div className="navbar">
-      <div className="home">Products</div>
-    </div>
-  );
+  return <h1 className="home">Products</h1>;
 }
