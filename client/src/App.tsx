@@ -8,7 +8,6 @@ import Navbar from "./components/Navbar";
 import Orders from "./pages/Orders";
 import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
-import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
@@ -36,7 +35,6 @@ export default function App() {
           <Route path="/orders" element={<Orders />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="*" element={<NotFound />} />
         </Route>
