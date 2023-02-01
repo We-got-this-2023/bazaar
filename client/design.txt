@@ -1,0 +1,68 @@
+=======================================================
+||     Colors that we are using in this project:     ||
+=======================================================
+
+I took the time to find all of the colors from the
+Figma file in Tailwind's color palette and referenced them
+here. I also added a few new colors that I used in the
+design to the Tailwind config file, as well as the colors
+that I used for the order history page.
+
+----------------
+|   Neutrals   |
+----------------
+
+black: Text, icons, box shadows and logo on light mode.
+white: Any text on dark mode, landing page button, form
+    inputs and order history tags on light mode, some
+    dark mode box shadows.
+neutral-800: Dark mode logo.
+neutral-200: Card background on light mode.
+zinc-900: Card background on dark mode.
+
+
+-------------------------
+|   Buttons and Links   |
+-------------------------
+
+brick-red: For the logo and landing page button.
+faded-blue: Blue confirm buttons.
+emerald-500: Green confirm buttons.
+slate-700: Paypal button.
+indigo-600: Google button.
+sky-400: Links
+
+
+---------------
+|   Pastels   |
+---------------
+
+pastel-green: Pastel green tag on order history.
+pastel-blue: Pastel blue tag on order history.
+pastel-red: Pastel red tag on order history.
+
+
+-------------------
+|   Edge Cases    |
+-------------------
+
+For any other neutral shades, please use Tailwind's
+brightness function to lighten or darken black/white
+as I did in the design.
+
+_______________________________________________________
+
+=======================================================
+||     Fonts that we are using in this project:      ||
+=======================================================
+
+For the logo and cart, I used the font "Goldman".
+
+For the headings and order history page, I
+used the font "Roboto Mono".
+
+For the rest of the text, I used the font "Lato".
+
+I bolded headings, buttons, links, prices, and totals.
+
+________________________________________________________
