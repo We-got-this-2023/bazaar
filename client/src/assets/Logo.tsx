@@ -11,15 +11,15 @@ export default (props: SVGProps<SVGSVGElement>) => {
       />
       <path
         d="M81.1232 27.7839C88.9248 19.4233 86.1716 7.32037 73.8692 0C79.7031 12.108 77.416 15.343 70.54 21.7904C66.2978 25.7682 73.2209 36.2523 81.1232 27.7839Z"
-        className="dark:fill-black-200 fill-black-0"
+        className="fill-black-0 dark:fill-black-200"
       />
       <path
         d="M29.5849 15C28.3822 21.378 21.073 23.8688 15.7085 33.25C10.344 42.6312 19.3251 54.9571 19.3251 54.9571C19.3251 54.9571 15.4496 42.7302 24.1248 37.75C32.8 32.7698 33.5133 21.7114 29.5849 15Z"
-        className="dark:fill-black-200 fill-black-0"
+        className="fill-black-0 dark:fill-black-200"
       />
       <path
         d="M39.8456 74.2534C48.3938 88.506 53.5664 77.0422 48.4825 56.5C66.4412 78.4278 64.55 92.5 52.1366 92.5C39.7232 92.5 36.1441 79.6508 39.8456 74.2534Z"
-        className="dark:fill-black-200 fill-black-0"
+        className="fill-black-0 dark:fill-black-200"
       />
     </svg>
   );
