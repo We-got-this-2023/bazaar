@@ -1,17 +1,16 @@
-import { Routes, Route, Outlet } from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import PrivateRoute from "./components/PrivateRoute";
+import About from "./pages/About";
+import Checkout from "./pages/Checkout";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import NotFound from "./pages/NotFound";
+import Orders from "./pages/Orders";
 import ProductInfo from "./pages/ProductInfo";
 import Products from "./pages/Products";
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Login from "./pages/Login";
-import Navbar from "./components/Navbar";
-import Orders from "./pages/Orders";
 import Profile from "./pages/Profile";
-import PrivateRoute from "./components/PrivateRoute";
-import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
 import Signup from "./pages/Signup";
-import NotFound from "./pages/NotFound";
 
 function LayoutWithNavbar() {
   return (
@@ -36,7 +35,6 @@ export default function App() {
           <Route path="/orders" element={<Orders />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="*" element={<NotFound />} />
         </Route>
