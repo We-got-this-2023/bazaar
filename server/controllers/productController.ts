@@ -22,14 +22,35 @@ export const getProduct = async (req: Request, res: Response) => {
   }
 };
 
+export const getProductDetails = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const productsDetails = await prisma.product.findUnique({
+      where: { id: Number(id) },
+      include: {
+        userRelation: true,
+      },
+    });
+    res.status(200).json(productsDetails);
+  } catch (error) {
+    res.status(404).json({ message: "Product not found" });
+  }
+};
+
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const { name, price, userId } = req.body;
+    const { userId } = req.params;
+    const { title, price } = req.body;
     const product = await prisma.product.create({
       data: {
-        name,
+        title,
         price: Number(price),
-        user: {
+        shippingMethodRelation: {
+          connect: {
+            id: 1,
+          },
+        },
+        userRelation: {
           connect: {
             id: Number(userId),
           },
@@ -57,17 +78,12 @@ export const deleteProduct = async (req: Request, res: Response) => {
 export const updateProduct = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { name, price, userId } = req.body;
+    const { title, price, userId } = req.body;
     const product = await prisma.product.update({
       where: { id: Number(id) },
       data: {
-        name,
+        title,
         price,
-        user: {
-          connect: {
-            id: Number(userId),
-          },
-        },
       },
     });
     res.status(200).json(product);

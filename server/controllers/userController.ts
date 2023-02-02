@@ -67,3 +67,16 @@ export const updateUser = async (req: Request, res: Response) => {
     res.status(404).json({ message: "User not found" });
   }
 };
+
+export const getUserAdress = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const user = await prisma.user.findUnique({
+      where: { id: Number(id) },
+      include: { UserAdress: true },
+    });
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).json({ message: "User not found" });
+  }
+};
