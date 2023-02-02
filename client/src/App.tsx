@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
 import About from "./pages/About";
 import Checkout from "./pages/Checkout";
-import Home from "./pages/Home";
+import Home from "./pages/LandingPage";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Orders from "./pages/Orders";
