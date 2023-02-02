@@ -19,3 +19,16 @@ span,
 button {
   font-family: "Lato", arial, sans-serif;
 }
+
+/* ***** Home ***** */
+
+/* ***** Nav ***** */
+
+.nav_logo {
+  height: 2rem;
+}
+
+.nav_logoSection {
+  display: flex;
+  align-items: center;
+}
