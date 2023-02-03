@@ -20,15 +20,81 @@ button {
   font-family: "Lato", arial, sans-serif;
 }
 
+/* ***** General ***** */
+* {
+  font-family: goldman, sans-serif;
+  background-color: #d9d9d9;
+}
+
 /* ***** Home ***** */
+
+.home_main {
+  display: grid;
+  height: 100vh;
+
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    "btn"
+    "images";
+}
+
+.home_btnContainer {
+  grid-area: btn;
+}
+
+.home_itemScroll {
+  grid-area: images;
+}
+
+.home_btn {
+  background-color: #601212;
+  color: white;
+  border-radius: 10px;
+
+  font-size: 2.2rem;
+  letter-spacing: 3px;
+  font-weight: 600;
+
+  padding: 0.6rem 2.5rem;
+}
 
 /* ***** Nav ***** */
 
+.nav_section {
+  display: flex;
+  align-items: center;
+}
+
 .nav_logo {
-  height: 2rem;
+  height: 3rem;
 }
 
 .nav_logoSection {
   display: flex;
   align-items: center;
+}
+
+.nav_logoSection p {
+  font-size: 2.5rem;
+  font-family: goldman;
+}
+
+.nav_search {
+  background-color: white;
+  border-radius: 6px;
+  height: 30px;
+  width: 300px;
+}
+
+.nav_search::placeholder {
+  font-family: sans-serif;
+  padding-left: 1rem;
+  color: rgba(52, 49, 49, 0.698);
+}
+
+.nav_search_container {
+  position: relative;
+  display: flex;
+  padding-left: 3.5rem;
 }

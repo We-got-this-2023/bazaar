@@ -3,11 +3,11 @@ import Logo from "../assets/Logo";
 
 const Home = () => {
   return (
-    <main>
-      <section className="home_content">
-        <button>Home</button>
-        <div className="home_itemScroll"></div>
-      </section>
+    <main className="home_main">
+      <div className="home_btnContainer">
+        <button className="home_btn">Get Started</button>
+      </div>
+      <div className="home_itemScroll">hey</div>
     </main>
   );
 };
