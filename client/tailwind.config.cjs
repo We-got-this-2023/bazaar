@@ -14,6 +14,11 @@ module.exports = {
         black: "#121212",
         white: "#EFEFEF",
       },
+      fontFamily: {
+        display: ["Roboto Mono", "monospace"],
+        body: ["Lato", "sans-serif"],
+        logo: "Goldman",
+      },
     },
   },
   darkMode: "class",
