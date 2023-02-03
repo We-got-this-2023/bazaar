@@ -22,8 +22,6 @@ model User {
  email     String   @unique
  photoURL  String?
  password  String
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
  products  Product[]
  productsReview ProductReview[]
  userResponse UserResponse[]
@@ -31,151 +29,149 @@ model User {
  userAdress UserAddress[]
  userPaymentMethod UserPaymentMethod[]
  userOrder UserOrder[]
-
-
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
 }
 
 
 model Product {
- id        Int      @default(autoincrement()) @id
- userId Int
+ id               Int      @default(autoincrement()) @id
+ userId           Int
  shippingMethodId Int
- imagesPath String[]
- title      String
- price     Int
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
- userRelation      User     @relation(fields: [userId], references: [id])
+ imagesPath       String[]
+ title            String
+ price            Int
+ userRelation     User     @relation(fields: [userId], references: [id])
  shippingMethodRelation ShippingMethod @relation(fields: [shippingMethodId], references: [id])
- productReview ProductReview[]
+ productReview    ProductReview[]
  shoppingCartProduct ShoppingCartProduct[]
- userOrder UserOrder[]
+ userOrder        UserOrder[]
+ createdAt        DateTime @default(now())
+ updatedAt        DateTime @updatedAt
 }
 
 
 model ProductReview {
- id Int @default(autoincrement()) @id
- userId Int
- productId Int
- userRating Float
- userComment String
+ id            Int @default(autoincrement()) @id
+ userId        Int
+ productId     Int
+ userRating    Float
+ userComment   String
  commentAmount Int
- commentLikes Int
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
+ commentLikes  Int
  userRelation User @relation(fields: [userId], references: [id])
  productRelation Product @relation(fields: [productId], references: [id])
  userResponse UserResponse[]
+ createdAt     DateTime @default(now())
+ updatedAt     DateTime @updatedAt
 }
 
 
 model UserResponse {
- id Int @default(autoincrement()) @id
+ id              Int @default(autoincrement()) @id
  productReviewId Int
- userId Int
- comments String
- responseLikes Int
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
+ userId          Int
+ comments        String
+ responseLikes   Int
  productReviewRelation ProductReview @relation(fields: [productReviewId], references: [id])
- userRelation User @relation(fields: [userId], references: [id])
+ userRelation    User @relation(fields: [userId], references: [id])
+ createdAt       DateTime @default(now())
+ updatedAt       DateTime @updatedAt
 }
 
 
-
-
 model ShoppingCartProduct {
- id Int   @default(autoincrement()) @id
- productId Int
- quantity Int
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
+ id          Int   @default(autoincrement()) @id
+ productId   Int
+ quantity    Int
  productIdRelation Product @relation(fields: [productId], references: [id])
  shoppingCart ShoppingCart[]
+ createdAt   DateTime @default(now())
+ updatedAt   DateTime @updatedAt 
 }
 
 
 model ShoppingCart {
- id        Int      @default(autoincrement()) @id
+ id            Int      @default(autoincrement()) @id
  cartProductId Int
- userId Int
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
+ userId        Int
  cartProductRelation ShoppingCartProduct @relation(fields: [cartProductId], references: [id])
  userRelation User @relation(fields: [userId], references: [id])
+ createdAt     DateTime @default(now())
+ updatedAt     DateTime @updatedAt
 }
 
 
 model ShippingMethod {
  id        Int      @default(autoincrement()) @id
- shipper String
- price Float
+ shipper   String
+ price     Float
+ userOrder UserOrder[]
+ Product   Product[]
  createdAt DateTime @default(now())
  updatedAt DateTime @updatedAt
- userOrder UserOrder[]
- Product Product[]
 }
 
 
 model Address {
- id        Int      @default(autoincrement()) @id
- unitNumber Int
- streetName String
+ id           Int      @default(autoincrement()) @id
+ unitNumber   Int
+ streetName   String
  addressLine1 String
  addressLine2 String
- city String
- region String
- postalCode Int
- country String
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
- userAdress UserAddress[]
- userOrder UserOrder[]
+ city         String
+ region       String
+ postalCode   Int
+ country      String
+ userAdress   UserAddress[]
+ userOrder    UserOrder[]
+ createdAt    DateTime @default(now())
+ updatedAt    DateTime @updatedAt
 }
 
 
 model UserAddress {
- id        Int      @default(autoincrement()) @id
- userId Int
- addressId Int
- isDefault Boolean
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
+ id            Int      @default(autoincrement()) @id
+ userId        Int
+ addressId     Int
+ isDefault     Boolean
  addressRelation Address @relation(fields: [addressId], references: [id])
- userRelation User @relation(fields: [userId], references: [id])
+ userRelation    User @relation(fields: [userId], references: [id])
+ createdAt      DateTime @default(now())
+ updatedAt      DateTime @updatedAt
 }
 
 
 model UserPaymentMethod {
- id        Int      @default(autoincrement()) @id
- userId Int
+ id            Int      @default(autoincrement()) @id
+ userId        Int
  paymentMethod String
- provider String
+ provider      String
  accountNumber Int
- expiryDate Int
- isDefault Boolean
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
- userRelation User @relation(fields: [userId], references: [id])
- userOrder UserOrder[]
+ expiryDate    Int
+ isDefault     Boolean
+ userRelation  User @relation(fields: [userId], references: [id])
+ userOrder     UserOrder[]
+ createdAt     DateTime @default(now())
+ updatedAt     DateTime @updatedAt
 }
 
 
 model UserOrder {
- id        Int      @default(autoincrement()) @id
- userId Int
- paymentMethodId Int
+ id                Int      @default(autoincrement()) @id
+ userId            Int
+ paymentMethodId   Int
  shippingAddressId Int
- shippingMethodId Int
- productId Int
- orderDate DateTime
- orderAmount Int
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
- userRelation User @relation(fields: [userId], references: [id])
- paymentRelation UserPaymentMethod @relation(fields: [paymentMethodId], references: [id])
- productRelation Product @relation(fields: [productId], references: [id])
+ shippingMethodId  Int
+ productId         Int
+ orderDate         DateTime
+ orderAmount       Int
+ userRelation      User @relation(fields: [userId], references: [id])
+ paymentRelation   UserPaymentMethod @relation(fields: [paymentMethodId], references: [id])
+ productRelation   Product @relation(fields: [productId], references: [id])
  shippingAddressRelation Address @relation(fields: [shippingAddressId], references: [id])
  shippingMethodRelation ShippingMethod @relation(fields: [shippingMethodId], references: [id])
+ createdAt         DateTime @default(now())
+ updatedAt         DateTime @updatedAt
 }
 
