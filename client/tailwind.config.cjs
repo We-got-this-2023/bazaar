@@ -13,6 +13,7 @@ module.exports = {
         },
         black: "#121212",
         white: "#EFEFEF",
+        "white-bright": "#FFF",
       },
       fontFamily: {
         display: ["Roboto Mono", "monospace"],
