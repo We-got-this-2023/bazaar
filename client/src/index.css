@@ -19,3 +19,15 @@ html {
 #logo {
   @apply font-logo;
 }
+
+/* ***** General ***** */
+* {
+  font-family: goldman, sans-serif;
+  background-color: #d9d9d9;
+}
+
+/* ***** Nav ***** */
+
+.nav_name {
+  font-family: goldman;
+}

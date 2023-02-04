@@ -4,9 +4,9 @@ export default function LandingPage() {
   const images = ["/electronics.jpg", "/glassware.jpg", "/clothing.jpg"];
 
   return (
-    <>
-      <h1>Landing Page</h1>
-      <Carousel images={images} />;
-    </>
+    <main>
+      <button>Get Started</button>
+      {/* <Carousel images={images} /> */}
+    </main>
   );
 }
