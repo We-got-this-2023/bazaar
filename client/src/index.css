@@ -9,15 +9,15 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Roboto Mono", display, serif;
+  @apply font-display;
 }
 
-p,
-a,
-li,
-span,
-button {
-  font-family: "Lato", arial, sans-serif;
+html {
+  @apply bg-white font-body text-black dark:bg-black dark:text-white;
+}
+
+#logo {
+  @apply font-logo;
 }
 
 /* ***** General ***** */

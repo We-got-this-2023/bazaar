@@ -57,7 +57,7 @@ export default function Carousel({
               src={img}
               alt={`Image of ${name}`}
             />
-            <div className="absolute bottom-0 flex w-full justify-center bg-black bg-opacity-20 p-4">
+            <div className="absolute bottom-0 flex w-full justify-center bg-black bg-opacity-30 p-4">
               <h2 className="relative text-xl font-bold capitalize text-white [text-shadow:_0_0_10px_#000000b0]">
                 {name}
               </h2>
