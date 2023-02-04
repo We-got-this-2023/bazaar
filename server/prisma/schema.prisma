@@ -2,6 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 
+
 // When you want to run: $npx prisma migrate dev
 
 
