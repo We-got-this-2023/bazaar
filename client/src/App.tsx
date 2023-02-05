@@ -23,7 +23,7 @@ function LayoutWithNavbar() {
 
 export default function App() {
   return (
-    <div className="bg-white">
+    <>
       <Routes>
         <Route path="/" element={<LayoutWithNavbar />}>
           <Route index element={<Home />} />
@@ -43,6 +43,6 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>
-    </div>
+    </>
   );
 }

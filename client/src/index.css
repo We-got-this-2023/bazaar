@@ -16,11 +16,19 @@ html {
   @apply bg-white font-body text-black dark:bg-black dark:text-white;
 }
 
-#logo {
-  @apply font-logo;
-}
+/*
+---------------------------------------------------------------------------------------------
+These are already defined with tailwind above, so you don't need to do this
+Just put the the font-<body | display | logo> class on the element you want to style different
+than standard.
 
-/* ***** General ***** */
+Headings are already defined as Roboto Mono with the font-display class
+The rest of the fonts are already defined as Lato with the font-body class
+For the logo, use the font-logo class
+--------------------------------------------------------------------------------------------
+*/
+
+/* ***** General *****
 * {
   font-family: goldman, sans-serif;
   background-color: #d9d9d9;
@@ -28,6 +36,6 @@ html {
 
 /* ***** Nav ***** */
 
-.nav_name {
+/* .nav_name {
   font-family: goldman;
-}
+} */
