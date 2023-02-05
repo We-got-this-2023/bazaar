@@ -5,7 +5,7 @@ export default function LandingPage() {
 
   return (
     <main>
-      <button>Get Started</button>
+      <button className="font-logo">Get Started</button>
       {/* <Carousel images={images} /> */}
     </main>
   );
