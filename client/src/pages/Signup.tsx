@@ -82,12 +82,8 @@ export default function Signup() {
             placeholder="Confirm Password"
             {...register("confirmPassword", {
               required: "Please confirm your password.",
-              validate: {
-                matchesPreviousPassword: (value) => {
-                  const { password } = getValues();
-                  return password === value || "Passwords don't match!";
-                },
-              },
+              validate: (value) =>
+                value === getValues().password || "Passwords do not match.",
             })}
           />
         </InputWithError>
