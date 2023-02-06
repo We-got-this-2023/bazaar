@@ -23,14 +23,12 @@ function LayoutWithNavbar() {
 
 export default function App() {
   return (
-    <div className="bg-white">
+    <>
       <Routes>
         <Route path="/" element={<LayoutWithNavbar />}>
           <Route index element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/products" element={<Products />} />
-
-          {/* Products tags query? */}
           <Route path="/products/:id" element={<ProductInfo />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/profile/:id" element={<Profile />} />
@@ -43,6 +41,6 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>
-    </div>
+    </>
   );
 }
