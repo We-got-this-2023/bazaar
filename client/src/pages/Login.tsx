@@ -1,7 +1,7 @@
 import { ErrorMessage } from "@hookform/error-message";
 import { useForm } from "react-hook-form";
 import { Navigate } from "react-router-dom";
-import InputWithError from "../components/InputWithError";
+import FancyInput from "../components/FancyInput";
 import { useAuth } from "../context/AuthContext";
 
 type FormData = {
@@ -19,30 +19,31 @@ export default function Login() {
     formState: { errors, isLoading },
   } = useForm<FormData>();
 
+  <input type="text" />;
   return (
     <div>
       <h1>Login</h1>
       <form onSubmit={handleSubmit((data) => console.log(data))}>
-        <InputWithError errors={errors} name="password">
-          <input
-            type="text"
-            placeholder="Email"
-            {...register("email", {
-              required: "Please enter an email address.",
-              pattern: {
-                value: /^\S+@\S+\.\S+$/i,
-                message: "Please enter a valid email address.",
-              },
-            })}
-          />
-        </InputWithError>
-        <InputWithError errors={errors} name="password">
-          <input
-            type="password"
-            placeholder="Password"
-            {...register("password", { required: "Please enter a password." })}
-          />
-        </InputWithError>
+        <FancyInput
+          errors={errors}
+          type="text"
+          placeholder="Email"
+          {...register("email", {
+            required: "Please enter an email address.",
+            pattern: {
+              value: /^\S+@\S+\.\S+$/i,
+              message: "Please enter a valid email address.",
+            },
+          })}
+        />
+
+        <FancyInput
+          errors={errors}
+          type="password"
+          placeholder="Password"
+          {...register("password", { required: "Please enter a password." })}
+        />
+
         <button type="submit">Login</button>
       </form>
     </div>
