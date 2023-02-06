@@ -39,15 +39,15 @@ export const getProductDetails = async (req: Request, res: Response) => {
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
-    const { title, price } = req.body;
+    // const { userId } = req.params;
+    const { title, price, userId, shippingMethodId } = req.body;
     const product = await prisma.product.create({
       data: {
         title,
         price: Number(price),
         shippingMethodRelation: {
           connect: {
-            id: 1,
+            id: Number(shippingMethodId),
           },
         },
         userRelation: {
@@ -59,7 +59,7 @@ export const createProduct = async (req: Request, res: Response) => {
     });
     res.status(200).json(product);
   } catch (error) {
-    res.status(404).json({ message: "Product not found" });
+    res.status(404).json({ message: "Couldnt create product" });
   }
 };
 
