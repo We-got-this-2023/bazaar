@@ -2,7 +2,10 @@ import { Link } from "react-router-dom";
 import CartIcon from "../assets/CartIcon";
 import DefaultImage from "../assets/DefaultImage";
 import Logo from "../assets/Logo";
+import MagGlass from "../assets/MagGlass.svg";
+import NewCart from "../assets/NewCart";
 import SearchIcon from "../assets/SearchIcon";
+import UserIcon from "../assets/UserIcon";
 
 export default function Navbar() {
   /*
@@ -17,12 +20,15 @@ export default function Navbar() {
     <nav className="relative flex items-center">
       <div className="nav_logoContainer flex items-center">
         <Logo className="h-14" />
-        <p className="nav_name font-logo text-4xl">Bazaar</p>
+        <p className="nav_name text-4xl">Bazaar</p>
       </div>
       <div className="relative ml-10 flex items-center">
-        <SearchIcon className="absolute left-1 h-6 bg-transparent" />
+        <img
+          src={MagGlass}
+          className="nav_magGlass absolute left-1 h-6 bg-transparent"
+        />
         <input
-          className="nav_searchBar bg-white-bright rounded-md py-1 pl-8 pr-48 font-sans dark:bg-neutral-800"
+          className="nav_searchBar rounded-md bg-white-bright py-1 pl-8 pr-48 font-sans"
           type="text"
           placeholder="Search for something..."
         />

@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
 import About from "./pages/About";
 import Checkout from "./pages/Checkout";
-import Home from "./pages/LandingPage";
+import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Orders from "./pages/Orders";
@@ -26,7 +26,7 @@ export default function App() {
     <>
       <Routes>
         <Route path="/" element={<LayoutWithNavbar />}>
-          <Route index element={<Home />} />
+          <Route index element={<LandingPage />} />
           <Route path="/about" element={<About />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductInfo />} />
