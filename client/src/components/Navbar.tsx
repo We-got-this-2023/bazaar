@@ -19,14 +19,13 @@ export default function Navbar() {
   return (
     <nav className="relative flex items-center">
       <div className="nav_logoContainer flex items-center">
-        <Logo className="h-14" />
-        <p className="nav_name text-4xl">Bazaar</p>
+        <Link to="/posts" className="flex items-center justify-center">
+          <Logo className="h-14" />
+          <p className="nav_name font-logo text-4xl">Bazaar</p>
+        </Link>
       </div>
       <div className="relative ml-10 flex items-center">
-        <img
-          src={MagGlass}
-          className="nav_magGlass absolute left-1 h-6 bg-transparent"
-        />
+        <SearchIcon className="absolute left-3 h-6" />
         <input
           className="nav_searchBar rounded-md bg-white-bright py-1 pl-8 pr-48 font-sans"
           type="text"
