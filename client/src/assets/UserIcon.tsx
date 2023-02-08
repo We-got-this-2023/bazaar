@@ -8,8 +8,8 @@ export default (props: SVGProps<SVGSVGElement>) => {
         className="fill-black dark:fill-white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M34 54C22.402 54 13 63.402 13 75V91.4516C13 94.213 15.2386 96.4516 18 96.4516H82C84.7614 96.4516 87 94.213 87 91.4516V75C87 63.402 77.598 54 66 54H34ZM34.9677 59.3066C26.1312 59.3066 18.9677 66.4701 18.9677 75.3066V88.1453C18.9677 89.8022 20.3109 91.1453 21.9677 91.1453H78.0323C79.6891 91.1453 81.0323 89.8022 81.0323 88.1453V75.3066C81.0323 66.4701 73.8688 59.3066 65.0323 59.3066H34.9677Z"
         className="fill-black dark:fill-white"
       />
