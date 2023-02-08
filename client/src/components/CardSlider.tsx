@@ -45,10 +45,10 @@ export default function CardSlider() {
       modules={[A11y, Autoplay, Pagination, Keyboard, Navigation]}
       className="p-10"
     >
-      {images.map((item) => {
+      {images.map((item, index) => {
         return (
           <SwiperSlide
-            key={item.name}
+            key={item.name + index}
             className="aspect-[4/3] overflow-hidden rounded-[3em]"
           >
             <img

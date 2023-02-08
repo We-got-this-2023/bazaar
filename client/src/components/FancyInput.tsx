@@ -1,18 +1,26 @@
 import { ErrorMessage } from "@hookform/error-message";
 import { InputHTMLAttributes, useRef, useState } from "react";
-import { FieldErrors } from "react-hook-form";
+import { FieldErrors, RegisterOptions, UseFormRegister } from "react-hook-form";
 
 interface FancyInputProps extends InputHTMLAttributes<HTMLInputElement> {
   errors?: FieldErrors;
+  register?: UseFormRegister<any>;
+  name?: string;
+  registerOptions?: RegisterOptions;
 }
 
-export default function FancyInput({ errors, ...props }: FancyInputProps) {
+export default function FancyInput({
+  errors,
+  register,
+  name,
+  registerOptions,
+  ...rest
+}: FancyInputProps) {
+  if (register && (!name || registerOptions))
+    throw new Error("FancyInput.tsx:17: Name is required when using register.");
+
   let error: JSX.Element =
-    props.name && errors ? (
-      <ErrorMessage errors={errors} name={props.name} />
-    ) : (
-      <></>
-    );
+    name && errors ? <ErrorMessage errors={errors} name={name} /> : <></>;
 
   const [labelSmall, setLabelSmall] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -26,23 +34,27 @@ export default function FancyInput({ errors, ...props }: FancyInputProps) {
     <div className="mb-2 flex flex-col">
       <div className="relative flex flex-col gap-2">
         <input
-          {...props}
+          {...rest}
           ref={inputRef}
           onFocus={() => handleFocus(true)}
           onBlur={() => handleFocus(false)}
           className="rounded-md border border-gray-300 px-4 pt-4 pb-1"
           placeholder=""
-          aria-placeholder={props.placeholder || ""}
+          {...(register &&
+            registerOptions &&
+            name &&
+            register(name, registerOptions))}
+          aria-placeholder={rest.placeholder || ""}
         />
         <label
-          className={`absolute select-none opacity-60 transition-all duration-300 ease-out ${
+          className={`absolute select-none capitalize opacity-60 transition-all duration-300 ease-out ${
             labelSmall
-              ? "top-0 pl-2 text-xs"
+              ? "top-0 pl-2 text-xs opacity-100"
               : "top-1/2 -translate-y-1/2 pl-3 text-base"
           }`}
-          htmlFor={props.placeholder}
+          htmlFor={rest.placeholder || name}
         >
-          {props.placeholder}
+          {rest.placeholder || name}
         </label>
       </div>
       {errors && error.props.errors[error.props.name] && (

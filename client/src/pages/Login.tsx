@@ -10,7 +10,7 @@ type FormData = {
 };
 
 export default function Login() {
-  const { userLoggedIn } = useAuth();
+  const { userLoggedIn, login } = useAuth();
   if (userLoggedIn) return <Navigate to="/" />;
 
   const {
@@ -19,11 +19,19 @@ export default function Login() {
     formState: { errors, isLoading },
   } = useForm<FormData>();
 
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    handleSubmit((data) => {
+      const { email, password } = data;
+      login({ email, password });
+    });
+  }
+
   <input type="text" />;
   return (
     <div>
       <h1>Login</h1>
-      <form onSubmit={handleSubmit((data) => console.log(data))}>
+      <form onSubmit={onSubmit}>
         <FancyInput
           errors={errors}
           type="text"
