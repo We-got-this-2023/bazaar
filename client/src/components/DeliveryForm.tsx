@@ -23,8 +23,6 @@ export default function DeliveryForm() {
   const { userLoggedIn } = useAuth();
   if (userLoggedIn) return <Navigate to="/" />;
 
-  const { getValues } = useFormContext();
-
   const onSubmit = async (data: FormData) => {
     console.log(data);
     // TODO: Send data to server
@@ -111,8 +109,9 @@ export default function DeliveryForm() {
         placeholder="Confirm Email"
         options={{
           required: "Please confirm your email address.",
-          validate: (value) =>
-            value === getValues("email") || "Email addresses do not match.",
+          validate: (confirmEmail) =>
+            confirmEmail === useFormContext().getValues().email ||
+            "Email addresses do not match.",
         }}
       />
 

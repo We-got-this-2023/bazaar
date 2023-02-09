@@ -1,3 +1,4 @@
+import { useFormContext } from "react-hook-form";
 import { Navigate } from "react-router-dom";
 import { Form } from "../components/Form";
 import Input from "../components/Input";
@@ -25,12 +26,31 @@ export default function Login() {
         <Input
           name="email"
           type="text"
-          options={{ required: "Please enter your email." }}
+          options={{
+            required: "Please enter your email.",
+            pattern: {
+              value: /^\S+@\S+$/i,
+              message: "Please enter a valid email.",
+            },
+          }}
         />
         <Input
           name="password"
           type="password"
-          options={{ required: "Please enter your password." }}
+          options={{
+            required: "Please enter a password.",
+            validate() {
+              const { password } = useFormContext().getValues();
+              if (
+                password.match(/[a-z]/) &&
+                password.match(/[A-Z]/) &&
+                password.match(/[0-9]/) &&
+                password.match(/[~`!@#$%^&*()\-_+=[\]{};':"\\|,.<>/?]/)
+              )
+                return true;
+              return "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.";
+            },
+          }}
         />
         <button type="submit">Login</button>
       </Form>

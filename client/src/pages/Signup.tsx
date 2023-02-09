@@ -57,8 +57,7 @@ export default function Signup() {
           options={{
             required: "Please enter a password.",
             validate() {
-              const { getValues } = useFormContext();
-              const { password } = getValues();
+              const { password } = useFormContext().getValues();
               if (
                 password.match(/[a-z]/) &&
                 password.match(/[A-Z]/) &&
@@ -76,9 +75,9 @@ export default function Signup() {
           placeholder="Confirm Password"
           options={{
             required: "Please confirm your password.",
-            validate(value) {
-              const { getValues } = useFormContext();
-              if (value === getValues().password) return true;
+            validate(confirmPassword) {
+              const { password } = useFormContext().getValues();
+              if (confirmPassword === password) return true;
               return "Passwords do not match.";
             },
           }}
