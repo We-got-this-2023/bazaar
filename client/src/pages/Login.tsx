@@ -39,8 +39,7 @@ export default function Login() {
           type="password"
           options={{
             required: "Please enter a password.",
-            validate() {
-              const { password } = useFormContext().getValues();
+            validate(password) {
               if (
                 password.match(/[a-z]/) &&
                 password.match(/[A-Z]/) &&

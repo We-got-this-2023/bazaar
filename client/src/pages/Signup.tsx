@@ -1,4 +1,3 @@
-import { useFormContext } from "react-hook-form";
 import { Navigate } from "react-router-dom";
 import { Form } from "../components/Form";
 import Input from "../components/Input";
@@ -56,8 +55,7 @@ export default function Signup() {
           type="text"
           options={{
             required: "Please enter a password.",
-            validate() {
-              const { password } = useFormContext().getValues();
+            validate(password) {
               if (
                 password.match(/[a-z]/) &&
                 password.match(/[A-Z]/) &&
@@ -75,8 +73,7 @@ export default function Signup() {
           placeholder="Confirm Password"
           options={{
             required: "Please confirm your password.",
-            validate(confirmPassword) {
-              const { password } = useFormContext().getValues();
+            validate(confirmPassword, { password }) {
               if (confirmPassword === password) return true;
               return "Passwords do not match.";
             },
