@@ -1,21 +1,30 @@
 import { ErrorMessage } from "@hookform/error-message";
 import { InputHTMLAttributes, useRef, useState } from "react";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import {
+  FieldErrors,
+  RegisterOptions,
+  useFormContext,
+  UseFormRegister,
+} from "react-hook-form";
 
 interface FancyInputProps extends InputHTMLAttributes<HTMLInputElement> {
   errors?: FieldErrors;
   name?: string;
-  register?: UseFormRegister<any>;
+  register?: UseFormRegister<any> | Function;
+  options?: RegisterOptions;
 }
 
 export default function Input({
-  errors,
   name,
   register,
+  options,
   ...rest
 }: FancyInputProps) {
-  let error: JSX.Element =
-    name && errors ? <ErrorMessage errors={errors} name={name} /> : <></>;
+  if (!register || !name) register = () => {};
+  else register = register(name, options || {});
+
+  const { formState } = useFormContext();
+  const { errors } = formState;
 
   const [labelSmall, setLabelSmall] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -27,14 +36,14 @@ export default function Input({
     <div className="mb-2 flex flex-col">
       <div className="relative flex flex-col gap-2">
         <input
+          {...rest}
           ref={inputRef}
           onFocus={() => handleFocus(true)}
           onBlur={() => handleFocus(false)}
           className="rounded-md border border-gray-300 px-4 pt-4 pb-1"
           placeholder=""
           aria-placeholder={rest.placeholder || ""}
-          {...(register && name ? register(name) : "")}
-          {...rest}
+          {...register}
         />
         <label
           className={`absolute select-none capitalize opacity-60 transition-all duration-300 ease-out ${
@@ -47,8 +56,10 @@ export default function Input({
           {rest.placeholder || name}
         </label>
       </div>
-      {errors && error?.props?.errors[error.props.name] && (
-        <div className="flex items-center text-sm text-red-500">{error}</div>
+      {name && errors[name] && (
+        <div className="text-xs text-red-500">
+          <ErrorMessage errors={errors} name={name} />
+        </div>
       )}
     </div>
   );

@@ -1,7 +1,3 @@
-import { ErrorMessage } from "@hookform/error-message";
-import { createElement } from "react";
-import { render } from "react-dom";
-import { useForm } from "react-hook-form";
 import { Navigate } from "react-router-dom";
 import { Form } from "../components/Form";
 import Input from "../components/Input";
@@ -22,13 +18,20 @@ export default function Login() {
     console.log("logged in");
   };
 
-  <input type="text" />;
   return (
     <div>
       <h1>Login</h1>
       <Form onSubmit={onSubmit}>
-        <Input name="email" type="text" />
-        <Input name="password" type="password" />
+        <Input
+          name="email"
+          type="text"
+          options={{ required: "Please enter your email." }}
+        />
+        <Input
+          name="password"
+          type="password"
+          options={{ required: "Please enter your password." }}
+        />
         <button type="submit">Login</button>
       </Form>
     </div>

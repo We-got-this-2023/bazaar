@@ -1,7 +1,8 @@
 import { ErrorMessage } from "@hookform/error-message";
-import { useForm } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
 import { Navigate } from "react-router-dom";
-import InputWithError from "../components/Input";
+import { Form } from "../components/Form";
+import Input from "../components/Input";
 import { useAuth } from "../context/AuthContext";
 
 type FormData = {
@@ -12,38 +13,34 @@ type FormData = {
 };
 
 export default function Signup() {
-  const { userLoggedIn } = useAuth();
+  const { userLoggedIn, signup } = useAuth();
   if (userLoggedIn) return <Navigate to="/" />;
 
-  const {
-    register,
-    handleSubmit,
-    getValues,
-    formState: { errors, isLoading },
-  } = useForm<FormData>();
+  const onSubmit = async (data: FormData) => {
+    console.log(data);
+    await signup(data);
+    console.log("signed up");
+  };
 
   return (
     <div>
       <h1>Login</h1>
-      <form onSubmit={handleSubmit((data) => console.log(data))}>
-        <InputWithError
-          errors={errors}
+      <Form onSubmit={onSubmit}>
+        <Input
+          name="email"
           type="text"
-          placeholder="Email"
-          register={register("email", {
+          options={{
             required: "Please enter an email address.",
             pattern: {
               value: /^\S+@\S+\.\S+$/i,
               message: "Please enter a valid email address.",
             },
-          })}
+          }}
         />
-
-        <InputWithError
-          errors={errors}
+        <Input
+          name="username"
           type="text"
-          placeholder="Username"
-          {...register("username", {
+          options={{
             required: "Please enter a username.",
             minLength: {
               value: 3,
@@ -53,16 +50,15 @@ export default function Signup() {
               value: 20,
               message: "Username must be at most 20 characters long.",
             },
-          })}
+          }}
         />
-
-        <InputWithError
-          errors={errors}
-          type="password"
-          placeholder="Password"
-          {...register("password", {
+        <Input
+          name="password"
+          type="text"
+          options={{
             required: "Please enter a password.",
             validate() {
+              const { getValues } = useFormContext();
               const { password } = getValues();
               if (
                 password.match(/[a-z]/) &&
@@ -73,22 +69,24 @@ export default function Signup() {
                 return true;
               return "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.";
             },
-          })}
+          }}
         />
-
-        <InputWithError
-          errors={errors}
+        <Input
+          name="confirmPassword"
           type="password"
           placeholder="Confirm Password"
-          {...register("confirmPassword", {
+          options={{
             required: "Please confirm your password.",
-            validate: (value) =>
-              value === getValues().password || "Passwords do not match.",
-          })}
+            validate(value) {
+              const { getValues } = useFormContext();
+              if (value === getValues().password) return true;
+              return "Passwords do not match.";
+            },
+          }}
         />
 
         <button type="submit">Sign up</button>
-      </form>
+      </Form>
     </div>
   );
 }

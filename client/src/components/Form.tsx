@@ -1,29 +1,30 @@
-import React, { cloneElement, createElement } from "react";
-import { useForm } from "react-hook-form";
+import React, { createElement } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 
 interface FormProps {
   defaultValues?: any;
   children: React.ReactElement[];
-  onSubmit: (data: { email: string; password: string }) => Promise<void>;
+  onSubmit: (data: any) => Promise<void>;
 }
 
 export function Form({ defaultValues, children, onSubmit }: FormProps) {
   if (!children) return <></>;
-  const { handleSubmit, register } = useForm({ defaultValues });
+  const methods = useForm({ defaultValues });
+  const { handleSubmit, register } = methods;
 
-  const newChildren = React.Children.map(children, (child: JSX.Element) => {
-    if (child?.type?.name === "Input") {
-      return createElement(child.type, {
-        ...{
-          ...child.props,
-          register,
-          key: child.props.name,
-        },
-      });
-    }
-    return child;
-  });
-  console.log(newChildren);
-
-  return <form onSubmit={handleSubmit(onSubmit)}>{newChildren}</form>;
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <FormProvider {...methods}>
+        {React.Children.map(children, (child: JSX.Element) => {
+          if (child?.type?.name === "Input")
+            return createElement(child.type, {
+              register,
+              key: child.props.name,
+              ...child.props,
+            });
+          return child;
+        })}
+      </FormProvider>
+    </form>
+  );
 }
