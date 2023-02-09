@@ -2,7 +2,7 @@ import { ErrorMessage } from "@hookform/error-message";
 import { useForm } from "react-hook-form";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import InputWithError from "./FancyInput";
+import InputWithError from "./Input";
 
 type FormData = {
   country: string;

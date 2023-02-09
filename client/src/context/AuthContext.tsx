@@ -12,7 +12,7 @@ const AuthContext = createContext({}) as AuthContextI;
 
 export function AuthProvider({ children }: { children: JSX.Element }) {
   const login = async (values: { email: string; password: string }) => {
-    const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
+    const loggedInResponse = await fetch("http://localhost:3000/auth/login/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
@@ -22,6 +22,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
 
   const value = {
     userLoggedIn: false,
+    login,
     user: {
       id: "123",
     },

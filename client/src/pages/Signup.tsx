@@ -1,7 +1,7 @@
 import { ErrorMessage } from "@hookform/error-message";
 import { useForm } from "react-hook-form";
 import { Navigate } from "react-router-dom";
-import InputWithError from "../components/FancyInput";
+import InputWithError from "../components/Input";
 import { useAuth } from "../context/AuthContext";
 
 type FormData = {
@@ -30,7 +30,7 @@ export default function Signup() {
           errors={errors}
           type="text"
           placeholder="Email"
-          {...register("email", {
+          register={register("email", {
             required: "Please enter an email address.",
             pattern: {
               value: /^\S+@\S+\.\S+$/i,
