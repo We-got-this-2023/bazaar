@@ -1,7 +1,7 @@
-import { ErrorMessage } from "@hookform/error-message";
-import { useForm } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { Navigate } from "react-router-dom";
-import FancyInput from "../components/FancyInput";
+import { Form } from "../components/Form";
+import Input from "../components/Input";
 import { useAuth } from "../context/AuthContext";
 
 type FormData = {
@@ -10,42 +10,50 @@ type FormData = {
 };
 
 export default function Login() {
-  const { userLoggedIn } = useAuth();
+  const { userLoggedIn, login } = useAuth();
   if (userLoggedIn) return <Navigate to="/" />;
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isLoading },
-  } = useForm<FormData>();
+  const onSubmit = async (data: FormData) => {
+    console.log(data);
+    await login(data);
+    console.log("logged in");
+  };
 
-  <input type="text" />;
   return (
     <div>
       <h1>Login</h1>
-      <form onSubmit={handleSubmit((data) => console.log(data))}>
-        <FancyInput
-          errors={errors}
+      <Form onSubmit={onSubmit}>
+        <Input
+          name="email"
           type="text"
-          placeholder="Email"
-          {...register("email", {
-            required: "Please enter an email address.",
+          options={{
+            required: "Please enter your email.",
             pattern: {
-              value: /^\S+@\S+\.\S+$/i,
-              message: "Please enter a valid email address.",
+              value: /^\S+@\S+$/i,
+              message: "Please enter a valid email.",
             },
-          })}
+          }}
         />
-
-        <FancyInput
-          errors={errors}
+        <Input
+          name="password"
           type="password"
-          placeholder="Password"
-          {...register("password", { required: "Please enter a password." })}
+          options={{
+            required: "Please enter a password.",
+            validate() {
+              const { password } = useFormContext().getValues();
+              if (
+                password.match(/[a-z]/) &&
+                password.match(/[A-Z]/) &&
+                password.match(/[0-9]/) &&
+                password.match(/[~`!@#$%^&*()\-_+=[\]{};':"\\|,.<>/?]/)
+              )
+                return true;
+              return "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.";
+            },
+          }}
         />
-
         <button type="submit">Login</button>
-      </form>
+      </Form>
     </div>
   );
 }

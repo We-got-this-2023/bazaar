@@ -1,8 +1,8 @@
-import { ErrorMessage } from "@hookform/error-message";
-import { useForm } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import InputWithError from "./FancyInput";
+import { Form } from "./Form";
+import Input from "./Input";
 
 type FormData = {
   country: string;
@@ -19,132 +19,121 @@ type FormData = {
   phoneNumber: string;
 };
 
-export default function Signup() {
+export default function DeliveryForm() {
   const { userLoggedIn } = useAuth();
   if (userLoggedIn) return <Navigate to="/" />;
 
-  const {
-    register,
-    handleSubmit,
-    getValues,
-    formState: { errors, isLoading },
-  } = useForm<FormData>();
+  const onSubmit = async (data: FormData) => {
+    console.log(data);
+    // TODO: Send data to server
+  };
 
   return (
-    <form onSubmit={handleSubmit((data) => console.log(data))}>
-      <InputWithError
-        errors={errors}
+    <Form onSubmit={onSubmit}>
+      <Input
         type="text"
-        placeholder="Country"
-        {...register("country", {
+        name="country"
+        options={{
           required: "Please enter a country.",
-        })}
+        }}
       />
 
-      <InputWithError
-        errors={errors}
+      <Input
         type="text"
-        placeholder="City"
-        {...register("city", {
+        name="city"
+        options={{
           required: "Please enter a city.",
-        })}
+        }}
       />
 
-      <InputWithError
-        errors={errors}
+      <Input
         type="text"
-        placeholder="Region"
-        {...register("region", {
+        name="region"
+        options={{
           required: "Please enter a region.",
-        })}
+        }}
       />
 
-      <InputWithError
-        errors={errors}
+      <Input
         type="text"
-        placeholder="Address"
-        {...register("address", {
+        name="address"
+        options={{
           required: "Please enter an address.",
-        })}
+        }}
       />
 
-      <InputWithError
-        errors={errors}
-        type="text"
-        placeholder="Address 2"
-        {...register("address2")}
-      />
+      <Input type="text" name="Address 2" />
 
-      <InputWithError
-        errors={errors}
+      <Input
         type="text"
+        name="postalCode"
         placeholder="Postal Code"
-        {...register("postalCode", {
+        options={{
           required: "Please enter a postal code.",
-        })}
+        }}
       />
 
-      <InputWithError
-        errors={errors}
+      <Input
         type="text"
+        name="firstName"
         placeholder="First Name"
-        {...register("firstName", {
+        options={{
           required: "Please enter a first name.",
-        })}
+        }}
       />
 
-      <InputWithError
-        errors={errors}
+      <Input
         type="text"
+        name="lastName"
         placeholder="Last Name"
-        {...register("lastName", {
+        options={{
           required: "Please enter a last name.",
-        })}
+        }}
       />
 
-      <InputWithError
-        errors={errors}
+      <Input
         type="text"
-        placeholder="Email"
-        {...register("email", {
+        name="email"
+        options={{
           required: "Please enter an email address.",
           pattern: {
             value: /^\S+@\S+\.\S+$/i,
             message: "Please enter a valid email address.",
           },
-        })}
+        }}
       />
 
-      <InputWithError
-        errors={errors}
+      <Input
         type="text"
+        name="confirmEmail"
         placeholder="Confirm Email"
-        {...register("confirmEmail", {
+        options={{
           required: "Please confirm your email address.",
-          validate: (value) =>
-            value === getValues("email") || "Email addresses do not match.",
-        })}
+          validate: (confirmEmail) =>
+            confirmEmail === useFormContext().getValues().email ||
+            "Email addresses do not match.",
+        }}
       />
 
-      <InputWithError
-        errors={errors}
+      <Input
         type="text"
+        name="countryCallingCode"
         placeholder="Country Calling Code"
-        {...register("countryCallingCode", {
+        options={{
           required: "Please enter a country calling code.",
-        })}
+        }}
       />
 
-      <InputWithError
-        errors={errors}
+      <Input
         type="text"
+        name="phoneNumber"
         placeholder="Phone Number"
-        {...register("phoneNumber", {
+        options={{
           required: "Please enter a phone number.",
-        })}
+        }}
       />
 
       <button type="submit">Submit</button>
-    </form>
+    </Form>
   );
 }
