@@ -1,33 +1,21 @@
 import { ErrorMessage } from "@hookform/error-message";
-import { InputHTMLAttributes, useRef, useState } from "react";
-import {
-  FieldErrors,
-  RegisterOptions,
-  useFormContext,
-  UseFormRegister,
-} from "react-hook-form";
+import { InputHTMLAttributes, useEffect, useRef, useState } from "react";
+import { FieldErrors, RegisterOptions, useFormContext } from "react-hook-form";
 
 interface FancyInputProps extends InputHTMLAttributes<HTMLInputElement> {
   errors?: FieldErrors;
   name?: string;
-  register?: UseFormRegister<any> | Function;
   options?: RegisterOptions;
 }
 
-export default function Input({
-  name,
-  register,
-  options,
-  ...rest
-}: FancyInputProps) {
-  if (!register || !name) register = () => {};
-  else register = register(name, options || {});
-
-  const { formState } = useFormContext();
+export default function Input({ name, options, ...rest }: FancyInputProps) {
+  const { formState, register } = useFormContext();
   const { errors } = formState;
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   const [labelSmall, setLabelSmall] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const { ref, ...regRest } = name ? register(name, options) : { ref: null };
 
   const handleFocus = (focus: boolean) =>
     inputRef.current?.value === "" ? setLabelSmall(focus) : setLabelSmall(true);
@@ -37,13 +25,17 @@ export default function Input({
       <div className="relative flex flex-col gap-2">
         <input
           {...rest}
-          ref={inputRef}
+          {...(ref ? regRest : {})}
+          ref={(e) => {
+            if (!ref) return inputRef;
+            ref(e);
+            inputRef.current = e;
+          }}
           onFocus={() => handleFocus(true)}
           onBlur={() => handleFocus(false)}
           className="rounded-md border border-gray-300 px-4 pt-4 pb-1"
           placeholder=""
           aria-placeholder={rest.placeholder || ""}
-          {...register}
         />
         <label
           className={`absolute select-none capitalize opacity-60 transition-all duration-300 ease-out ${
