@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { Navigate } from "react-router-dom";
 import { Form } from "../components/Form";
@@ -14,9 +15,7 @@ export default function Login() {
   if (userLoggedIn) return <Navigate to="/" />;
 
   const onSubmit = async (data: FormData) => {
-    console.log(data);
-    await login(data);
-    console.log("logged in");
+    return await login(data);
   };
 
   return (

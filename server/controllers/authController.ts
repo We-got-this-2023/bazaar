@@ -8,7 +8,6 @@ import prisma from "../prisma/prisma.js";
 export const signUp = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
-
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -21,7 +20,8 @@ export const signUp = async (req: Request, res: Response) => {
     });
     res.status(200).json(user);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    console.log(error);
+    res.status(404).json({ message: error });
   }
 };
 
