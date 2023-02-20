@@ -2,8 +2,7 @@ export default function Warning(props: React.SVGProps<SVGSVGElement>) {
   const cl = "fill-red-500";
   return (
     <svg
-      width="100"
-      height="100"
+      width="0"
       viewBox="0 0 100 100"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

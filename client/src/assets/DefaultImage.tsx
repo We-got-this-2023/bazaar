@@ -3,6 +3,7 @@ import { SVGProps } from "react";
 export default function DefaultImage(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
+      width="0"
       viewBox="0 0 120 120"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

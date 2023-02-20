@@ -2,7 +2,12 @@ import { SVGProps } from "react";
 
 export default (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg
+      width="0"
+      viewBox="0 0 100 100"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
       <path
         d="M74.0217 27.5C74.0217 40.4787 63.2717 51 50.0109 51C36.75 51 26 40.4787 26 27.5C26 14.5213 36.75 4 50.0109 4C63.2717 4 74.0217 14.5213 74.0217 27.5ZM31.0586 27.5C31.0586 37.7443 39.5438 46.049 50.0109 46.049C60.4779 46.049 68.9631 37.7443 68.9631 27.5C68.9631 17.2557 60.4779 8.95098 50.0109 8.95098C39.5438 8.95098 31.0586 17.2557 31.0586 27.5Z"
         className="fill-black dark:fill-white"
