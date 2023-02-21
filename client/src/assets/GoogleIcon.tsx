@@ -2,7 +2,12 @@ import { SVGProps } from "react";
 
 export default (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg
+      width="0"
+      viewBox="0 0 100 100"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
       <rect width="100" height="100" rx="7" fill="white" />
       <g filter="url(#filter0_d_41_4444)">
         <path

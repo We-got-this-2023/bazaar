@@ -1,4 +1,4 @@
-import { Context, createContext, useContext } from "react";
+import { Context, createContext, useContext, useState } from "react";
 
 interface AuthContextI extends Context<{}> {
   userLoggedIn: boolean;
@@ -9,47 +9,63 @@ interface AuthContextI extends Context<{}> {
     password: string;
     confirmPassword: string;
   }) => Promise<void>;
-  user: {
-    id: string;
-  };
+  user: any;
 }
 
 const AuthContext = createContext({}) as AuthContextI;
 
 export function AuthProvider({ children }: { children: JSX.Element }) {
+  const [user, setUser] = useState();
+
   const login = async (values: { email: string; password: string }) => {
-    const loggedInResponse = await fetch("http://localhost:3000/auth/login/", {
+    const loggedInResponse = await fetch("http://localhost:5173/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
     });
-    console.log(loggedInResponse);
+    if (loggedInResponse.ok) {
+      setUser(await loggedInResponse.json());
+      console.log(user);
+    } else {
+      setUser(undefined);
+      console.log();
+      throw new Error("Invalid credentials");
+    }
   };
 
   const signup = async (values: {
     email: string;
     username: string;
     password: string;
-    confirmPassword: string;
   }) => {
+    const data = {
+      email: values.email,
+      name: values.username,
+      password: values.password,
+    };
     const loggedInResponse = await fetch(
-      "http://localhost:3000/auth/register/",
+      "http://localhost:3000/auth/register",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify(data),
       }
     );
-    console.log(loggedInResponse);
+    if (loggedInResponse.ok) {
+      setUser(await loggedInResponse.json());
+      console.log(user);
+    } else {
+      setUser(undefined);
+      console.log(loggedInResponse);
+      throw new Error("Error registering user. Please try again later.");
+    }
   };
 
   const value = {
     userLoggedIn: false,
     login,
     signup,
-    user: {
-      id: "123",
-    },
+    user,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

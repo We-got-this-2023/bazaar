@@ -68,12 +68,14 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-export const getUserAdress = async (req: Request, res: Response) => {
+export const getUserAddress = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const user = await prisma.user.findUnique({
       where: { id: Number(id) },
-      include: { UserAdress: true },
+      // controllers/userController.ts(77,18): error TS2322:
+      // Type '{ userAddress: true; }' is not assignable to type 'UserInclude'.
+      // include: { userAddress: true },
     });
     res.status(200).json(user);
   } catch (error) {

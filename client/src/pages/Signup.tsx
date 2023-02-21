@@ -15,9 +15,7 @@ export default function Signup() {
   if (userLoggedIn) return <Navigate to="/" />;
 
   const onSubmit = async (data: FormData) => {
-    console.log(data);
     await signup(data);
-    console.log("signed up");
   };
 
   return (
@@ -45,14 +43,14 @@ export default function Signup() {
               message: "Username must be at least 3 characters long.",
             },
             maxLength: {
-              value: 20,
-              message: "Username must be at most 20 characters long.",
+              value: 30,
+              message: "Username must be at most 30 characters long.",
             },
           }}
         />
         <Input
           name="password"
-          type="text"
+          type="password"
           options={{
             required: "Please enter a password.",
             validate(password) {

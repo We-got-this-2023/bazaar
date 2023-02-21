@@ -7,6 +7,7 @@ export default ({
   return (
     <>
       <svg
+        width="0"
         viewBox="0 0 100 100"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -38,10 +39,12 @@ export default ({
           className="stroke-black dark:stroke-white"
         />
       </svg>
-      {number && number > 0 && (
+      {number && number > 0 ? (
         <span className="absolute left-8 top-[1.2rem] bg-transparent font-logo text-black dark:text-white">
           {number > 9 ? "9+" : number}
         </span>
+      ) : (
+        ""
       )}
     </>
   );

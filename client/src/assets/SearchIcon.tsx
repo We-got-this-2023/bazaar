@@ -2,7 +2,12 @@ import { SVGProps } from "react";
 
 export default function SearchIcon(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg
+      width="0"
+      viewBox="0 0 100 100"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
       <rect
         x="55.4207"
         y="61.0771"
