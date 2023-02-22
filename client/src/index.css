@@ -16,6 +16,8 @@ html {
   @apply bg-white font-body text-black dark:bg-black dark:text-white;
 }
 
-* {
-  box-sizing: border-box;
+html,
+body,
+#root {
+  @apply h-full;
 }
