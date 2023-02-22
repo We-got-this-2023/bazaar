@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useRef, useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import CartIcon from "../assets/CartIcon";
 import DefaultImage from "../assets/DefaultImage";
 import Logo from "../assets/Logo";
@@ -7,30 +7,47 @@ import SearchIcon from "../assets/SearchIcon";
 
 export default function Navbar() {
   const [cartNumber, setCartNumber] = useState(0);
-  return (
-    <nav className="relative flex items-center p-1">
-      <div className="flex items-center">
-        <Link to="/posts" className="flex items-center justify-center">
-          <Logo className="w-14" />
-          <p className="font-logo text-4xl">Bazaar</p>
-        </Link>
-      </div>
-      <div className="relative ml-10 flex w-[30em] items-center gap-2 rounded-lg bg-white-bright p-2 ring-blue-200 focus-within:ring-2">
-        <SearchIcon className="w-6" />
-        <input
-          className="w-full focus:outline-none"
-          type="text"
-          placeholder="Search for something..."
-        />
-      </div>
+  const searchRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
-      <div className="absolute right-3 flex h-14 items-center gap-4">
-        <div className="relative flex items-center">
-          <Link to="/checkout">
-            <CartIcon number={cartNumber} className="w-16" />
-          </Link>
+  const handleSearch = () => {
+    navigate(`/search?q=${searchRef.current?.value}`);
+  };
+
+  return (
+    <nav className="flex h-16 items-center justify-between gap-4 p-1">
+      <SearchIcon
+        className="w-6 cursor-pointer max-md:flex md:hidden"
+        onClick={handleSearch}
+      />
+      <div className="flex h-full w-full items-center gap-6">
+        <Link
+          to="/"
+          className="flex items-center justify-center font-logo text-4xl"
+        >
+          <Logo className="w-14" />
+          <span>Bazaar</span>
+        </Link>
+        <div className="flex max-w-md shrink grow gap-2 bg-white-bright p-2 ring-blue-200 focus-within:ring-2 max-lg:rounded-lg max-md:hidden max-md:rounded-md max-sm:rounded-sm">
+          <SearchIcon className="w-6 cursor-pointer" onClick={handleSearch} />
+          <input
+            className="w-full focus:outline-none"
+            type="text"
+            ref={searchRef}
+            placeholder="Search for something..."
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSearch();
+            }}
+          />
         </div>
-        <DefaultImage className="w-16 cursor-pointer" />
+      </div>
+      <div className="flex h-full items-center gap-6">
+        <Link to="/checkout" className="relative">
+          <CartIcon number={2} className="w-16" />
+        </Link>
+        <Link to="/profile">
+          <DefaultImage className="w-16" />
+        </Link>
       </div>
     </nav>
   );
