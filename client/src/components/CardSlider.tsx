@@ -25,17 +25,17 @@ export default function CardSlider({ className }: { className?: string }) {
     {
       image: "electronics.jpg",
       name: "Electronics",
-      link: "/search/query=electronics",
+      link: "/search?q=electronics",
     },
     {
       image: "glassware.jpg",
       name: "Glassware",
-      link: "/search/query=glassware",
+      link: "/search?q=glassware",
     },
     {
       image: "apparels.jpeg",
       name: "Clothing",
-      link: "/search/query=clothing",
+      link: "/search?q=clothing",
     },
   ];
 
@@ -58,7 +58,7 @@ export default function CardSlider({ className }: { className?: string }) {
       keyboard
       a11y={{ enabled: true }}
       modules={[A11y, Autoplay, Pagination, Keyboard, Navigation]}
-      className={`w-full p-10 ${className || ""}`}
+      className={`w-full ${className || ""}`}
     >
       {images.map(({ name, image, link }, index) => {
         return (
