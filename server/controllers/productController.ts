@@ -10,6 +10,60 @@ export const getProducts = async (req: Request, res: Response) => {
   }
 };
 
+export const getProductsWithParams = async (req: Request, res: Response) => {
+  let query,
+    page,
+    priceMin,
+    priceMax,
+    sortBy,
+    sortDir,
+    time,
+    ratingMin,
+    ratingMax,
+    tags,
+    blacklistTags;
+
+  try {
+    const products = await prisma.product.findMany({
+      skip: page ? page - 1 : 0,
+      take: 10,
+      where: {
+        OR: [
+          { title: { contains: query } },
+          { description: { contains: query } },
+        ],
+        price: {
+          gte: priceMin ?? 0,
+          lte: priceMax ?? Infinity,
+        },
+        rating: {
+          gte: ratingMin ?? 0,
+          lte: ratingMax ?? 5,
+        },
+        createdAt: {
+          gte: time ? new Date(time) : null,
+        },
+        tags: {
+          has: tags ?? [],
+        },
+        NOT: {
+          tags: {
+            has: blacklistTags,
+          },
+        },
+      },
+      orderBy: {
+        [(sortBy || "createdAt") as string]: (sortDir || "asc") as
+          | "asc"
+          | "desc",
+      },
+    });
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(404).json({ message: "Products not found" });
+  }
+};
+
 export const getProduct = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
