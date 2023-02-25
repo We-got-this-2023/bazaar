@@ -11,53 +11,82 @@ export const getProducts = async (req: Request, res: Response) => {
 };
 
 export const getProductsWithParams = async (req: Request, res: Response) => {
-  let query,
-    page,
-    priceMin,
-    priceMax,
-    sortBy,
-    sortDir,
-    time,
-    ratingMin,
-    ratingMax,
+  const {
+    q,
+    p,
+    clo,
+    chi,
+    s,
+    o,
+    t,
+    rlo,
+    rhi,
+    stags,
     tags,
-    blacklistTags;
+    notags,
+  }: {
+    q?: string;
+    p?: string;
+    clo?: string;
+    chi?: string;
+    s?: string;
+    o?: string;
+    t?: string;
+    rlo?: string;
+    rhi?: string;
+    stags?: string;
+    tags?: string;
+    notags?: string;
+  } = req.query;
 
+  const query = q,
+    page = Number(p || 1),
+    costLow = Number(clo || 0),
+    costHigh = Number(chi || 999999999),
+    sortBy = s || "createdAt",
+    order = o || "asc",
+    timeSince = t || 999999999,
+    ratingLow = Number(rlo || 0),
+    ratingHigh = Number(rhi || 999999999),
+    someTags = stags ? stags.split(",") : undefined,
+    allTags = tags ? tags.split(",") : [],
+    notAnyTags = notags ? notags.split(",") : [];
+
+  console.log(ratingLow, ratingHigh, costLow, costHigh, timeSince);
   try {
     const products = await prisma.product.findMany({
-      skip: page ? page - 1 : 0,
+      skip: page - 1,
       take: 10,
       where: {
         OR: [
           { title: { contains: query } },
           { description: { contains: query } },
+          { tags: { has: query } },
         ],
         price: {
-          gte: priceMin ?? 0,
-          lte: priceMax ?? Infinity,
+          gte: costLow,
+          lte: costHigh,
         },
         rating: {
-          gte: ratingMin ?? 0,
-          lte: ratingMax ?? 5,
+          gte: ratingLow,
+          lte: ratingHigh,
         },
-        createdAt: {
-          gte: time ? new Date(time) : null,
-        },
+        createdAt: {},
         tags: {
-          has: tags ?? [],
+          hasEvery: allTags,
+          hasSome: someTags,
         },
         NOT: {
           tags: {
-            has: blacklistTags,
+            hasSome: notAnyTags,
           },
         },
       },
       orderBy: {
-        [(sortBy || "createdAt") as string]: (sortDir || "asc") as
-          | "asc"
-          | "desc",
+        [sortBy]: order,
       },
     });
+    console.log(products);
     res.status(200).json(products);
   } catch (error) {
     res.status(404).json({ message: "Products not found" });

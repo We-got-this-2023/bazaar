@@ -1,56 +1,77 @@
+import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
 export default function Search({ className }: { className?: string }) {
   const [searchParams] = useSearchParams();
   // Legend:
-  //   q - search query
-  //   t - time period - default is all
-  //   r - rating - default is all
-  //   s - sort by - default is newest
-  //   pmn - price min - default is 0
-  //   pmx - price max - default is unset
-  //   p - page - default is 1 (first page)
+  // q - query
+  // t - time ago
+  // rlo - rating lower bound
+  // rhi - rating upper bound
+  // clo - cost lower bound
+  // chi - cost upper bound
+  // s - sort by
+  // o - order
+  // p - page
+  // stags - some tags
+  // tags - all tags
+  // ntags - no tags
+
   const q = searchParams.get("q"),
-    t = searchParams.get("t") || "all",
-    r = searchParams.get("r") || "all",
-    s = searchParams.get("s") || "newest",
-    pmn = searchParams.get("pmn") || "0",
-    pmx = searchParams.get("pmx") || "unset",
-    p = searchParams.get("p") || "1";
+    t = searchParams.get("t"),
+    rlo = searchParams.get("r"),
+    rhi = searchParams.get("r"),
+    s = searchParams.get("s"),
+    o = searchParams.get("o"),
+    clo = searchParams.get("clo"),
+    chi = searchParams.get("chi"),
+    p = searchParams.get("p"),
+    stags = searchParams.get("stags"),
+    tags = searchParams.get("tags"),
+    notags = searchParams.get("notags");
+
+  const query =
+    `q=${q}` +
+    (t ? `&t=${t}` : "") +
+    (rlo ? `&r=${rlo}` : "") +
+    (rhi ? `&r=${rhi}` : "") +
+    (s ? `&s=${s}` : "") +
+    (o ? `&o=${o}` : "") +
+    (clo ? `&clo=${clo}` : "") +
+    (chi ? `&chi=${chi}` : "") +
+    (p ? `&p=${p}` : "") +
+    (stags ? `&stags=${stags}` : "") +
+    (tags ? `&tags=${tags}` : "") +
+    (notags ? `&notags=${notags}` : "");
+
+  const handleSubmit = async () => {
+    const data = await fetch("http://localhost:3000/products?" + query).then(
+      (res) => res.json()
+    );
+    console.log(data);
+  };
+
+  useEffect(() => {
+    handleSubmit();
+  }, []);
 
   return (
     <div>
       <h1>Search</h1>
       {/* Temporary Template to show query parameters */}
       <div>
-        <p>
-          <strong>Query:</strong>
-          {q}
-        </p>
-        <p>
-          <strong>Time Period:</strong>
-          {t}
-        </p>
-        <p>
-          <strong>Rating:</strong>
-          {r}
-        </p>
-        <p>
-          <strong>Sort By:</strong>
-          {s}
-        </p>
-        <p>
-          <strong>Price Min:</strong>
-          {pmn}
-        </p>
-        <p>
-          <strong>Price Max:</strong>
-          {pmx}
-        </p>
-        <p>
-          <strong>Page:</strong>
-          {p}
-        </p>
+        <p>q: {q ? q : "none"}</p>
+        <p>t: {t ? t : "none"}</p>
+        <p>rlo: {rlo ? rlo : "none"}</p>
+        <p>rhi: {rhi ? rhi : "none"}</p>
+        <p>s: {s ? s : "none"}</p>
+        <p>o: {o ? o : "none"}</p>
+        <p>clo: {clo ? clo : "none"}</p>
+        <p>chi: {chi ? chi : "none"}</p>
+        <p>p: {p ? p : "none"}</p>
+        <p>stags: {stags ? stags : "none"}</p>
+        <p>tags: {tags ? tags : "none"}</p>
+        <p>notags: {notags ? notags : "none"}</p>
       </div>
     </div>
   );
