@@ -10,6 +10,7 @@ import Orders from "./pages/Orders";
 import ProductInfo from "./pages/ProductInfo";
 import Products from "./pages/Products";
 import Profile from "./pages/Profile";
+import Search from "./pages/Search";
 import Signup from "./pages/Signup";
 
 function LayoutWithNavbar() {
@@ -28,12 +29,14 @@ export default function App() {
         <Route path="/" element={<LayoutWithNavbar />}>
           <Route index element={<LandingPage />} />
           <Route path="/about" element={<About />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/search?q=" element={<Search />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductInfo />} />
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/profile/:id" element={<Profile />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/profile/:id" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Route>
 
