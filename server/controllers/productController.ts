@@ -71,7 +71,9 @@ export const getProductsWithParams = async (req: Request, res: Response) => {
           gte: ratingLow,
           lte: ratingHigh,
         },
-        createdAt: {},
+        createdAt: {
+          gte: new Date(timeSince),
+        },
         tags: {
           hasEvery: allTags,
           hasSome: someTags,
