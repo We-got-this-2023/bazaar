@@ -12,5 +12,5 @@ export default function ProtectedRoute({ element }: { element: JSX.Element }) {
 
   if (isLoading) return <div>Loading...</div>;
   if (userLoggedIn) return element;
-  return <Navigate to="/login" />;
+  return <Navigate to="/login" replace />;
 }
