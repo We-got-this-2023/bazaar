@@ -12,10 +12,9 @@ const NotAllowed = () => {
 };
 
 export default function PrivateRoute({ element }: { element: JSX.Element }) {
-  const { userLoggedIn, user } = useAuth();
-  if (userLoggedIn) {
-    if (user.id === element.props.id) return element;
-    return <NotAllowed />;
-  }
-  return <Navigate to="/login" />;
+  const { userLoggedIn, user, isLoading } = useAuth();
+  if (isLoading) return <div>Loading...</div>;
+  if (userLoggedIn)
+    if (user.id === element.props.validId) return element;
+    else return <NotAllowed />;
 }
