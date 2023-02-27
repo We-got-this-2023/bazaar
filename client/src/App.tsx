@@ -1,6 +1,7 @@
 import { Outlet, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 import About from "./pages/About";
 import Checkout from "./pages/Checkout";
 import LandingPage from "./pages/LandingPage";
@@ -29,15 +30,26 @@ export default function App() {
         <Route path="/" element={<LayoutWithNavbar />}>
           <Route index element={<LandingPage />} />
           <Route path="/about" element={<About />} />
-          <Route path="/orders" element={<Orders />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/search?q=" element={<Search />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductInfo />} />
-          <Route path="/profile" element={<Profile />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
+
+          {/* Protected Routes */}
+          <Route
+            path="/products"
+            element={<ProtectedRoute element={<Products />} />}
+          />
+          <Route
+            path="/profile"
+            element={<ProtectedRoute element={<Profile />} />}
+          />
+          <Route
+            path="/orders"
+            element={<ProtectedRoute element={<Orders />} />}
+          />
         </Route>
 
         {/* Routes without a navbar */}

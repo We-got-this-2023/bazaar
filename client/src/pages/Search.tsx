@@ -1,8 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import SearchResults from "./SearchResults";
 
 export default function Search({ className }: { className?: string }) {
-  const [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParams(),
+    [results, setResults] = useState([]);
   // Legend:
   // q - query
   // t - time ago
@@ -48,31 +50,17 @@ export default function Search({ className }: { className?: string }) {
     const data = await fetch("http://localhost:3000/products?" + query).then(
       (res) => res.json()
     );
-    console.log(data);
+    setResults(data);
   };
 
   useEffect(() => {
-    handleSubmit();
+    if (q) handleSubmit();
   }, []);
 
   return (
     <div>
       <h1>Search</h1>
-      {/* Temporary Template to show query parameters */}
-      <div>
-        <p>q: {q ? q : "none"}</p>
-        <p>t: {t ? t : "none"}</p>
-        <p>rlo: {rlo ? rlo : "none"}</p>
-        <p>rhi: {rhi ? rhi : "none"}</p>
-        <p>s: {s ? s : "none"}</p>
-        <p>o: {o ? o : "none"}</p>
-        <p>clo: {clo ? clo : "none"}</p>
-        <p>chi: {chi ? chi : "none"}</p>
-        <p>p: {p ? p : "none"}</p>
-        <p>stags: {stags ? stags : "none"}</p>
-        <p>tags: {tags ? tags : "none"}</p>
-        <p>notags: {notags ? notags : "none"}</p>
-      </div>
+      {results && <SearchResults data={results} />}
     </div>
   );
 }

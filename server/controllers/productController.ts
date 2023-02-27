@@ -38,6 +38,7 @@ export const getProductsWithParams = async (req: Request, res: Response) => {
     tags?: string;
     notags?: string;
   } = req.query;
+  console.log("?????????????????");
 
   const query = q,
     page = Number(p || 1),

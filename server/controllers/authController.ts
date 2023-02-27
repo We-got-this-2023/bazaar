@@ -18,7 +18,12 @@ export const signUp = async (req: Request, res: Response) => {
         password: hashedPassword,
       },
     });
-    res.status(200).json(user);
+    user.password = undefined;
+
+    const token = jwt.sign({ ...user }, process.env.JWT_SECRET, {
+      expiresIn: "30d",
+    });
+    res.status(200).json({ token });
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: error });
@@ -41,8 +46,12 @@ export const signIn = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Invalid password" });
     }
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
-    res.status(200).json({ user, token });
+    user.password = undefined;
+
+    const token = jwt.sign({ ...user }, process.env.JWT_SECRET, {
+      expiresIn: "30d",
+    });
+    res.status(200).json({ token });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }

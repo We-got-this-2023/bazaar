@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Form } from "../components/Form";
 import Input from "../components/Input";
 import { useAuth } from "../context/AuthContext";
@@ -12,7 +12,12 @@ type FormData = {
 
 export default function Login() {
   const { userLoggedIn, login } = useAuth();
-  if (userLoggedIn) return <Navigate to="/" />;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(userLoggedIn);
+    if (userLoggedIn) navigate("/");
+  }, [userLoggedIn]);
 
   const onSubmit = async (data: FormData) => {
     return await login(data);
