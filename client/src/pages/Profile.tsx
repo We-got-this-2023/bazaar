@@ -9,8 +9,8 @@ export default function Profile() {
 
   useEffect(() => {
     if (userLoggedIn) {
-      if (!id) return setIsOwner(true);
-      if (user.id === id) return setIsOwner(true);
+      if (!id || user.id === id) setIsOwner(true);
+      else setIsOwner(false);
     }
   }, [userLoggedIn, id]);
 

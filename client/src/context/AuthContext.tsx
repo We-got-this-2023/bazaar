@@ -12,6 +12,8 @@ interface AuthContextI extends Context<{}> {
     confirmPassword: string;
   }) => Promise<void>;
   user: any;
+  isLoading: boolean;
+  error: string;
 }
 
 const prompt = (username: string) => console.log(`Welcome back, ${username}!`);
@@ -19,26 +21,39 @@ const prompt = (username: string) => console.log(`Welcome back, ${username}!`);
 const AuthContext = createContext({}) as AuthContextI;
 
 export function AuthProvider({ children }: { children: JSX.Element }) {
-  const [user, setUser]: [any, any] = useState(null),
+  const [user, setUser] = useState<any>(null),
+    [userLoggedIn, setUserLoggedIn] = useState<boolean>(false),
+    [isLoading, setIsLoading] = useState<boolean>(true),
+    [error, setError] = useState<string | undefined>(),
     clearUser = (error?: string) => {
+      setIsLoading(false);
       localStorage.removeItem("token");
       setUser(undefined);
-      if (error) throw new Error(error);
+      if (error) setError(error);
+      setUserLoggedIn(false);
     },
     addUser = ({ user, token }: { user: any; token: string }) => {
+      setIsLoading(false);
       localStorage.setItem("token", JSON.stringify(token));
       setUser(user);
+      setUserLoggedIn(true);
+      setError(undefined);
     };
 
   useEffect(() => {
-    const user = attemptTokenLogin();
-    if (user) setUser(user);
-    else clearUser();
+    const tokenUser = attemptTokenLogin();
+    if (tokenUser) {
+      setUser(tokenUser);
+      setUserLoggedIn(true);
+      setError(undefined);
+      setIsLoading(false);
+    } else clearUser();
   }, []);
 
   useEffect(() => prompt(user?.name), [user]);
 
   const login = async (values: { email: string; password: string }) => {
+    setIsLoading(true);
     const data = {
       email: values.email,
       password: values.password,
@@ -54,6 +69,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       if (!user) clearUser();
       else addUser({ user, token });
     } else clearUser("Invalid credentials");
+    setIsLoading(false);
   };
 
   const signup = async (values: {
@@ -61,6 +77,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     username: string;
     password: string;
   }) => {
+    setIsLoading(true);
     const data = {
       email: values.email,
       name: values.username,
@@ -80,13 +97,16 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       if (!user) clearUser();
       else addUser({ user, token });
     } else clearUser("Error registering user. Please try again later.");
+    setIsLoading(false);
   };
 
   const value = {
-    userLoggedIn: false,
+    userLoggedIn,
     login,
     signup,
     user,
+    isLoading,
+    error,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
