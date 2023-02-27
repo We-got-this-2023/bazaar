@@ -15,7 +15,7 @@ export class AuthService {
   constructor(private prisma: PrismaService, private jwt: JwtService) {}
 
   async signup(dto: AuthDto) {
-    const { email, password } = dto;
+    const { name, email, password } = dto;
 
     const userExists = await this.prisma.user.findUnique({
       where: { email },
@@ -29,8 +29,9 @@ export class AuthService {
 
     await this.prisma.user.create({
       data: {
+        name,
         email,
-        hashedPassword,
+        password: hashedPassword,
       },
     });
 
@@ -52,7 +53,7 @@ export class AuthService {
 
     const compareSuccess = await this.comparePasswords({
       password,
-      hash: foundUser.hashedPassword,
+      hash: foundUser.password,
     });
 
     if (!compareSuccess) {
@@ -60,7 +61,7 @@ export class AuthService {
     }
 
     const token = await this.signToken({
-      userId: foundUser.id,
+      userId: foundUser.id.toString(),
       email: foundUser.email,
     });
 
@@ -100,5 +101,9 @@ export class AuthService {
     });
 
     return token;
+  }
+
+  getHello(): string {
+    return 'Hello World!';
   }
 }
