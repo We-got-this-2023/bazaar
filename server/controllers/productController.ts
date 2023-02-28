@@ -145,7 +145,7 @@ export const createProduct = async (req: Request, res: Response) => {
     });
     res.status(200).json(product);
   } catch (error) {
-    res.status(404).json({ message: "Couldnt create product" });
+    res.status(404).json({ message: "Couldn't create product" });
   }
 };
 
