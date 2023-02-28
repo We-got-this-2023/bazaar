@@ -43,10 +43,10 @@ model Product {
  shippingMethodId Int
  imagesPath String[]
  title      String
- description String
- rating    Int
+ description String?
+ rating    Int?
  tags      String[]
- price     Int
+ price     Decimal
  createdAt DateTime @default(now())
  updatedAt DateTime @updatedAt
  userRelation      User     @relation(fields: [userId], references: [id])

@@ -1,37 +1,32 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE "User" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "photoURL" TEXT,
+    "password" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
-  - You are about to drop the column `name` on the `Product` table. All the data in the column will be lost.
-  - You are about to drop the `Order` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `_OrderToProduct` table. If the table is not empty, all the data it contains will be lost.
-  - Added the required column `shippingMethodId` to the `Product` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `title` to the `Product` table without a default value. This is not possible if the table is not empty.
-  - Made the column `password` on table `User` required. This step will fail if there are existing NULL values in that column.
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
 
-*/
--- DropForeignKey
-ALTER TABLE "Order" DROP CONSTRAINT "Order_userId_fkey";
+-- CreateTable
+CREATE TABLE "Product" (
+    "id" SERIAL NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "shippingMethodId" INTEGER NOT NULL,
+    "imagesPath" TEXT[],
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "rating" INTEGER NOT NULL,
+    "tags" TEXT[],
+    "price" DECIMAL(65,30) NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
--- DropForeignKey
-ALTER TABLE "_OrderToProduct" DROP CONSTRAINT "_OrderToProduct_A_fkey";
-
--- DropForeignKey
-ALTER TABLE "_OrderToProduct" DROP CONSTRAINT "_OrderToProduct_B_fkey";
-
--- AlterTable
-ALTER TABLE "Product" DROP COLUMN "name",
-ADD COLUMN     "imagesPath" TEXT[],
-ADD COLUMN     "shippingMethodId" INTEGER NOT NULL,
-ADD COLUMN     "title" TEXT NOT NULL;
-
--- AlterTable
-ALTER TABLE "User" ALTER COLUMN "password" SET NOT NULL;
-
--- DropTable
-DROP TABLE "Order";
-
--- DropTable
-DROP TABLE "_OrderToProduct";
+    CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "ProductReview" (
@@ -153,6 +148,12 @@ CREATE TABLE "UserOrder" (
 
     CONSTRAINT "UserOrder_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- AddForeignKey
+ALTER TABLE "Product" ADD CONSTRAINT "Product_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Product" ADD CONSTRAINT "Product_shippingMethodId_fkey" FOREIGN KEY ("shippingMethodId") REFERENCES "ShippingMethod"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
