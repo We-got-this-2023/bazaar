@@ -39,7 +39,7 @@ export const getProductsWithParams = async (req: Request, res: Response) => {
     notags?: string;
   } = req.query;
 
-  const query = q,
+  const query = q ?? "",
     page = Number(p ?? 1),
     costLow = Number(clo ?? 0),
     costHigh = Number(chi ?? 999999999),
