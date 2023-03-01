@@ -38,39 +38,49 @@ export const getProductsWithParams = async (req: Request, res: Response) => {
     tags?: string;
     notags?: string;
   } = req.query;
-  console.log("?????????????????");
 
   const query = q,
-    page = Number(p || 1),
-    costLow = Number(clo || 0),
-    costHigh = Number(chi || 999999999),
-    sortBy = s || "createdAt",
-    order = o || "asc",
+    page = Number(p ?? 1),
+    costLow = Number(clo ?? 0),
+    costHigh = Number(chi ?? 999999999),
+    sortBy = s ?? "createdAt",
+    order = o ?? "asc",
     timeSince = t || 999999999,
-    ratingLow = Number(rlo || 0),
-    ratingHigh = Number(rhi || 999999999),
+    ratingLow = Number(rlo ?? 0),
+    ratingHigh = Number(rhi ?? 999999999),
     someTags = stags ? stags.split(",") : undefined,
     allTags = tags ? tags.split(",") : [],
     notAnyTags = notags ? notags.split(",") : [];
 
-  console.log(ratingLow, ratingHigh, costLow, costHigh, timeSince);
   try {
     const products = await prisma.product.findMany({
       skip: page - 1,
       take: 10,
       where: {
-        OR: [
-          { title: { contains: query } },
-          { description: { contains: query } },
-          { tags: { has: query } },
+        AND: [
+          {
+            OR: [
+              { title: { contains: query } },
+              { description: { contains: query } },
+              { tags: { has: query } },
+            ],
+          },
+          {
+            OR: [
+              { rating: { gte: ratingLow, lte: ratingHigh } },
+              { rating: null },
+              { rating: undefined },
+            ],
+          },
         ],
+        NOT: {
+          tags: {
+            hasSome: notAnyTags,
+          },
+        },
         price: {
           gte: costLow,
           lte: costHigh,
-        },
-        rating: {
-          gte: ratingLow,
-          lte: ratingHigh,
         },
         createdAt: {
           gte: new Date(timeSince),
@@ -79,17 +89,11 @@ export const getProductsWithParams = async (req: Request, res: Response) => {
           hasEvery: allTags,
           hasSome: someTags,
         },
-        NOT: {
-          tags: {
-            hasSome: notAnyTags,
-          },
-        },
       },
       orderBy: {
         [sortBy]: order,
       },
     });
-    console.log(products);
     res.status(200).json(products);
   } catch (error) {
     res.status(404).json({ message: "Products not found" });
@@ -125,7 +129,6 @@ export const getProductDetails = async (req: Request, res: Response) => {
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    // const { userId } = req.params;
     const { title, price, userId, shippingMethodId } = req.body;
     const product = await prisma.product.create({
       data: {
