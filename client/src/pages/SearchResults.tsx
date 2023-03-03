@@ -4,9 +4,10 @@ export default function SearchResults({ data }: any) {
   return (
     <div>
       <h1>Search Results</h1>
-      {data.map((product: any) => (
-        <ProductPreview key={product.id} product={product} />
-      ))}
+      {Array.isArray(data) &&
+        data.map((product: any) => (
+          <ProductPreview key={product.id} product={product} />
+        ))}
     </div>
   );
 }

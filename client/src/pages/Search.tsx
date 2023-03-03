@@ -1,3 +1,9 @@
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import SearchResults from "./SearchResults";
@@ -33,29 +39,36 @@ export default function Search({ className }: { className?: string }) {
     notags = searchParams.get("notags");
 
   const query =
-    `q=${q}` +
-    (t ? `&t=${t}` : "") +
-    (rlo ? `&r=${rlo}` : "") +
-    (rhi ? `&r=${rhi}` : "") +
-    (s ? `&s=${s}` : "") +
-    (o ? `&o=${o}` : "") +
-    (clo ? `&clo=${clo}` : "") +
-    (chi ? `&chi=${chi}` : "") +
-    (p ? `&p=${p}` : "") +
-    (stags ? `&stags=${stags}` : "") +
-    (tags ? `&tags=${tags}` : "") +
-    (notags ? `&notags=${notags}` : "");
+    "?" +
+    [
+      q ? `q=${q}` : "",
+      t ? `t=${t}` : "",
+      rlo ? `rlo=${rlo}` : "",
+      rhi ? `rhi=${rhi}` : "",
+      clo ? `clo=${clo}` : "",
+      chi ? `chi=${chi}` : "",
+      s ? `s=${s}` : "",
+      o ? `o=${o}` : "",
+      p ? `p=${p}` : "",
+      stags ? `stags=${stags}` : "",
+      tags ? `tags=${tags}` : "",
+      notags ? `notags=${notags}` : "",
+    ]
+      .filter((t) => t)
+      .join("&");
 
-  const handleSubmit = async () => {
-    const data = await fetch("http://localhost:3000/products?" + query).then(
-      (res) => res.json()
-    );
-    setResults(data);
-  };
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["search"],
+    queryFn: () =>
+      fetch(`localhost:3000/products${query}`).then((r) => r.json()),
+  });
 
   useEffect(() => {
-    if (q) handleSubmit();
-  }, []);
+    console.log(data);
+    if (data) {
+      setResults(data);
+    }
+  }, [data]);
 
   return (
     <div>
