@@ -52,6 +52,7 @@ export const getProductsWithParams = async (req: Request, res: Response) => {
     allTags = tags ? tags.split(",") : [],
     notAnyTags = notags ? notags.split(",") : [];
 
+  console.log(q, query);
   try {
     const products = await prisma.product.findMany({
       skip: page - 1,
@@ -60,8 +61,8 @@ export const getProductsWithParams = async (req: Request, res: Response) => {
         AND: [
           {
             OR: [
-              { title: { contains: query } },
-              { description: { contains: query } },
+              { title: { contains: query, mode: "insensitive" } },
+              { description: { contains: query, mode: "insensitive" } },
               { tags: { has: query } },
             ],
           },
