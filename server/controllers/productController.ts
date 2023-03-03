@@ -186,10 +186,11 @@ export const updateProduct = async (req: Request, res: Response) => {
 
 export const getProductsPagination = async (req: Request, res: Response) => {
   try {
-    const { page } = req.params;
+    const { id } = req.params;
+    console.log(id);
     const products = await prisma.product.findMany({
-      skip: Number(page) - 1,
-      take: 10,
+      skip: Number(id) - 1,
+      take: 1, // need to increase this to 10 for production
     });
     res.status(200).json(products);
   } catch (error) {
