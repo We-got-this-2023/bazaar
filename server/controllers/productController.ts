@@ -129,7 +129,8 @@ export const getProductDetails = async (req: Request, res: Response) => {
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const { title, price, userId, shippingMethodId } = req.body;
+    const { title, price, userId, shippingMethodId, rating, description } =
+      req.body;
     const product = await prisma.product.create({
       data: {
         title,
@@ -144,11 +145,13 @@ export const createProduct = async (req: Request, res: Response) => {
             id: Number(userId),
           },
         },
+        rating: Number(rating),
+        description,
       },
     });
     res.status(200).json(product);
   } catch (error) {
-    res.status(404).json({ message: "Couldn't create product" });
+    res.status(404).json({ message: error.message });
   }
 };
 
@@ -178,5 +181,18 @@ export const updateProduct = async (req: Request, res: Response) => {
     res.status(200).json(product);
   } catch (error) {
     res.status(404).json({ message: "Product not found" });
+  }
+};
+
+export const getProductsPagination = async (req: Request, res: Response) => {
+  try {
+    const { page } = req.params;
+    const products = await prisma.product.findMany({
+      skip: Number(page) - 1,
+      take: 10,
+    });
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(404).json({ message: "Products not found" });
   }
 };
