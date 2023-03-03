@@ -18,6 +18,6 @@ router.get("/:id", getProduct);
 router.post("/add", createProduct);
 router.delete("/:id", verifyToken, deleteProduct);
 router.patch("/:id", verifyToken, updateProduct);
-router.get("/many/:ids", getProductsPagination);
+router.get("/many/:id", getProductsPagination);
 
 export default router;
