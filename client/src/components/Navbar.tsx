@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CartIcon from "../assets/CartIcon";
 import DefaultImage from "../assets/DefaultImage";
 import Logo from "../assets/Logo";
@@ -28,10 +28,10 @@ export default function Navbar() {
           <Logo className="w-14" />
           <span>Bazaar</span>
         </Link>
-        <div className="flex max-w-md shrink grow gap-2 bg-white-bright p-2 ring-blue-200 focus-within:ring-2 max-lg:rounded-lg max-md:hidden max-md:rounded-md max-sm:rounded-sm">
+        <div className="opacity flex max-w-md shrink grow gap-2 rounded-lg bg-white-bright p-2 shadow-blue-200 ring-blue-200 transition-all duration-200 focus-within:shadow-[0_0_10px_#bfdbfe] focus-within:ring-2 dark:bg-neutral-700 dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 max-md:hidden">
           <SearchIcon className="w-6 cursor-pointer" onClick={handleSearch} />
           <input
-            className="w-full focus:outline-none"
+            className="w-full bg-transparent focus:outline-none"
             type="text"
             ref={searchRef}
             placeholder="Search for something..."
