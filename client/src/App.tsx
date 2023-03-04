@@ -1,5 +1,4 @@
 import { Outlet, Route, Routes } from "react-router-dom";
-import DeliveryForm from "./components/DeliveryForm";
 import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -54,7 +53,7 @@ export default function App() {
         </Route>
 
         {/* Routes without a navbar */}
-        <Route path="/login" element={<DeliveryForm />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>
     </>

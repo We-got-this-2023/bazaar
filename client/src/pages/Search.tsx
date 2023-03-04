@@ -1,12 +1,13 @@
-import {
-  QueryClient,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { NavigateFunction, useSearchParams } from "react-router-dom";
 import SearchResults from "./SearchResults";
+
+export function handleSearch(query = "", navigate: NavigateFunction) {
+  const URL = `/search${query}`;
+  const same = URL.split("?")[0] === "/search";
+  navigate(URL, same ? { replace: true } : {});
+}
 
 export default function Search({ className }: { className?: string }) {
   const [searchParams] = useSearchParams(),
@@ -23,7 +24,7 @@ export default function Search({ className }: { className?: string }) {
   // p - page
   // stags - some tags
   // tags - all tags
-  // ntags - no tags
+  // notags - no tags
 
   const q = searchParams.get("q"),
     t = searchParams.get("t"),
@@ -57,22 +58,27 @@ export default function Search({ className }: { className?: string }) {
       .filter((t) => t)
       .join("&");
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["search"],
-    queryFn: () =>
-      fetch(`localhost:3000/products${query}`).then((r) => r.json()),
+  const { data, isLoading, error } = useQuery(["search"], {
+    queryFn: async () => {
+      try {
+        const json = await (
+          await fetch(`http://localhost:3000/products${query}`)
+        ).json();
+        return json;
+      } catch (e) {
+        console.error(e);
+        return [];
+      }
+    },
   });
 
   useEffect(() => {
-    console.log(data);
-    if (data) {
-      setResults(data);
-    }
+    if (data) setResults(data);
   }, [data]);
 
   return (
     <div>
-      <h1>Search</h1>
+      {isLoading && <div>Loading...</div>}
       {results && <SearchResults data={results} />}
     </div>
   );
