@@ -58,13 +58,13 @@ export default function CardSlider({ className }: { className?: string }) {
       keyboard
       a11y={{ enabled: true }}
       modules={[A11y, Autoplay, Pagination, Keyboard, Navigation]}
-      className={`w-full ${className || ""}`}
+      className={`w-full overflow-visible ${className || ""}`}
     >
       {images.map(({ name, image, link }, index) => {
         return (
           <SwiperSlide
             key={name + index}
-            className={`aspect-[4/3] overflow-hidden`}
+            className="aspect-[4/3] transition-transform duration-100 hover:scale-105"
           >
             <Link to={link}>
               <img
