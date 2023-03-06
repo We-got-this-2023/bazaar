@@ -42,7 +42,10 @@ export default function Navbar() {
             centerSearchBar ? "hidden " : ""
           }opacity flex max-w-md shrink grow gap-2 rounded-lg bg-white-bright p-2 shadow-blue-200 ring-blue-200 transition-all duration-200 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:bg-neutral-800 dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 max-md:hidden`}
         >
-          <SearchIcon className="w-6 cursor-pointer" onClick={handleSearch} />
+          <SearchIcon
+            className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110"
+            onClick={handleSearch}
+          />
           <input
             className="w-full bg-transparent focus:outline-none"
             type="text"
@@ -62,10 +65,13 @@ export default function Navbar() {
           Theme
         </button>
         <Link to="/checkout" className="relative">
-          <CartIcon number={cartNumber} className="w-16" />
+          <CartIcon
+            number={cartNumber}
+            className="w-16 transition-transform duration-200 hover:scale-110"
+          />
         </Link>
         <Link to="/profile">
-          <DefaultImage className="w-16" />
+          <DefaultImage className="w-16 transition-transform duration-200 hover:scale-110" />
         </Link>
       </div>
     </nav>
