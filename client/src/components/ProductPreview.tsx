@@ -21,7 +21,7 @@ export default function ProductPreview({ product }: any) {
 
   return (
     <Link to={`/products/${id}`}>
-      <div className="m-10 rounded-3xl bg-neutral-200 px-8 py-4 shadow-[3px_3px_10px_1px_#00000060] transition-colors duration-200 dark:bg-neutral-800">
+      <div className="m-10 rounded-3xl bg-neutral-200 px-8 py-4 shadow-[3px_3px_10px_1px_#00000060] transition-all duration-200 hover:-translate-y-[2px] hover:-translate-x-[2px] hover:brightness-110 dark:bg-neutral-800">
         <h2 className="font-body text-lg">{title}</h2>
         <div className="flex justify-between gap-20 p-3">
           <div className="flex w-32 items-start">

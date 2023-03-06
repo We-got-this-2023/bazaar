@@ -18,7 +18,6 @@ function setTheme(theme?: Theme) {
   localStorage.setItem("theme", theme);
   // Set the theme on the document for Tailwind to use
   document.documentElement.className = theme;
-  console.log("Theme set to", theme);
   return theme;
 }
 
