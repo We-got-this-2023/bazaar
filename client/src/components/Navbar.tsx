@@ -30,17 +30,17 @@ export default function Navbar() {
       <div className="flex h-full w-full items-center gap-6">
         <Link
           to="/"
-          className="flex items-center justify-center font-logo text-4xl"
+          className="group flex items-center justify-center font-logo text-4xl transition-transform duration-200 hover:scale-105"
         >
           <Logo className="w-14" />
-          <span className="relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:h-2 after:w-0 after:rounded-lg after:bg-black after:transition-all after:duration-200 after:content-[''] hover:after:w-full">
+          <span className="relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:h-2 after:w-0 after:rounded-lg after:bg-black after:transition-all after:duration-200 after:content-[''] group-hover:after:w-full">
             Bazaar
           </span>
         </Link>
         <div
           className={`${
             centerSearchBar ? "hidden " : ""
-          }opacity flex max-w-md shrink grow gap-2 rounded-lg bg-white-bright p-2 shadow-blue-200 ring-blue-200 transition-all duration-200 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:bg-neutral-800 dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 max-md:hidden`}
+          }opacity flex max-w-md shrink grow gap-2 rounded-lg bg-white-bright p-2 shadow-blue-200 ring-blue-200 transition-all duration-200 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:scale-[101.5%] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:bg-neutral-800 dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 max-md:hidden`}
         >
           <SearchIcon
             className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110"
