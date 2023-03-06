@@ -1,17 +1,15 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { NavigateFunction, useSearchParams } from "react-router-dom";
 import SearchResults from "./SearchResults";
 
 export function handleSearch(query = "", navigate: NavigateFunction) {
-  const URL = `/search${query}`;
-  const same = URL.split("?")[0] === "/search";
+  const URL = `/search${query}`,
+    same = URL.split("?")[0] === "/search";
   navigate(URL, same ? { replace: true } : {});
 }
 
-export default function Search({ className }: { className?: string }) {
-  const [searchParams] = useSearchParams(),
-    [results, setResults] = useState([]);
+export default function Search() {
   // Legend:
   // q - query
   // t - time ago
@@ -26,7 +24,9 @@ export default function Search({ className }: { className?: string }) {
   // tags - all tags
   // notags - no tags
 
-  const q = searchParams.get("q"),
+  const [searchParams] = useSearchParams(),
+    [results, setResults] = useState([]),
+    q = searchParams.get("q"),
     t = searchParams.get("t"),
     rlo = searchParams.get("r"),
     rhi = searchParams.get("r"),
@@ -37,40 +37,38 @@ export default function Search({ className }: { className?: string }) {
     p = searchParams.get("p"),
     stags = searchParams.get("stags"),
     tags = searchParams.get("tags"),
-    notags = searchParams.get("notags");
-
-  const query =
-    "?" +
-    [
-      q ? `q=${q}` : "",
-      t ? `t=${t}` : "",
-      rlo ? `rlo=${rlo}` : "",
-      rhi ? `rhi=${rhi}` : "",
-      clo ? `clo=${clo}` : "",
-      chi ? `chi=${chi}` : "",
-      s ? `s=${s}` : "",
-      o ? `o=${o}` : "",
-      p ? `p=${p}` : "",
-      stags ? `stags=${stags}` : "",
-      tags ? `tags=${tags}` : "",
-      notags ? `notags=${notags}` : "",
-    ]
-      .filter((t) => t)
-      .join("&");
-
-  const { data, isLoading, error } = useQuery(["search"], {
-    queryFn: async () => {
-      try {
-        const json = await (
-          await fetch(`http://localhost:3000/products${query}`)
-        ).json();
-        return json;
-      } catch (e) {
-        console.error(e);
-        return [];
-      }
-    },
-  });
+    notags = searchParams.get("notags"),
+    query =
+      "?" +
+      [
+        q ? `q=${q}` : "",
+        t ? `t=${t}` : "",
+        rlo ? `rlo=${rlo}` : "",
+        rhi ? `rhi=${rhi}` : "",
+        clo ? `clo=${clo}` : "",
+        chi ? `chi=${chi}` : "",
+        s ? `s=${s}` : "",
+        o ? `o=${o}` : "",
+        p ? `p=${p}` : "",
+        stags ? `stags=${stags}` : "",
+        tags ? `tags=${tags}` : "",
+        notags ? `notags=${notags}` : "",
+      ]
+        .filter((t) => t)
+        .join("&"),
+    { data, isLoading, error } = useQuery(["search"], {
+      queryFn: async () => {
+        try {
+          const json = await (
+            await fetch(`http://localhost:3000/products${query}`)
+          ).json();
+          return json;
+        } catch (e) {
+          console.error(e);
+          return [];
+        }
+      },
+    });
 
   useEffect(() => {
     if (data) setResults(data);
