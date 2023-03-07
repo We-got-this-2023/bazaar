@@ -55,7 +55,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   const login = async (values: { email: string; password: string }) => {
     setIsLoading(true);
     const data = {
-      email: values.email,
+      email: values.email.toLowerCase().trim(),
       password: values.password,
     };
     const loggedInResponse = await fetch("http://localhost:3000/auth/login", {
@@ -79,7 +79,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   }) => {
     setIsLoading(true);
     const data = {
-      email: values.email,
+      email: values.email.toLowerCase().trim(),
       name: values.username,
       password: values.password,
     };

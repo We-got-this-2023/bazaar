@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
@@ -13,6 +14,7 @@ import Products from "./pages/Products";
 import Profile from "./pages/Profile";
 import Search from "./pages/Search";
 import Signup from "./pages/Signup";
+import isEmptySearch from "./utils/isEmptySearch";
 
 function LayoutWithNavbar() {
   return (
@@ -24,6 +26,7 @@ function LayoutWithNavbar() {
 }
 
 export default function App() {
+  const [isEmpty, setIsEmpty] = useState(isEmptySearch());
   return (
     <>
       <Routes>
@@ -31,7 +34,6 @@ export default function App() {
           <Route index element={<LandingPage />} />
           <Route path="/about" element={<About />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/search?q=" element={<Search />} />
           <Route path="/search" element={<Search />} />
           <Route path="/products/:id" element={<ProductInfo />} />
           <Route path="/profile/:id" element={<Profile />} />
