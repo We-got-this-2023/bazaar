@@ -26,6 +26,7 @@ interface FancySelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   options?: RegisterOptions;
   placeholder?: string;
   children: JSX.Element[];
+  type?: string;
 }
 
 export function FancyInput({
@@ -107,6 +108,7 @@ export function FancySelect({
   className,
   placeholder,
   children,
+  type,
   ...rest
 }: FancySelectProps) {
   const { formState, register } = useFormContext();
@@ -117,6 +119,7 @@ export function FancySelect({
   const inputRef = useRef<HTMLSelectElement | null>(null);
 
   const [labelSmall, setLabelSmall] = useState(false);
+  const [isCheckbox] = useState(type === "checkbox");
 
   const handleFocus = (focus: boolean) => {
     inputRef.current?.value === "" ? setLabelSmall(focus) : setLabelSmall(true);
@@ -139,10 +142,19 @@ export function FancySelect({
       aria-placeholder={placeholder ?? ""}
     >
       {Children.map(children, (child: JSX.Element) => {
-        if (child.type !== "option")
+        if (type !== "checkbox" && child.type !== "option")
           throw new Error('Input.tsx:142 - child.type must be "option"');
+        if (isCheckbox && child.type !== "input")
+          throw new Error('Input.tsx:143 - child.type must be "input"');
         const { value } = child.props;
-        return <option {...child.props} key={value} value={value} />;
+        if (isCheckbox) {
+          return (
+            <input {...child.props} type="checkbox" name={value} key={value} />
+          );
+        }
+        return (
+          <option {...child.props} key={value} value={value} children={value} />
+        );
       })}
     </select>
   );

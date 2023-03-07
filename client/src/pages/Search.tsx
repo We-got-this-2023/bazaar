@@ -81,7 +81,7 @@ export default function Search() {
 
   return (
     <div className="mt-2 flex gap-3">
-      <div className="flex w-[24rem] flex-col items-center rounded-2xl bg-neutral-200 p-4 shadow-[3px_3px_10px_1px_#00000060] dark:bg-neutral-800 max-md:hidden">
+      <div className="flex w-[24rem] flex-col items-center rounded-2xl bg-neutral-200 p-4 shadow-[3px_3px_10px_1px_#00000060] transition-colors duration-200 dark:bg-neutral-800 max-md:hidden">
         <h2 className="text-lg font-semibold">Filters</h2>
         <div className="flex justify-between gap-20 p-3">
           <div className="flex gap-2">
@@ -160,8 +160,9 @@ export default function Search() {
                 <option value="Ascending" />
                 <option value="Descending" />
               </Select>
+              <label htmlFor="query_yes_tags">Tags</label>
               <button
-                className="rounded-lg bg-green-600 p-2 text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-green-800 hover:shadow-xl dark:bg-green-400 dark:text-black dark:hover:bg-green-500"
+                className="mt-6 rounded-lg bg-green-600 p-2 text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-green-800 hover:shadow-xl dark:bg-green-400 dark:text-black dark:hover:bg-green-500"
                 type="submit"
               >
                 Save Changes
