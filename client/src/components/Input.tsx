@@ -10,6 +10,7 @@ interface FancyInputProps extends InputHTMLAttributes<HTMLInputElement> {
   options?: RegisterOptions;
   type: string;
   placeholder?: string;
+  choices?: string[];
 }
 
 export default function Input({
@@ -18,6 +19,7 @@ export default function Input({
   className,
   type,
   placeholder,
+  choices,
   ...rest
 }: FancyInputProps) {
   const { formState, register } = useFormContext();
@@ -27,7 +29,13 @@ export default function Input({
 
   const [labelSmall, setLabelSmall] = useState(false);
   const [isNumber] = useState(type === "number");
+  const [isSelect] = useState(type === "select");
   const { ref, ...regRest } = name ? register(name, options) : { ref: null };
+
+  if (isSelect) {
+    if (!choices) throw new Error('Input.tsx:26 "choices" is required');
+  } else if (choices)
+    throw new Error('Input.tsx:27 "choices" is not supported for this type');
 
   const handleFocus = (focus: boolean) => {
     if (isNumber) return;

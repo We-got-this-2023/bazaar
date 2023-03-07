@@ -86,15 +86,74 @@ export default function Search() {
               onSubmit={onSubmit}
               className="flex h-full flex-col items-center gap-2"
             >
-              <Input name="query_time" type="number" placeholder="0" />
+              <label htmlFor="query_time">Results from..</label>
               <Input
-                name="query_rating_lower"
+                id="query_time"
+                name="query_time"
                 type="number"
-                min="0"
-                max="5"
                 placeholder="0"
+                className="mx-0 w-16"
               />
-
+              <label htmlFor="query_rating_lower">Rating</label>
+              <div className="flex gap-2">
+                <Input
+                  id="query_rating_lower"
+                  name="query_rating_lower"
+                  type="number"
+                  min="0"
+                  max="5"
+                  placeholder="0"
+                  className="mx-0 w-16"
+                />
+                _
+                <Input
+                  id="query_rating_upper"
+                  name="query_rating_upper"
+                  type="number"
+                  min="0"
+                  max="5"
+                  placeholder="5"
+                  className="mx-0 w-16"
+                />
+              </div>
+              <label htmlFor="query_cost_lower">Cost</label>
+              <div className="flex gap-2">
+                <Input
+                  id="query_cost_lower"
+                  name="query_cost_lower"
+                  type="number"
+                  min="0"
+                  placeholder="0"
+                  className="mx-0 w-16"
+                />
+                _
+                <Input
+                  id="query_cost_upper"
+                  name="query_cost_upper"
+                  type="number"
+                  min="0"
+                  placeholder="∞"
+                  className="mx-0 w-16"
+                />
+              </div>
+              <label htmlFor="query_sort_by">Sort By</label>
+              <Input
+                id="query_sort_by"
+                name="query_sort_by"
+                placeholder="Popularity"
+                type="select"
+                className="mx-0 w-32"
+                choices={["Popularity", "Rating", "Cost", "Date"]}
+              />
+              <label htmlFor="query_sort_dir">Order</label>
+              <Input
+                id="query_sort_dir"
+                name="query_sort_dir"
+                type="select"
+                className="mx-0 w-32"
+                placeholder="Ascending"
+                choices={["Ascending", "Descending"]}
+              />
               <button
                 className="rounded-lg bg-green-600 p-2 text-white shadow-lg dark:bg-green-400 dark:text-black"
                 type="submit"
