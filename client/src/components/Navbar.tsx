@@ -5,7 +5,6 @@ import CartIcon from "../assets/CartIcon";
 import DefaultImage from "../assets/DefaultImage";
 import Logo from "../assets/Logo";
 import SearchIcon from "../assets/SearchIcon";
-import { handleSearch } from "../pages/Search";
 import { toggleTheme } from "../utils/settings";
 
 export default function Navbar() {
@@ -40,7 +39,7 @@ export default function Navbar() {
         <div
           className={`${
             centerSearchBar ? "hidden " : ""
-          }opacity flex max-w-md shrink grow gap-2 rounded-lg bg-white-bright p-2 shadow-blue-200 ring-blue-200 transition-all duration-200 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:scale-[101.5%] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:bg-neutral-800 dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 max-md:hidden`}
+          }opacity flex max-w-md shrink grow gap-2 rounded-lg bg-white-bright p-2 shadow-blue-200 ring-blue-200 transition-all duration-200 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:scale-[101.5%] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:bg-neutral-800 dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe] max-md:hidden`}
         >
           <SearchIcon
             className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110"

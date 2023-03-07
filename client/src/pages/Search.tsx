@@ -1,13 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { NavigateFunction, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { Form } from "../components/Form";
+import Input from "../components/Input";
 import SearchResults from "./SearchResults";
 
-export function handleSearch(query = "", navigate: NavigateFunction) {
-  const URL = `/search${query}`,
-    same = URL.split("?")[0] === "/search";
-  navigate(URL, same ? { replace: true } : {});
-}
+interface FormData {}
 
 export default function Search() {
   // Legend:
@@ -74,8 +72,37 @@ export default function Search() {
     if (data) setResults(data);
   }, [data]);
 
+  const onSubmit = async (data: FormData) => {
+    sessionStorage.setItem("search", JSON.stringify(data));
+  };
+
   return (
-    <div>
+    <div className="mt-2 flex gap-3">
+      <div className="flex w-[24rem] flex-col items-center rounded-2xl bg-neutral-200 p-4 shadow-[3px_3px_10px_1px_#00000060] dark:bg-neutral-800 max-md:hidden">
+        <h2 className="text-lg font-semibold">Filters</h2>
+        <div className="flex justify-between gap-20 p-3">
+          <div className="flex gap-2">
+            <Form
+              onSubmit={onSubmit}
+              className="flex h-full flex-col items-center gap-2"
+            >
+              <Input
+                name="query_time"
+                type="number"
+                placeholder="0"
+                className="appearance-none rounded-lg bg-white p-1 text-black [-moz-appearance:textfield] dark:bg-black dark:text-white"
+              />
+
+              <button
+                className="rounded-lg bg-green-600 p-2 text-white shadow-lg dark:bg-green-400 dark:text-black"
+                type="submit"
+              >
+                Save Changes
+              </button>
+            </Form>
+          </div>
+        </div>
+      </div>
       {isLoading && <div>Loading...</div>}
       {results && <SearchResults data={results} />}
     </div>
