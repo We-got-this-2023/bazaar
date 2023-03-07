@@ -2,7 +2,7 @@ import { useForm, useFormContext } from "react-hook-form";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Form } from "./Form";
-import Input from "./Input";
+import { FancyInput as Input } from "./Input";
 
 type FormData = {
   country: string;

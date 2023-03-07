@@ -2,7 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Form } from "../components/Form";
-import Input from "../components/Input";
+import {
+  FancyInput as Input,
+  FancySelect as Select,
+} from "../components/Input";
 import SearchResults from "./SearchResults";
 
 interface FormData {}
@@ -137,23 +140,26 @@ export default function Search() {
                 />
               </div>
               <label htmlFor="query_sort_by">Sort By</label>
-              <Input
+              <Select
                 id="query_sort_by"
                 name="query_sort_by"
-                placeholder="Popularity"
-                type="select"
                 className="mx-0 w-32"
-                choices={["Popularity", "Rating", "Cost", "Date"]}
-              />
+                placeholder="Rating"
+              >
+                <option value="Time" />
+                <option value="Rating" />
+                <option value="Cost" />
+              </Select>
               <label htmlFor="query_sort_dir">Order</label>
-              <Input
+              <Select
                 id="query_sort_dir"
                 name="query_sort_dir"
-                type="select"
                 className="mx-0 w-32"
                 placeholder="Ascending"
-                choices={["Ascending", "Descending"]}
-              />
+              >
+                <option value="Ascending" />
+                <option value="Descending" />
+              </Select>
               <button
                 className="rounded-lg bg-green-600 p-2 text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-green-800 hover:shadow-xl dark:bg-green-400 dark:text-black dark:hover:bg-green-500"
                 type="submit"

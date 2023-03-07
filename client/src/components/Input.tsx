@@ -1,5 +1,12 @@
 import { ErrorMessage } from "@hookform/error-message";
-import { InputHTMLAttributes, useRef, useState } from "react";
+import React, {
+  Children,
+  InputHTMLAttributes,
+  ReactNode,
+  SelectHTMLAttributes,
+  useRef,
+  useState,
+} from "react";
 import { FieldErrors, RegisterOptions, useFormContext } from "react-hook-form";
 import Warning from "../assets/Warning";
 
@@ -10,32 +17,33 @@ interface FancyInputProps extends InputHTMLAttributes<HTMLInputElement> {
   options?: RegisterOptions;
   type: string;
   placeholder?: string;
-  choices?: string[];
 }
 
-export default function Input({
+interface FancySelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
+  errors?: FieldErrors;
+  name: string;
+  className?: string;
+  options?: RegisterOptions;
+  placeholder?: string;
+  children: JSX.Element[];
+}
+
+export function FancyInput({
   name,
   options,
   className,
   type,
   placeholder,
-  choices,
   ...rest
 }: FancyInputProps) {
   const { formState, register } = useFormContext();
   const { errors } = formState;
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | HTMLSelectElement | null>(null);
 
   const [labelSmall, setLabelSmall] = useState(false);
   const [isNumber] = useState(type === "number");
-  const [isSelect] = useState(type === "select");
   const { ref, ...regRest } = name ? register(name, options) : { ref: null };
-
-  if (isSelect) {
-    if (!choices) throw new Error('Input.tsx:26 "choices" is required');
-  } else if (choices)
-    throw new Error('Input.tsx:27 "choices" is not supported for this type');
 
   const handleFocus = (focus: boolean) => {
     if (isNumber) return;
@@ -90,5 +98,52 @@ export default function Input({
         </div>
       )}
     </div>
+  );
+}
+
+export function FancySelect({
+  name,
+  options,
+  className,
+  placeholder,
+  children,
+  ...rest
+}: FancySelectProps) {
+  const { formState, register } = useFormContext();
+  const { errors } = formState;
+
+  const { ref, ...regRest } = name ? register(name, options) : { ref: null };
+
+  const inputRef = useRef<HTMLSelectElement | null>(null);
+
+  const [labelSmall, setLabelSmall] = useState(false);
+
+  const handleFocus = (focus: boolean) => {
+    inputRef.current?.value === "" ? setLabelSmall(focus) : setLabelSmall(true);
+  };
+  return (
+    <select
+      {...rest}
+      {...(ref ? regRest : {})}
+      ref={(e) => {
+        if (!ref) return inputRef;
+        ref(e);
+        inputRef.current = e;
+      }}
+      onFocus={() => handleFocus(true)}
+      onBlur={() => handleFocus(false)}
+      className={`rounded-md border px-4 pb-2 ring-blue-300 focus:outline-none focus:ring-2 dark:bg-black ${
+        name && errors[name] ? "border-red-500 ring-red-300" : "border-gray-300"
+      } bg-white-bright p-2 shadow-blue-200 ring-blue-200 transition-all duration-200 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:scale-[101.5%] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:bg-neutral-800 dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe] ${className}`}
+      placeholder=""
+      aria-placeholder={placeholder ?? ""}
+    >
+      {Children.map(children, (child: JSX.Element) => {
+        if (child.type !== "option")
+          throw new Error('Input.tsx:142 - child.type must be "option"');
+        const { value } = child.props;
+        return <option {...child.props} key={value} value={value} />;
+      })}
+    </select>
   );
 }
