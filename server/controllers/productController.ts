@@ -22,8 +22,8 @@ export const getProductsWithParams = async (req: Request, res: Response) => {
     rlo,
     rhi,
     stags,
-    tags,
-    notags,
+    atags,
+    ntags,
   }: {
     q?: string;
     p?: string;
@@ -35,8 +35,8 @@ export const getProductsWithParams = async (req: Request, res: Response) => {
     rlo?: string;
     rhi?: string;
     stags?: string;
-    tags?: string;
-    notags?: string;
+    atags?: string;
+    ntags?: string;
   } = req.query;
 
   const query = q ?? "",
@@ -49,8 +49,8 @@ export const getProductsWithParams = async (req: Request, res: Response) => {
     ratingLow = Number(rlo ?? 0),
     ratingHigh = Number(rhi ?? 999999999),
     someTags = stags ? stags.split(",") : undefined,
-    allTags = tags ? tags.split(",") : [],
-    notAnyTags = notags ? notags.split(",") : [];
+    allTags = atags ? atags.split(",") : [],
+    notAnyTags = ntags ? ntags.split(",") : [];
 
   try {
     const products = await prisma.product.findMany({

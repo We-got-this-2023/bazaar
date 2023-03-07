@@ -8,7 +8,33 @@ import {
 } from "../components/Input";
 import SearchResults from "./SearchResults";
 
-interface FormData {}
+interface SessionQueryParams {
+  sq?: string;
+  st?: string;
+  srlo?: string;
+  srhi?: string;
+  sclo?: string;
+  schi?: string;
+  ss?: string;
+  so?: string;
+  sp?: string;
+  sstags?: string;
+  satags?: string;
+  snotags?: string;
+}
+
+interface FormData {
+  t: number;
+  rlo: number;
+  rhi: number;
+  clo: number;
+  chi: number;
+  s: string;
+  o: string;
+  tags: string[];
+  notags: string[];
+  stags: string[];
+}
 
 export default function Search() {
   // Legend:
@@ -22,8 +48,34 @@ export default function Search() {
   // o - order
   // p - page
   // stags - some tags
-  // tags - all tags
+  // atags - all tags
   // notags - no tags
+  // sq - session query
+  // srlo - session rating lower bound
+  // srhi - session rating upper bound
+  // sclo - session cost lower bound
+  // schi - session cost upper bound
+  // ss - session sort by
+  // so - session order
+  // sp - session page
+  // sstags - session some tags
+  // satags - session all tags
+  // snotags - session no tags
+
+  const {
+    sq,
+    st,
+    srlo,
+    srhi,
+    sclo,
+    schi,
+    ss,
+    so,
+    sp,
+    sstags,
+    satags,
+    snotags,
+  } = JSON.parse(sessionStorage.getItem("query") || "{}") as SessionQueryParams;
 
   const [searchParams] = useSearchParams(),
     [results, setResults] = useState([]),
@@ -37,23 +89,23 @@ export default function Search() {
     chi = searchParams.get("chi"),
     p = searchParams.get("p"),
     stags = searchParams.get("stags"),
-    tags = searchParams.get("tags"),
+    atags = searchParams.get("atags"),
     notags = searchParams.get("notags"),
     query =
       "?" +
       [
-        q ? `q=${q}` : "",
-        t ? `t=${t}` : "",
-        rlo ? `rlo=${rlo}` : "",
-        rhi ? `rhi=${rhi}` : "",
-        clo ? `clo=${clo}` : "",
-        chi ? `chi=${chi}` : "",
-        s ? `s=${s}` : "",
-        o ? `o=${o}` : "",
-        p ? `p=${p}` : "",
-        stags ? `stags=${stags}` : "",
-        tags ? `tags=${tags}` : "",
-        notags ? `notags=${notags}` : "",
+        q ? `q=${q}` : sq ?? "",
+        t ? `t=${t}` : st ?? "",
+        rlo ? `rlo=${rlo}` : srlo ?? "",
+        rhi ? `rhi=${rhi}` : srhi ?? "",
+        clo ? `clo=${clo}` : sclo ?? "",
+        chi ? `chi=${chi}` : schi ?? "",
+        s ? `s=${s}` : ss ?? "",
+        o ? `o=${o}` : so ?? "",
+        p ? `p=${p}` : sp ?? "",
+        stags ? `stags=${stags}` : sstags ?? "",
+        atags ? `atags=${atags}` : satags ?? "",
+        notags ? `notags=${notags}` : snotags ?? "",
       ]
         .filter((t) => t)
         .join("&"),
@@ -76,6 +128,7 @@ export default function Search() {
   }, [data]);
 
   const onSubmit = async (data: FormData) => {
+    console.log(data);
     sessionStorage.setItem("search", JSON.stringify(data));
   };
 
@@ -89,29 +142,28 @@ export default function Search() {
               onSubmit={onSubmit}
               className="flex h-full flex-col items-center gap-2"
             >
-              <label htmlFor="query_time">Results from..</label>
+              <label htmlFor="t">Results from..</label>
               <Input
-                id="query_time"
-                name="query_time"
+                id="t"
+                name="t"
                 type="number"
                 placeholder="0"
                 className="mx-0 w-16"
               />
-              <label htmlFor="query_rating_lower">Rating</label>
+              <label htmlFor="rlo">Rating</label>
               <div className="flex gap-2">
                 <Input
-                  id="query_rating_lower"
-                  name="query_rating_lower"
+                  id="rlo"
+                  name="rlo"
                   type="number"
                   min="0"
                   max="5"
-                  placeholder="0"
+                  placeholder="5"
                   className="mx-0 w-16"
                 />
-                _
                 <Input
-                  id="query_rating_upper"
-                  name="query_rating_upper"
+                  id="rhi"
+                  name="rhi"
                   type="number"
                   min="0"
                   max="5"
@@ -119,11 +171,11 @@ export default function Search() {
                   className="mx-0 w-16"
                 />
               </div>
-              <label htmlFor="query_cost_lower">Cost</label>
+              <label htmlFor="clo">Cost</label>
               <div className="flex gap-2">
                 <Input
-                  id="query_cost_lower"
-                  name="query_cost_lower"
+                  id="clo"
+                  name="clo"
                   type="number"
                   min="0"
                   placeholder="0"
@@ -131,18 +183,18 @@ export default function Search() {
                 />
                 _
                 <Input
-                  id="query_cost_upper"
-                  name="query_cost_upper"
+                  id="chi"
+                  name="chi"
                   type="number"
                   min="0"
                   placeholder="∞"
                   className="mx-0 w-16"
                 />
               </div>
-              <label htmlFor="query_sort_by">Sort By</label>
+              <label htmlFor="s">Sort By</label>
               <Select
-                id="query_sort_by"
-                name="query_sort_by"
+                id="s"
+                name="s"
                 className="mx-0 w-32"
                 placeholder="Rating"
               >
@@ -150,17 +202,17 @@ export default function Search() {
                 <option value="Rating" />
                 <option value="Cost" />
               </Select>
-              <label htmlFor="query_sort_dir">Order</label>
+              <label htmlFor="o">Order</label>
               <Select
-                id="query_sort_dir"
-                name="query_sort_dir"
+                id="o"
+                name="o"
                 className="mx-0 w-32"
                 placeholder="Ascending"
               >
                 <option value="Ascending" />
                 <option value="Descending" />
               </Select>
-              <label htmlFor="query_yes_tags">Tags</label>
+              <label htmlFor="tags">Tags</label>
               <button
                 className="mt-6 rounded-lg bg-green-600 p-2 text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-green-800 hover:shadow-xl dark:bg-green-400 dark:text-black dark:hover:bg-green-500"
                 type="submit"
