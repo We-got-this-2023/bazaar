@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Form } from "../components/Form";
 import {
   FancyInput as Input,
@@ -8,35 +8,21 @@ import {
 } from "../components/Input";
 import SearchResults from "./SearchResults";
 
-interface SessionQueryParams {
-  sq?: string;
-  st?: string;
-  srlo?: string;
-  srhi?: string;
-  sclo?: string;
-  schi?: string;
-  ss?: string;
-  so?: string;
-  sp?: string;
-  sstags?: string;
-  satags?: string;
-  snotags?: string;
-}
-
 interface FormData {
-  t: number;
+  t: "Today" | "This Week" | "This Month" | "This Year" | "All Time";
   rlo: number;
   rhi: number;
   clo: number;
   chi: number;
-  s: string;
-  o: string;
-  tags: string[];
-  notags: string[];
+  s: "Date" | "Rating" | "Cost";
+  o: "Ascending" | "Descending";
+  atags: string[];
+  ntags: string[];
   stags: string[];
 }
 
 export default function Search() {
+  const navigate = useNavigate();
   // Legend:
   // q - query
   // t - time ago
@@ -49,33 +35,11 @@ export default function Search() {
   // p - page
   // stags - some tags
   // atags - all tags
-  // notags - no tags
-  // sq - session query
-  // srlo - session rating lower bound
-  // srhi - session rating upper bound
-  // sclo - session cost lower bound
-  // schi - session cost upper bound
-  // ss - session sort by
-  // so - session order
-  // sp - session page
-  // sstags - session some tags
-  // satags - session all tags
-  // snotags - session no tags
+  // ntags - no tags
 
-  const {
-    sq,
-    st,
-    srlo,
-    srhi,
-    sclo,
-    schi,
-    ss,
-    so,
-    sp,
-    sstags,
-    satags,
-    snotags,
-  } = JSON.parse(sessionStorage.getItem("query") || "{}") as SessionQueryParams;
+  const session = JSON.parse(
+    sessionStorage.getItem("searchParams") || "{}"
+  ) as FormData;
 
   const [searchParams] = useSearchParams(),
     [results, setResults] = useState([]),
@@ -90,22 +54,22 @@ export default function Search() {
     p = searchParams.get("p"),
     stags = searchParams.get("stags"),
     atags = searchParams.get("atags"),
-    notags = searchParams.get("notags"),
+    ntags = searchParams.get("ntags"),
     query =
       "?" +
       [
-        q ? `q=${q}` : sq ?? "",
-        t ? `t=${t}` : st ?? "",
-        rlo ? `rlo=${rlo}` : srlo ?? "",
-        rhi ? `rhi=${rhi}` : srhi ?? "",
-        clo ? `clo=${clo}` : sclo ?? "",
-        chi ? `chi=${chi}` : schi ?? "",
-        s ? `s=${s}` : ss ?? "",
-        o ? `o=${o}` : so ?? "",
-        p ? `p=${p}` : sp ?? "",
-        stags ? `stags=${stags}` : sstags ?? "",
-        atags ? `atags=${atags}` : satags ?? "",
-        notags ? `notags=${notags}` : snotags ?? "",
+        q ? `q=${q}` : "",
+        t || session.t ? `t=${t || session.t}` : "",
+        rlo || session.rlo ? `rlo=${rlo || session.rlo}` : "",
+        rhi || session.rhi ? `rhi=${rhi || session.rhi}` : "",
+        clo || session.clo ? `clo=${clo || session.clo}` : "",
+        chi || session.chi ? `chi=${chi || session.chi}` : "",
+        s || session.s ? `s=${s || session.s}` : "",
+        o || session.o ? `o=${o || session.o}` : "",
+        p ? `p=${p}` : "",
+        stags || session.stags ? `stags=${stags || session.stags}` : "",
+        atags || session.atags ? `atags=${atags || session.atags}` : "",
+        ntags || session.ntags ? `ntags=${ntags || session.ntags}` : "",
       ]
         .filter((t) => t)
         .join("&"),
@@ -129,7 +93,7 @@ export default function Search() {
 
   const onSubmit = async (data: FormData) => {
     console.log(data);
-    sessionStorage.setItem("search", JSON.stringify(data));
+    sessionStorage.setItem("searchParams", JSON.stringify(data));
   };
 
   return (
@@ -143,13 +107,13 @@ export default function Search() {
               className="flex h-full flex-col items-center gap-2"
             >
               <label htmlFor="t">Results from..</label>
-              <Input
-                id="t"
-                name="t"
-                type="number"
-                placeholder="0"
-                className="mx-0 w-16"
-              />
+              <Select id="t" name="t">
+                <option value="Today" />
+                <option value="This Week" />
+                <option value="This Month" />
+                <option value="This Year" />
+                <option value="All Time" />
+              </Select>
               <label htmlFor="rlo">Rating</label>
               <div className="flex gap-2">
                 <Input
@@ -158,7 +122,7 @@ export default function Search() {
                   type="number"
                   min="0"
                   max="5"
-                  placeholder="5"
+                  placeholder="0"
                   className="mx-0 w-16"
                 />
                 <Input
