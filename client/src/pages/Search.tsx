@@ -86,11 +86,13 @@ export default function Search() {
               onSubmit={onSubmit}
               className="flex h-full flex-col items-center gap-2"
             >
+              <Input name="query_time" type="number" placeholder="0" />
               <Input
-                name="query_time"
+                name="query_rating_lower"
                 type="number"
+                min="0"
+                max="5"
                 placeholder="0"
-                className="appearance-none rounded-lg bg-white p-1 text-black [-moz-appearance:textfield] dark:bg-black dark:text-white"
               />
 
               <button

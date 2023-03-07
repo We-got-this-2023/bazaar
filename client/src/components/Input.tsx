@@ -49,7 +49,9 @@ export default function Input({
           onFocus={() => handleFocus(true)}
           onBlur={() => handleFocus(false)}
           className={`rounded-md border px-4 ${
-            isNumber ? "pt-2" : "pt-4"
+            isNumber
+              ? "appearance-none pt-2 [-moz-appearance:textfield]"
+              : "pt-4"
           } pb-2 ring-blue-300 focus:outline-none focus:ring-2 dark:bg-black ${
             name && errors[name]
               ? "border-red-500 ring-red-300"
