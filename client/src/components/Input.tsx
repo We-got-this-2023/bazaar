@@ -64,7 +64,7 @@ export default function Input({
             name && errors[name]
               ? "border-red-500 ring-red-300"
               : "border-gray-300"
-          }${className}`}
+          } bg-white-bright p-2 shadow-blue-200 ring-blue-200 transition-all duration-200 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:scale-[101.5%] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:bg-neutral-800 dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe] ${className}`}
           placeholder={isNumber ? placeholder ?? name : ""}
           aria-placeholder={placeholder ?? ""}
         />
