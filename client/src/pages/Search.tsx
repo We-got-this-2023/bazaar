@@ -22,7 +22,6 @@ interface FormData {
 }
 
 export default function Search() {
-  const navigate = useNavigate();
   // Legend:
   // q - query
   // t - time ago
@@ -37,11 +36,9 @@ export default function Search() {
   // atags - all tags
   // ntags - no tags
 
-  const session = JSON.parse(
-    sessionStorage.getItem("searchParams") || "{}"
-  ) as FormData;
-
-  const [searchParams] = useSearchParams(),
+  const item = sessionStorage.getItem("searchParams"),
+    session = (item ? JSON.parse(item) : {}) as FormData,
+    [searchParams] = useSearchParams(),
     [results, setResults] = useState([]),
     q = searchParams.get("q"),
     t = searchParams.get("t"),
@@ -55,24 +52,25 @@ export default function Search() {
     stags = searchParams.get("stags"),
     atags = searchParams.get("atags"),
     ntags = searchParams.get("ntags"),
-    query =
-      "?" +
-      [
-        q ? `q=${q}` : "",
-        t || session.t ? `t=${t || session.t}` : "",
-        rlo || session.rlo ? `rlo=${rlo || session.rlo}` : "",
-        rhi || session.rhi ? `rhi=${rhi || session.rhi}` : "",
-        clo || session.clo ? `clo=${clo || session.clo}` : "",
-        chi || session.chi ? `chi=${chi || session.chi}` : "",
-        s || session.s ? `s=${s || session.s}` : "",
-        o || session.o ? `o=${o || session.o}` : "",
-        p ? `p=${p}` : "",
-        stags || session.stags ? `stags=${stags || session.stags}` : "",
-        atags || session.atags ? `atags=${atags || session.atags}` : "",
-        ntags || session.ntags ? `ntags=${ntags || session.ntags}` : "",
-      ]
-        .filter((t) => t)
-        .join("&"),
+    query = q
+      ? "?" +
+        [
+          q ? `q=${q}` : "",
+          t || session.t ? `t=${t || session.t}` : "",
+          rlo || session.rlo ? `rlo=${rlo || session.rlo}` : "",
+          rhi || session.rhi ? `rhi=${rhi || session.rhi}` : "",
+          clo || session.clo ? `clo=${clo || session.clo}` : "",
+          chi || session.chi ? `chi=${chi || session.chi}` : "",
+          s || session.s ? `s=${s || session.s}` : "",
+          o || session.o ? `o=${o || session.o}` : "",
+          p ? `p=${p}` : "",
+          stags || session.stags ? `stags=${stags || session.stags}` : "",
+          atags || session.atags ? `atags=${atags || session.atags}` : "",
+          ntags || session.ntags ? `ntags=${ntags || session.ntags}` : "",
+        ]
+          .filter((t) => t)
+          .join("&")
+      : "",
     { data, isLoading, error } = useQuery(["search"], {
       queryFn: async () => {
         try {

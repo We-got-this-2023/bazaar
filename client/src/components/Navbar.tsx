@@ -15,7 +15,12 @@ export default function Navbar() {
   const queryClient = useQueryClient();
   const handleSearch = () => {
     if (location.pathname.includes("/search")) {
-      navigate(`/search?q=${searchRef.current?.value}`, { replace: true });
+      navigate(
+        `/search${
+          searchRef.current?.value ? "?q=" + searchRef.current.value : ""
+        }`,
+        { replace: true }
+      );
       queryClient.clear();
     } else navigate(`/search?q=${searchRef.current?.value}`);
   };
