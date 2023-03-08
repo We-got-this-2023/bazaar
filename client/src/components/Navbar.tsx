@@ -39,7 +39,7 @@ export default function Navbar() {
         <div
           className={`${
             centerSearchBar ? "hidden " : ""
-          }opacity 1 flex max-w-md shrink grow gap-2 rounded-lg max-md:hidden`}
+          }opacity 1 flex max-w-md shrink grow gap-2 rounded-lg bg-white-bright p-2 dark:bg-neutral-800 max-md:hidden`}
         >
           <SearchIcon
             className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110"

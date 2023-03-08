@@ -32,7 +32,7 @@ interface FancySelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 export function FancyInput({
   name,
   options,
-  className,
+  className: cOverrides,
   type,
   placeholder,
   ...rest
@@ -51,6 +51,27 @@ export function FancyInput({
     inputRef.current?.value === "" ? setLabelSmall(focus) : setLabelSmall(true);
   };
 
+  const classes = {
+    error: name && errors[name] ? "border-red-500 ring-red-300" : "",
+    main: "rounded-md border p-4 pb-2 ring-blue-300 dark:bg-black bg-white-bright shadow-blue-200 ring-blue-200 transition-all duration-200",
+    labelMain:
+      "pointer-events-none absolute select-none capitalize opacity-60 transition-all duration-300 ease-out top-1/2 -translate-y-1/2 pl-3 text-base",
+    labelSmall: labelSmall ? "top-0 pl-2 text-xs opacity-80" : "",
+    number: isNumber ? "appearance-none pt-2 [-moz-appearance:textfield]" : "",
+    pseudo:
+      "focus:outline-none focus:ring-2 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:scale-[101.5%] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe]",
+    overrides: cOverrides ?? "",
+  };
+
+  const classString = [
+    classes.error,
+    classes.main,
+    classes.number,
+    classes.pseudo,
+    classes.overrides,
+  ].join(" ");
+  const labelClassString = [classes.labelMain, classes.labelSmall].join(" ");
+
   return (
     <div className="mb-2 flex flex-col">
       <div className="relative flex flex-col gap-2">
@@ -65,27 +86,12 @@ export function FancyInput({
           }}
           onFocus={() => handleFocus(true)}
           onBlur={() => handleFocus(false)}
-          className={`rounded-md border px-4 ${
-            isNumber
-              ? "appearance-none pt-2 [-moz-appearance:textfield]"
-              : "pt-4"
-          } pb-2 ring-blue-300 focus:outline-none focus:ring-2 dark:bg-black ${
-            name && errors[name]
-              ? "border-red-500 ring-red-300"
-              : "border-gray-300"
-          } bg-white-bright p-2 shadow-blue-200 ring-blue-200 transition-all duration-200 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:scale-[101.5%] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:bg-neutral-800 dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe] ${className}`}
+          className={classString}
           placeholder={isNumber ? placeholder ?? name : ""}
           aria-placeholder={placeholder ?? ""}
         />
         {!isNumber && (
-          <label
-            className={`pointer-events-none absolute select-none capitalize opacity-60 transition-all duration-300 ease-out ${
-              labelSmall
-                ? "top-0 pl-2 text-xs opacity-80"
-                : "top-1/2 -translate-y-1/2 pl-3 text-base"
-            }`}
-            htmlFor={placeholder ?? name}
-          >
+          <label className={labelClassString} htmlFor={placeholder ?? name}>
             {placeholder ?? name}
           </label>
         )}
@@ -105,7 +111,7 @@ export function FancyInput({
 export function FancySelect({
   name,
   options,
-  className,
+  className: cOverrides,
   placeholder,
   children,
   type,
@@ -124,6 +130,22 @@ export function FancySelect({
   const handleFocus = (focus: boolean) => {
     inputRef.current?.value === "" ? setLabelSmall(focus) : setLabelSmall(true);
   };
+
+  const classes = {
+    error: name && errors[name] ? "border-red-500 ring-red-300" : "",
+    main: "shadow-blue-200 rounded-md border px-4 py-2 dark:bg-black bg-white-bright ring-blue-300 transition-all duration-200",
+    pseudo:
+      "focus:outline-none focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:scale-[101.5%] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:focus-within:shadow-[0_0_5px_#bfdbfe] focus:ring-2 dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe]",
+    override: cOverrides ?? "",
+  };
+
+  const classString = [
+    classes.main,
+    classes.error,
+    classes.pseudo,
+    classes.override,
+  ].join(" ");
+
   return (
     <select
       {...rest}
@@ -135,9 +157,7 @@ export function FancySelect({
       }}
       onFocus={() => handleFocus(true)}
       onBlur={() => handleFocus(false)}
-      className={`rounded-md border px-4 pb-2 ring-blue-300 focus:outline-none focus:ring-2 dark:bg-black ${
-        name && errors[name] ? "border-red-500 ring-red-300" : "border-gray-300"
-      } bg-white-bright p-2 shadow-blue-200 ring-blue-200 transition-all duration-200 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:scale-[101.5%] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:bg-neutral-800 dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe] ${className}`}
+      className={classString}
       placeholder=""
       aria-placeholder={placeholder ?? ""}
     >
