@@ -178,7 +178,7 @@ export default function Search() {
               </Select>
               <label htmlFor="tags">Tags</label>
               <button
-                className="mt-6 rounded-lg bg-green-600 p-2 text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-green-800 hover:shadow-xl dark:bg-green-400 dark:text-black dark:hover:bg-green-500"
+                className="mt-6 rounded-lg bg-green-600 p-2 text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-green-800 hover:shadow-[0_0_10px_1px_#33aa3350] dark:bg-green-400 dark:text-black dark:hover:bg-green-500"
                 type="submit"
               >
                 Save Changes
