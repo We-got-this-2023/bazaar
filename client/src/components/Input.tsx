@@ -52,8 +52,8 @@ export function FancyInput({
   };
 
   const classes = {
-    error: name && errors[name] ? "border-red-500 ring-red-300" : "",
-    main: "rounded-md border p-4 pb-2 ring-blue-300 dark:bg-black bg-white-bright shadow-blue-200 ring-blue-200 transition-all duration-200",
+    error: name && errors[name] ? "border-red-500 ring-red-300 border-1" : "",
+    main: "rounded-md p-4 pb-2 ring-blue-300 dark:bg-black bg-white-bright shadow-blue-200 ring-blue-200 transition-all duration-200",
     labelMain:
       "pointer-events-none absolute select-none capitalize opacity-60 transition-all duration-300 ease-out top-1/2 -translate-y-1/2 pl-3 text-base",
     labelSmall: labelSmall ? "top-0 pl-2 text-xs opacity-80" : "",
@@ -77,8 +77,8 @@ export function FancyInput({
       <div className="relative flex flex-col gap-2">
         <input
           {...rest}
-          type={type}
           {...(ref ? regRest : {})}
+          type={type}
           ref={(e) => {
             if (!ref) return inputRef;
             ref(e);
@@ -133,7 +133,7 @@ export function FancySelect({
 
   const classes = {
     error: name && errors[name] ? "border-red-500 ring-red-300" : "",
-    main: "shadow-blue-200 rounded-md border px-4 py-2 dark:bg-black bg-white-bright ring-blue-300 transition-all duration-200",
+    main: "shadow-blue-200 rounded-md px-4 py-2 dark:bg-black bg-white-bright ring-blue-300 transition-all duration-200",
     pseudo:
       "focus:outline-none focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:scale-[101.5%] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:focus-within:shadow-[0_0_5px_#bfdbfe] focus:ring-2 dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe]",
     override: cOverrides ?? "",
