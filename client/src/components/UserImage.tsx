@@ -1,6 +1,14 @@
 import DefaultImage from "../assets/DefaultImage";
 
-export default function UserImage({ user }: { user: any }) {
-  if (user.image) return <img src={user.image} alt={user.name} />;
-  return <DefaultImage />;
+export default function UserImage({
+  user,
+  className,
+}: {
+  user: any;
+  className?: string;
+}) {
+  console.log(user);
+  if (user.photoURL)
+    return <img src={user.photoURL} alt={user.name} className={className} />;
+  return <DefaultImage className={className} />;
 }
