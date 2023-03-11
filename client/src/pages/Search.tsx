@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { Form } from "../components/Form";
 import {
   FancyInput as Input,
@@ -78,8 +78,8 @@ export default function Search() {
             await fetch(`http://localhost:3000/products${query}`)
           ).json();
           return json;
-        } catch (e) {
-          console.error(e);
+        } catch (err) {
+          console.error(err);
           return [];
         }
       },
@@ -185,8 +185,12 @@ export default function Search() {
           </div>
         </div>
       </div>
-      {isLoading && <div>Loading...</div>}
-      {results && <SearchResults data={results} />}
+      {searchParams.entries() && (
+        <>
+          {isLoading && <div>Loading...</div>}
+          {results && <SearchResults data={results} />}
+        </>
+      )}
     </div>
   );
 }

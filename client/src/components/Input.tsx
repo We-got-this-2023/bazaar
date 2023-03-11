@@ -1,8 +1,7 @@
 import { ErrorMessage } from "@hookform/error-message";
-import React, {
+import {
   Children,
   InputHTMLAttributes,
-  ReactNode,
   SelectHTMLAttributes,
   useRef,
   useState,
@@ -52,14 +51,17 @@ export function FancyInput({
   };
 
   const classes = {
-    error: name && errors[name] ? "border-red-500 ring-red-300 border-1" : "",
-    main: "rounded-md p-4 pb-2 ring-blue-300 dark:bg-black bg-white-bright shadow-blue-200 ring-blue-200 transition-all duration-200",
+    error:
+      name && errors[name]
+        ? "border-red-500 ring-red-300 border-1"
+        : "ring-blue-300",
+    main: "rounded-md p-4 pb-2 dark:bg-black bg-white-bright shadow-blue-200 transition-all duration-200",
     labelMain:
       "pointer-events-none absolute select-none capitalize opacity-60 transition-all duration-300 ease-out top-1/2 -translate-y-1/2 pl-3 text-base",
-    labelSmall: labelSmall ? "top-0 pl-2 text-xs opacity-80" : "",
+    labelSmall: labelSmall ? "top-2 pl-2 text-xs opacity-80" : "",
     number: isNumber ? "appearance-none pt-2 [-moz-appearance:textfield]" : "",
     pseudo:
-      "focus:outline-none focus:ring-2 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:scale-[101.5%] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe]",
+      "focus:outline-none focus:ring-2 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe]",
     overrides: cOverrides ?? "",
   };
 

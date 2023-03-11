@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import PrivateRoute from "./components/PrivateRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
 import About from "./pages/About";
 import Checkout from "./pages/Checkout";
