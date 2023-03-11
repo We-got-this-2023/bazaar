@@ -3,6 +3,7 @@ import {
   Children,
   InputHTMLAttributes,
   SelectHTMLAttributes,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -14,6 +15,7 @@ interface FancyInputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   className?: string;
   options?: RegisterOptions;
+  initialValue?: string;
   type: string;
   placeholder?: string;
 }
@@ -25,6 +27,7 @@ interface FancySelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   options?: RegisterOptions;
   placeholder?: string;
   children: JSX.Element[];
+  initialValue?: string;
   type?: string;
 }
 
@@ -34,6 +37,7 @@ export function FancyInput({
   className: cOverrides,
   type,
   placeholder,
+  initialValue,
   ...rest
 }: FancyInputProps) {
   const form = useFormContext();
@@ -55,6 +59,16 @@ export function FancyInput({
     if (isNumber) return;
     inputRef.current?.value === "" ? setLabelSmall(focus) : setLabelSmall(true);
   };
+
+  useEffect(() => {
+    if (initialValue) {
+      console.log(initialValue);
+      if (inputRef.current) {
+        inputRef.current.value = initialValue;
+        setLabelSmall(true);
+      }
+    }
+  }, []);
 
   const classes = {
     error:
