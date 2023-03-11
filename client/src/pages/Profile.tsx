@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import AccountCard from "../components/AccountCard";
+import DeliveryForm from "../components/DeliveryForm";
 import { useAuth } from "../context/AuthContext";
 
 export default function Profile() {
@@ -15,9 +17,13 @@ export default function Profile() {
   }, [userLoggedIn, id]);
 
   return (
-    <div>
-      <h1>{isOwner && <span>My </span>}Profile</h1>
-      <p>id: {id}</p>
+    <div className="relative top-24 flex h-full flex-col items-center gap-4">
+      {isOwner && (
+        <>
+          <AccountCard user={user} />
+          <DeliveryForm user={user} />
+        </>
+      )}
     </div>
   );
 }

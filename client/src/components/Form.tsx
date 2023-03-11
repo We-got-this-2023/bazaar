@@ -6,12 +6,14 @@ interface FormProps {
   defaultValues?: any;
   children: React.ReactElement[];
   onSubmit: (data: any) => Promise<void>;
+  className?: string;
 }
 
 export function Form({
   defaultValues,
   children,
   onSubmit: sendForm,
+  className,
 }: FormProps) {
   if (!children) return <></>;
   const methods = useForm({ defaultValues });
@@ -27,7 +29,7 @@ export function Form({
   };
 
   return (
-    <form onSubmit={testSyntax(submit)}>
+    <form className={className || ""} onSubmit={testSyntax(submit)}>
       {formError && (
         <div className="flex gap-2">
           <Warning className="h-5 w-5" />

@@ -5,7 +5,6 @@ import CartIcon from "../assets/CartIcon";
 import DefaultImage from "../assets/DefaultImage";
 import Logo from "../assets/Logo";
 import SearchIcon from "../assets/SearchIcon";
-import { handleSearch } from "../pages/Search";
 import { toggleTheme } from "../utils/settings";
 
 export default function Navbar() {
@@ -16,10 +15,26 @@ export default function Navbar() {
   const queryClient = useQueryClient();
   const handleSearch = () => {
     if (location.pathname.includes("/search")) {
-      navigate(`/search?q=${searchRef.current?.value}`, { replace: true });
+      navigate(
+        `/search${
+          searchRef.current?.value ? "?q=" + searchRef.current.value : ""
+        }`,
+        { replace: true }
+      );
       queryClient.clear();
     } else navigate(`/search?q=${searchRef.current?.value}`);
   };
+
+  const classes = {
+    centered: centerSearchBar ? "hidden" : "",
+    main: "flex gap-2 rounded-lg p-3 min-w-[20em] ring-blue-300 dark:bg-neutral-800 bg-white-bright shadow-blue-200 ring-blue-200 transition-all duration-200",
+    pseudo:
+      "focus:outline-none focus:ring-2 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:scale-[101.5%] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe]",
+  };
+
+  const classString = [classes.centered, classes.main, classes.pseudo].join(
+    " "
+  );
 
   return (
     <nav className="flex h-16 items-center justify-between gap-4 p-1">
@@ -37,13 +52,9 @@ export default function Navbar() {
             Bazaar
           </span>
         </Link>
-        <div
-          className={`${
-            centerSearchBar ? "hidden " : ""
-          }opacity flex max-w-md shrink grow gap-2 rounded-lg bg-white-bright p-2 shadow-blue-200 ring-blue-200 transition-all duration-200 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:scale-[101.5%] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:bg-neutral-800 dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 max-md:hidden`}
-        >
+        <div className={classString}>
           <SearchIcon
-            className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110"
+            className="w-6 cursor-pointer transition-transform duration-200"
             onClick={handleSearch}
           />
           <input
