@@ -17,6 +17,7 @@ interface FancyInputProps extends InputHTMLAttributes<HTMLInputElement> {
   options?: RegisterOptions;
   initialValue?: string;
   type: string;
+  placementClassName?: string;
   placeholder?: string;
 }
 
@@ -28,6 +29,7 @@ interface FancySelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   placeholder?: string;
   children: JSX.Element[];
   initialValue?: string;
+  placementClassName?: string;
   type?: string;
 }
 
@@ -38,6 +40,7 @@ export function FancyInput({
   type,
   placeholder,
   initialValue,
+  placementClassName,
   ...rest
 }: FancyInputProps) {
   const form = useFormContext();
@@ -95,7 +98,7 @@ export function FancyInput({
   const labelClassString = [classes.labelMain, classes.labelSmall].join(" ");
 
   return (
-    <div className="mb-2 flex flex-col">
+    <div className={"mb-2 flex flex-col " + placementClassName}>
       <div className="relative flex flex-col gap-2">
         <input
           {...rest}
