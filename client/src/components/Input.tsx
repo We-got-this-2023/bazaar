@@ -75,7 +75,7 @@ export function FancyInput({
       name && errors && errors[name]
         ? "border-red-500 ring-red-300 border-1"
         : "ring-blue-300",
-    main: "rounded-md p-4 pb-2 dark:bg-black bg-white-bright shadow-blue-200 transition-all duration-200",
+    main: "rounded-md p-4 pb-2 dark:bg-neutral-800 bg-white-bright shadow-blue-200 transition-all duration-200",
     labelMain:
       "pointer-events-none absolute select-none capitalize opacity-60 transition-all duration-300 ease-out top-1/2 -translate-y-1/2 pl-3 text-base",
     labelSmall: labelSmall ? "top-2 pl-2 text-xs opacity-80" : "",
