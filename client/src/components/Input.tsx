@@ -36,14 +36,20 @@ export function FancyInput({
   placeholder,
   ...rest
 }: FancyInputProps) {
-  const { formState, register } = useFormContext();
-  const { errors } = formState;
+  const form = useFormContext();
+  let formState, register, errors;
+  if (form) {
+    formState = form.formState;
+    register = form.register;
+    errors = formState.errors;
+  }
 
   const inputRef = useRef<HTMLInputElement | HTMLSelectElement | null>(null);
 
   const [labelSmall, setLabelSmall] = useState(false);
   const [isNumber] = useState(type === "number");
-  const { ref, ...regRest } = name ? register(name, options) : { ref: null };
+  const { ref, ...regRest } =
+    name && register ? register(name, options) : { ref: null };
 
   const handleFocus = (focus: boolean) => {
     if (isNumber) return;
@@ -52,7 +58,7 @@ export function FancyInput({
 
   const classes = {
     error:
-      name && errors[name]
+      name && errors && errors[name]
         ? "border-red-500 ring-red-300 border-1"
         : "ring-blue-300",
     main: "rounded-md p-4 pb-2 dark:bg-black bg-white-bright shadow-blue-200 transition-all duration-200",
@@ -98,7 +104,7 @@ export function FancyInput({
           </label>
         )}
       </div>
-      {name && errors[name] && (
+      {name && errors && errors[name] && (
         <div className="flex items-center gap-2 p-1 text-red-500">
           <Warning className="h-5 w-5" />
           <span className="text-sm">
