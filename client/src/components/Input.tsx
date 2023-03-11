@@ -1,4 +1,5 @@
 import { ErrorMessage } from "@hookform/error-message";
+import { sleep } from "@tanstack/query-core/build/lib/utils";
 import {
   Children,
   InputHTMLAttributes,
@@ -65,7 +66,6 @@ export function FancyInput({
 
   useEffect(() => {
     if (initialValue) {
-      console.log(initialValue);
       if (inputRef.current) {
         inputRef.current.value = initialValue;
         setLabelSmall(true);
