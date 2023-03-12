@@ -22,7 +22,7 @@ export default function CheckoutSummary({
           <p>$0.00</p>
         </div>
       </div>
-      <hr className="w-full border-black" />
+      <hr className="w-full border-black opacity-60 transition-all duration-200 dark:border-white" />
       <div className="flex w-full justify-between p-4">
         <div className="flex flex-col justify-start">
           <h3 className="font-bold">Total:</h3>
