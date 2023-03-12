@@ -34,15 +34,19 @@ export default function ProductPreview({
   let c = second;
   if (second.length === 1) c = `${second}0`;
 
+  const cl = type === "checkout" ? "py-4 px-8" : "py-6 px-8";
+
   return (
-    <div className="rounded-3xl bg-neutral-200 px-8 py-4 shadow-[3px_3px_10px_1px_#00000060] transition-all duration-200 hover:-translate-y-[2px] hover:-translate-x-[2px] hover:shadow-[4px_4px_12px_2px_#00000060] hover:brightness-105 dark:bg-neutral-900 dark:hover:brightness-110">
+    <div
+      className={`${cl} rounded-3xl bg-neutral-200 shadow-[3px_3px_10px_1px_#00000060] transition-all duration-200 hover:-translate-y-[2px] hover:-translate-x-[2px] hover:shadow-[4px_4px_12px_2px_#00000060] hover:brightness-105 dark:bg-neutral-900 dark:hover:brightness-110`}
+    >
       <Link to={`/products/${id}`}>
         <h2 className="w-fit font-body text-lg hover:text-sky-500 hover:underline">
           {title}
         </h2>
       </Link>
-      <div className="flex justify-between gap-20 p-3">
-        <div className="flex flex-col justify-between">
+      <div className="flex justify-start gap-4">
+        <div className="flex flex-col">
           <div className="flex w-32 items-start">
             <span className="py-[.5rem] text-2xl font-bold">{d}</span>
             <span className="text-xl">{c}</span>
