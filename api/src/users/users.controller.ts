@@ -27,16 +27,19 @@ export class UsersController {
     return this.usersService.getUsers();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   deleteUser(@Param() params: { id: number }) {
     return this.usersService.deleteUser(params.id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   updateUser(@Param() params: { id: number }, @Body() userDto: UserDto) {
     return this.usersService.updateUser(params.id, userDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('details/:id')
   getUserDetails(@Param() params: { id: number }) {
     return this.usersService.getUserDetails(params.id);
