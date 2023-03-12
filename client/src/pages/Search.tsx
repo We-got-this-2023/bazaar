@@ -105,7 +105,11 @@ export default function Search() {
               className="flex h-full flex-col items-center gap-2"
             >
               <label htmlFor="t">Results from..</label>
-              <Select id="t" name="t">
+              <Select
+                id="t"
+                name="t"
+                initialValue={(session.t || 0).toString()}
+              >
                 <option value="Today" />
                 <option value="This Week" />
                 <option value="This Month" />
@@ -122,6 +126,7 @@ export default function Search() {
                   max="5"
                   placeholder="0"
                   className="mx-0 w-16"
+                  initialValue={(session.rlo || 0).toString()}
                 />
                 <Input
                   id="rhi"
@@ -131,6 +136,7 @@ export default function Search() {
                   max="5"
                   placeholder="5"
                   className="mx-0 w-16"
+                  initialValue={(session.rhi || 0).toString()}
                 />
               </div>
               <label htmlFor="clo">Cost</label>
@@ -142,6 +148,7 @@ export default function Search() {
                   min="0"
                   placeholder="0"
                   className="mx-0 w-16"
+                  initialValue={(session.clo || 0).toString()}
                 />
                 _
                 <Input
@@ -151,6 +158,7 @@ export default function Search() {
                   min="0"
                   placeholder="∞"
                   className="mx-0 w-16"
+                  initialValue={(session.chi || 0).toString()}
                 />
               </div>
               <label htmlFor="s">Sort By</label>
@@ -159,6 +167,7 @@ export default function Search() {
                 name="s"
                 className="mx-0 w-32"
                 placeholder="Rating"
+                initialValue={(session.s || 0).toString()}
               >
                 <option value="Time" />
                 <option value="Rating" />
@@ -170,6 +179,7 @@ export default function Search() {
                 name="o"
                 className="mx-0 w-32"
                 placeholder="Ascending"
+                initialValue={(session.o || 0).toString()}
               >
                 <option value="Ascending" />
                 <option value="Descending" />

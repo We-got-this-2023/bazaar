@@ -45,7 +45,7 @@ export function FancyInput({
   ...rest
 }: FancyInputProps) {
   const form = useFormContext();
-  let formState, register, errors, ref: any, regRest;
+  let formState, register, errors, ref: any, regRest: any;
   if (form) {
     formState = form.formState;
     register = form.register;
@@ -59,7 +59,8 @@ export function FancyInput({
   if (name && options && register) {
     const reg = register(name, options);
     ref = reg.ref;
-    const regRest = reg;
+    regRest = reg;
+    regRest.ref = undefined;
   }
 
   const handleFocus = (focus: boolean) => {
@@ -113,13 +114,11 @@ export function FancyInput({
           type={type}
           ref={(e) => {
             if (!ref) {
-              console.log("working");
               inputRef.current = e;
               return inputRef;
             }
             ref(e);
             inputRef.current = e;
-            console.log(inputRef);
           }}
           onFocus={() => handleFocus(true)}
           onBlur={() => handleFocus(false)}
@@ -152,12 +151,22 @@ export function FancySelect({
   placeholder,
   children,
   type,
+  initialValue,
   ...rest
 }: FancySelectProps) {
-  const { formState, register } = useFormContext();
-  const { errors } = formState;
-
-  const { ref, ...regRest } = name ? register(name, options) : { ref: null };
+  const form = useFormContext();
+  let formState, register, errors, ref: any, regRest: any;
+  if (form) {
+    formState = form.formState;
+    register = form.register;
+    errors = formState.errors;
+  }
+  if (name && options && register) {
+    const reg = register(name, options);
+    ref = reg.ref;
+    regRest = reg;
+    regRest.ref = undefined;
+  }
 
   const inputRef = useRef<HTMLSelectElement | null>(null);
 
@@ -169,7 +178,7 @@ export function FancySelect({
   };
 
   const classes = {
-    error: name && errors[name] ? "border-red-500 ring-red-300" : "",
+    error: name && errors && errors[name] ? "border-red-500 ring-red-300" : "",
     main: "shadow-blue-200 rounded-md px-4 py-2 dark:bg-neutral-800 bg-white-bright ring-blue-300 transition-all duration-200",
     pseudo:
       "focus:outline-none focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:scale-[101.5%] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:focus-within:shadow-[0_0_5px_#bfdbfe] focus:ring-2 dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe]",
@@ -183,12 +192,28 @@ export function FancySelect({
     classes.override,
   ].join(" ");
 
+  useEffect(() => {
+    if (
+      initialValue !== undefined &&
+      initialValue !== "" &&
+      initialValue !== null
+    ) {
+      if (inputRef.current) {
+        inputRef.current.value = initialValue;
+        setLabelSmall(true);
+      }
+    }
+  }, []);
+
   return (
     <select
       {...rest}
       {...(ref ? regRest : {})}
       ref={(e) => {
-        if (!ref) return inputRef;
+        if (!ref) {
+          inputRef.current = e;
+          return inputRef;
+        }
         ref(e);
         inputRef.current = e;
       }}
