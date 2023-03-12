@@ -11,163 +11,85 @@ datasource db {
 }
 model User {
  id        Int      @default(autoincrement()) @id
+ orderId   Int? 
+ order Order? @relation(fields: [orderId], references: [id])
  name      String
  email     String   @unique
- photoURL  String?
+ ratings   Int[]
  password  String
  createdAt DateTime @default(now())
  updatedAt DateTime @updatedAt
  products  Product[]
- productsReview ProductReview[]
- userResponse UserResponse[]
- shoppingCartRelation ShoppingCart[]
- userAdress UserAddress[]
- userPaymentMethod UserPaymentMethod[]
- userOrder UserOrder[]
-
-
+ address Address[]
 }
 
 
 model Product {
  id        Int      @default(autoincrement()) @id
- userId Int
- shippingMethodId Int
+ userId Int?
+ user User? @relation(fields: [userId], references: [id])
+ catoegoryId Int?
+ category Category? @relation(fields: [catoegoryId], references: [id])
+ orderId Int?
+ order Order? @relation(fields: [orderId], references: [id])
+ name     String
+ description String?
  imagesPath String[]
- title      String
  price     Int
  createdAt DateTime @default(now())
  updatedAt DateTime @updatedAt
- userRelation      User     @relation(fields: [userId], references: [id])
- shippingMethodRelation ShippingMethod @relation(fields: [shippingMethodId], references: [id])
- productReview ProductReview[]
- shoppingCartProduct ShoppingCartProduct[]
- userOrder UserOrder[]
+ productTags ProductTags[]
 }
 
-
-model ProductReview {
- id Int @default(autoincrement()) @id
- userId Int
- productId Int
- userRating Float
- userComment String
- commentAmount Int
- commentLikes Int
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
- userRelation User @relation(fields: [userId], references: [id])
- productRelation Product @relation(fields: [productId], references: [id])
- userResponse UserResponse[]
+model Category {
+  id        Int      @default(autoincrement()) @id
+  categoryName String 
+  categoryDescription String
+  products Product[]
 }
 
-
-model UserResponse {
- id Int @default(autoincrement()) @id
- productReviewId Int
- userId Int
- comments String
- responseLikes Int
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
- productReviewRelation ProductReview @relation(fields: [productReviewId], references: [id])
- userRelation User @relation(fields: [userId], references: [id])
+model Tags {
+  id       Int      @default(autoincrement()) @id
+  name     String
+  productTags ProductTags[]
 }
 
-
-
-
-model ShoppingCartProduct {
- id Int   @default(autoincrement()) @id
- productId Int
- quantity Int
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
- productIdRelation Product @relation(fields: [productId], references: [id])
- shoppingCart ShoppingCart[]
+model ProductTags {
+  id       Int      @default(autoincrement()) @id
+  productId Int?
+  product Product? @relation(fields: [productId], references: [id])
+  tagId Int?
+  tag Tags? @relation(fields: [tagId], references: [id])
 }
-
-
-model ShoppingCart {
- id        Int      @default(autoincrement()) @id
- cartProductId Int
- userId Int
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
- cartProductRelation ShoppingCartProduct @relation(fields: [cartProductId], references: [id])
- userRelation User @relation(fields: [userId], references: [id])
-}
-
-
-model ShippingMethod {
- id        Int      @default(autoincrement()) @id
- shipper String
- price Float
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
- userOrder UserOrder[]
- Product Product[]
-}
-
 
 model Address {
  id        Int      @default(autoincrement()) @id
- unitNumber Int
- streetName String
+ userId Int?
+ user User? @relation(fields: [userId], references: [id])
  addressLine1 String
  addressLine2 String
  city String
  region String
  postalCode Int
- country String
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
- userAdress UserAddress[]
- userOrder UserOrder[]
+ country String 
 }
 
 
-model UserAddress {
+model PaymentMethod {
  id        Int      @default(autoincrement()) @id
- userId Int
- addressId Int
- isDefault Boolean
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
- addressRelation Address @relation(fields: [addressId], references: [id])
- userRelation User @relation(fields: [userId], references: [id])
+ methodName String
+ accountAddress Int
+ orders Order[]
 }
 
 
-model UserPaymentMethod {
+model Order {
  id        Int      @default(autoincrement()) @id
- userId Int
- paymentMethod String
- provider String
- accountNumber Int
- expiryDate Int
- isDefault Boolean
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
- userRelation User @relation(fields: [userId], references: [id])
- userOrder UserOrder[]
-}
-
-
-model UserOrder {
- id        Int      @default(autoincrement()) @id
- userId Int
  paymentMethodId Int
- shippingAddressId Int
- shippingMethodId Int
- productId Int
- orderDate DateTime
+ paymentMethod PaymentMethod @relation(fields: [paymentMethodId], references: [id])
  orderAmount Int
  createdAt DateTime @default(now())
  updatedAt DateTime @updatedAt
- userRelation User @relation(fields: [userId], references: [id])
- paymentRelation UserPaymentMethod @relation(fields: [paymentMethodId], references: [id])
- productRelation Product @relation(fields: [productId], references: [id])
- shippingAddressRelation Address @relation(fields: [shippingAddressId], references: [id])
- shippingMethodRelation ShippingMethod @relation(fields: [shippingMethodId], references: [id])
+ users User[]
+ products Product[]
 }
