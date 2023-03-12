@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Form } from "./Form";
 import { FancyInput as Input } from "./Input";
 
 type Product = {
@@ -27,6 +28,11 @@ export default function ProductPreview({
   let first = split[0],
     second;
 
+  async function changeQuantity(number: string) {
+    // Need to add Change Quantity function from client/src/components/Cart.tsx
+    // Will do it later
+  }
+
   if (split.length === 1) second = "00";
   else second = split[1];
 
@@ -52,12 +58,20 @@ export default function ProductPreview({
             <span className="text-xl">{c}</span>
           </div>
           {type === "checkout" && amount && (
-            <Input
-              name="quantity"
-              type="number"
-              initialValue={amount.toString()}
-              className="w-20"
-            />
+            <Form onSubmit={changeQuantity}>
+              <Input
+                name="Quantity"
+                type="number"
+                initialValue={amount.toString()}
+                className="w-20"
+                onChange={(e) => {
+                  if (e.target.value === "" || parseInt(e.target.value) < 0)
+                    e.target.value = "0";
+                  if (parseInt(e.target.value) !== amount)
+                    changeQuantity(e.target.value);
+                }}
+              />
+            </Form>
           )}
         </div>
         <p className="w-full opacity-50">{description}</p>

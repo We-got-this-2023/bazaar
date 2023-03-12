@@ -45,7 +45,7 @@ export function FancyInput({
   ...rest
 }: FancyInputProps) {
   const form = useFormContext();
-  let formState, register, errors;
+  let formState, register, errors, ref: any, regRest;
   if (form) {
     formState = form.formState;
     register = form.register;
@@ -56,8 +56,11 @@ export function FancyInput({
 
   const [labelSmall, setLabelSmall] = useState(false);
   const [isNumber] = useState(type === "number");
-  const { ref, ...regRest } =
-    name && register ? register(name, options) : { ref: null };
+  if (name && options && register) {
+    const reg = register(name, options);
+    ref = reg.ref;
+    const regRest = reg;
+  }
 
   const handleFocus = (focus: boolean) => {
     if (isNumber) return;
@@ -65,7 +68,11 @@ export function FancyInput({
   };
 
   useEffect(() => {
-    if (initialValue) {
+    if (
+      initialValue !== undefined &&
+      initialValue !== "" &&
+      initialValue !== null
+    ) {
       if (inputRef.current) {
         inputRef.current.value = initialValue;
         setLabelSmall(true);
@@ -105,9 +112,14 @@ export function FancyInput({
           {...(ref ? regRest : {})}
           type={type}
           ref={(e) => {
-            if (!ref) return inputRef;
+            if (!ref) {
+              console.log("working");
+              inputRef.current = e;
+              return inputRef;
+            }
             ref(e);
             inputRef.current = e;
+            console.log(inputRef);
           }}
           onFocus={() => handleFocus(true)}
           onBlur={() => handleFocus(false)}
@@ -158,7 +170,7 @@ export function FancySelect({
 
   const classes = {
     error: name && errors[name] ? "border-red-500 ring-red-300" : "",
-    main: "shadow-blue-200 rounded-md px-4 py-2 dark:bg-black bg-white-bright ring-blue-300 transition-all duration-200",
+    main: "shadow-blue-200 rounded-md px-4 py-2 dark:bg-neutral-800 bg-white-bright ring-blue-300 transition-all duration-200",
     pseudo:
       "focus:outline-none focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:scale-[101.5%] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:focus-within:shadow-[0_0_5px_#bfdbfe] focus:ring-2 dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe]",
     override: cOverrides ?? "",

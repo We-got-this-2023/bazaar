@@ -96,7 +96,7 @@ export default function Search() {
 
   return (
     <div className="mt-2 flex gap-3">
-      <div className="flex w-[24rem] flex-col items-center rounded-2xl bg-neutral-200 p-4 shadow-[3px_3px_10px_1px_#00000060] transition-colors duration-200 dark:bg-neutral-800 max-md:hidden">
+      <div className="flex w-[24rem] flex-col items-center rounded-2xl bg-neutral-200 p-4 shadow-[3px_3px_10px_1px_#00000060] transition-colors duration-200 dark:bg-neutral-900 max-md:hidden">
         <h2 className="text-lg font-semibold">Filters</h2>
         <div className="flex justify-between gap-20 p-3">
           <div className="flex gap-2">
