@@ -27,10 +27,12 @@ export default function Checkout() {
   }, []);
 
   return (
-    <div className="flex h-full w-full">
-      <div className="m-4 flex w-full flex-col gap-8">
+    <div className="flex h-full w-full justify-between px-8">
+      <div className="m-4 flex w-full max-w-3xl flex-col gap-8">
         <div className="flex flex-col">
-          <h1>Review Items</h1>
+          <h1 className="self-center pb-12 pt-6 text-2xl font-bold">
+            Review Items
+          </h1>
           <div>
             <div className="flex flex-col gap-3">
               {items.map((item: Product) => {
@@ -46,9 +48,13 @@ export default function Checkout() {
             </div>
           </div>
         </div>
-        <DeliveryForm title="Shipping" user={user} />
+        <DeliveryForm
+          title="Shipping"
+          user={user}
+          className="w-fit self-center"
+        />
       </div>
-      <CheckoutSummary className="w-[30rem]" price="23.43" />
+      <CheckoutSummary className="w-[25rem]" price="23.43" />
     </div>
   );
 }
