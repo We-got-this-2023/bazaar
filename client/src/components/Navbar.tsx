@@ -48,7 +48,7 @@ export default function Navbar() {
           className="group flex items-center justify-center font-logo text-4xl transition-transform duration-200 hover:scale-105"
         >
           <Logo className="w-14" />
-          <span className="relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:h-2 after:w-0 after:rounded-lg after:bg-black after:transition-all after:duration-200 after:content-[''] group-hover:after:w-full">
+          <span className="relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:h-2 after:w-0 after:rounded-lg after:bg-black after:transition-all after:duration-200 after:content-[''] group-hover:after:w-full dark:after:bg-white">
             Bazaar
           </span>
         </Link>
