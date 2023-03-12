@@ -8,6 +8,9 @@ import SearchIcon from "../assets/SearchIcon";
 import { toggleTheme } from "../utils/settings";
 
 export default function Navbar() {
+  // Leaving these unused functions for now.
+  // This is because I haven't set up the cart state yet,
+  // and haven't set up the search page for an empty search.
   const [cartNumber, setCartNumber] = useState(0);
   const [centerSearchBar, setCenterSearchBar] = useState();
   const searchRef = useRef<HTMLInputElement>(null);

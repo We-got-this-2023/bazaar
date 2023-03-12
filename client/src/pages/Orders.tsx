@@ -1,8 +1,9 @@
 import OrderCard from "../components/OrderCard";
-import ProductPreview from "../components/ProductPreview";
 import { useAuth } from "../context/AuthContext";
 export default function Orders() {
   const { user } = useAuth();
+  // Leaving this unused variable as it I haven't set up
+  // the functionality for requesting to the backend yet.
 
   return (
     <div className="mt-2 flex flex-col items-center justify-center gap-3">

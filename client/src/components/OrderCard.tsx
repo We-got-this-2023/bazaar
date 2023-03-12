@@ -1,7 +1,3 @@
-import { Link } from "react-router-dom";
-import { Form } from "./Form";
-import { FancyInput as Input } from "./Input";
-
 type Order = {
   id: string;
   title: string;

@@ -22,8 +22,7 @@ export default function ProductPreview({
   type?: string;
   amount?: number;
 }) {
-  const { id, price, title, images, createdAt, tags, userId, description } =
-    product;
+  const { id, price, title, description } = product;
   const split = price.split(".");
   let first = split[0],
     second;

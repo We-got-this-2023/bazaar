@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -13,7 +12,6 @@ import Products from "./pages/Products";
 import Profile from "./pages/Profile";
 import Search from "./pages/Search";
 import Signup from "./pages/Signup";
-import isEmptySearch from "./utils/isEmptySearch";
 
 function LayoutWithNavbar() {
   return (
@@ -25,7 +23,6 @@ function LayoutWithNavbar() {
 }
 
 export default function App() {
-  const [isEmpty, setIsEmpty] = useState(isEmptySearch());
   return (
     <>
       <Routes>
@@ -52,8 +49,6 @@ export default function App() {
             element={<ProtectedRoute element={<Orders />} />}
           />
         </Route>
-
-        {/* Routes without a navbar */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>

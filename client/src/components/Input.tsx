@@ -1,5 +1,4 @@
 import { ErrorMessage } from "@hookform/error-message";
-import { sleep } from "@tanstack/query-core/build/lib/utils";
 import {
   Children,
   InputHTMLAttributes,
@@ -170,7 +169,7 @@ export function FancySelect({
 
   const inputRef = useRef<HTMLSelectElement | null>(null);
 
-  const [labelSmall, setLabelSmall] = useState(false);
+  const setLabelSmall = useState(false)[1];
   const [isCheckbox] = useState(type === "checkbox");
 
   const handleFocus = (focus: boolean) => {

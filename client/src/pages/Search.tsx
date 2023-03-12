@@ -84,6 +84,7 @@ export default function Search() {
         .replaceAll("Ascending", "asc")
         .replaceAll("Descending", "desc");
     })(),
+    // Leaving this unused error, as I haven't implemented error handling yet
     { data, isLoading, error } = useQuery(["search"], {
       queryFn: async () => {
         try {

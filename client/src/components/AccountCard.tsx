@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import UserImage from "../components/UserImage";
 import { Form } from "./Form";
@@ -12,7 +11,7 @@ interface User {
 }
 
 export default function AccountCard({ user }: { user: User }) {
-  const [date, setDate] = useState(
+  const [date] = useState(
     new Date(user.createdAt).toLocaleDateString("default", {
       year: "numeric",
       month: "long",

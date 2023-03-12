@@ -6,8 +6,8 @@ import App from "./App";
 import { AuthProvider } from "./context/AuthContext";
 import { MiscProvider } from "./context/MiscContext";
 import "./index.css";
-import { init } from "./utils/settings";
-init();
+import { initSettings } from "./utils/settings";
+initSettings();
 
 const queryClient = new QueryClient();
 

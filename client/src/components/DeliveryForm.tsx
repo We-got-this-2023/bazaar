@@ -1,6 +1,4 @@
 import { useFormContext } from "react-hook-form";
-import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import { Form } from "./Form";
 import { FancyInput as Input } from "./Input";
 
@@ -18,6 +16,9 @@ type FormData = {
   countryCallingCode: string;
   phoneNumber: string;
 };
+
+// Leaving the user in the delivery form for now
+// This is because the form needs to autofill data from the backend
 
 export default function DeliveryForm({
   user,
