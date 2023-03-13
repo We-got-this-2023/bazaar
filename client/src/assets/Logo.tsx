@@ -1,6 +1,6 @@
 import { SVGProps } from "react";
 
-export default () => {
+export default ({ isSmall = false }: { isSmall?: boolean }) => {
   return (
     <div className="flex items-center">
       <svg
@@ -28,9 +28,11 @@ export default () => {
           className="fill-black dark:fill-neutral-800"
         />
       </svg>
-      <span className="relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:h-2 after:w-0 after:rounded-lg after:bg-black after:transition-all after:duration-200 after:content-[''] group-hover:after:w-full dark:after:bg-white">
-        Bazaar
-      </span>
+      {!isSmall && (
+        <span className="relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:h-2 after:w-0 after:rounded-lg after:bg-black after:transition-all after:duration-200 after:content-[''] group-hover:after:w-full dark:after:bg-white max-sm:hidden">
+          Bazaar
+        </span>
+      )}
     </div>
   );
 };
