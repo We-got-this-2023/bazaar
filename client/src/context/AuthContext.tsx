@@ -58,11 +58,14 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       email: values.email.toLowerCase().trim(),
       password: values.password,
     };
-    const loggedInResponse = await fetch("http://localhost:3000/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+    const loggedInResponse = await fetch(
+      `${import.meta.env.VITE_API}/auth/login`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }
+    );
     if (loggedInResponse.ok) {
       const { token } = await loggedInResponse.json();
       const user = parseJWT(token);
@@ -84,7 +87,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       password: values.password,
     };
     const loggedInResponse = await fetch(
-      "http://localhost:3000/auth/register",
+      `${import.meta.env.VITE_API}/auth/register`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

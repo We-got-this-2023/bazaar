@@ -2,11 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import FilterForm from "../components/FilterForm";
-import { Form } from "../components/Form";
-import {
-  FancyInput as Input,
-  FancySelect as Select,
-} from "../components/Input";
 import SearchResults from "./SearchResults";
 
 interface FormData {
@@ -89,7 +84,9 @@ export default function Search() {
     { data, isLoading, error } = useQuery(["search"], {
       queryFn: async () => {
         try {
-          const url = encodeURI(`http://localhost:3000/products${cleanQuery}`);
+          const url = encodeURI(
+            `${import.meta.env.VITE_API}/products${cleanQuery}`
+          );
           const json = await (await fetch(url)).json();
           return json;
         } catch (err) {
