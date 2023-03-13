@@ -71,12 +71,24 @@ export default function Search() {
           .filter((t) => t)
           .join("&")
       : "",
+    cleanQuery = (() => {
+      return query
+        .replaceAll("This Week", "week")
+        .replaceAll("This Month", "month")
+        .replaceAll("This Year", "year")
+        .replaceAll("All Time", "time")
+        .replaceAll("Today", "today")
+        .replaceAll("Date", "date")
+        .replaceAll("Rating", "rating")
+        .replaceAll("Cost", "cost")
+        .replaceAll("Ascending", "asc")
+        .replaceAll("Descending", "desc");
+    })(),
     { data, isLoading, error } = useQuery(["search"], {
       queryFn: async () => {
         try {
-          const json = await (
-            await fetch(`http://localhost:3000/products${query}`)
-          ).json();
+          const url = encodeURI(`http://localhost:3000/products${cleanQuery}`);
+          const json = await (await fetch(url)).json();
           return json;
         } catch (err) {
           console.error(err);
@@ -96,7 +108,7 @@ export default function Search() {
 
   return (
     <div className="mt-2 flex gap-3">
-      <div className="flex w-[24rem] flex-col items-center rounded-2xl bg-neutral-200 p-4 shadow-[3px_3px_10px_1px_#00000060] transition-colors duration-200 dark:bg-neutral-800 max-md:hidden">
+      <div className="flex w-[24rem] flex-col items-center rounded-2xl bg-neutral-200 p-4 shadow-[3px_3px_10px_1px_#00000060] transition-colors duration-200 dark:bg-neutral-900 max-md:hidden">
         <h2 className="text-lg font-semibold">Filters</h2>
         <div className="flex justify-between gap-20 p-3">
           <div className="flex gap-2">
@@ -105,12 +117,16 @@ export default function Search() {
               className="flex h-full flex-col items-center gap-2"
             >
               <label htmlFor="t">Results from..</label>
-              <Select id="t" name="t">
+              <Select
+                id="t"
+                name="t"
+                initialValue={session.t ? session.t.toString() : undefined}
+              >
+                <option value="All Time" />
                 <option value="Today" />
                 <option value="This Week" />
                 <option value="This Month" />
                 <option value="This Year" />
-                <option value="All Time" />
               </Select>
               <label htmlFor="rlo">Rating</label>
               <div className="flex gap-2">
@@ -122,6 +138,9 @@ export default function Search() {
                   max="5"
                   placeholder="0"
                   className="mx-0 w-16"
+                  initialValue={
+                    session.rlo ? session.rlo.toString() : undefined
+                  }
                 />
                 <Input
                   id="rhi"
@@ -131,6 +150,9 @@ export default function Search() {
                   max="5"
                   placeholder="5"
                   className="mx-0 w-16"
+                  initialValue={
+                    session.rhi ? session.rhi.toString() : undefined
+                  }
                 />
               </div>
               <label htmlFor="clo">Cost</label>
@@ -142,6 +164,9 @@ export default function Search() {
                   min="0"
                   placeholder="0"
                   className="mx-0 w-16"
+                  initialValue={
+                    session.clo ? session.clo.toString() : undefined
+                  }
                 />
                 _
                 <Input
@@ -151,6 +176,9 @@ export default function Search() {
                   min="0"
                   placeholder="∞"
                   className="mx-0 w-16"
+                  initialValue={
+                    session.chi ? session.chi.toString() : undefined
+                  }
                 />
               </div>
               <label htmlFor="s">Sort By</label>
@@ -159,9 +187,10 @@ export default function Search() {
                 name="s"
                 className="mx-0 w-32"
                 placeholder="Rating"
+                initialValue={session.s ? session.s.toString() : undefined}
               >
-                <option value="Time" />
                 <option value="Rating" />
+                <option value="Time" />
                 <option value="Cost" />
               </Select>
               <label htmlFor="o">Order</label>
@@ -170,9 +199,10 @@ export default function Search() {
                 name="o"
                 className="mx-0 w-32"
                 placeholder="Ascending"
+                initialValue={session.o ? session.o.toString() : undefined}
               >
-                <option value="Ascending" />
                 <option value="Descending" />
+                <option value="Ascending" />
               </Select>
               <label htmlFor="tags">Tags</label>
               <button

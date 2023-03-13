@@ -4,7 +4,7 @@ import Warning from "../assets/Warning";
 
 interface FormProps {
   defaultValues?: any;
-  children: React.ReactElement[];
+  children: JSX.Element[] | JSX.Element;
   onSubmit: (data: any) => Promise<void>;
   className?: string;
 }

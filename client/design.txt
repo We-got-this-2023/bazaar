@@ -26,7 +26,7 @@ zinc-900: Card background on dark mode.
 -------------------------
 
 brick-red: For the logo and landing page button.
-faded-blue: Blue confirm buttons.
+silk-blue: Blue confirm buttons.
 emerald-500: Green confirm buttons.
 slate-700: Paypal button.
 indigo-600: Google button.

@@ -1,4 +1,5 @@
 import { ErrorMessage } from "@hookform/error-message";
+import { sleep } from "@tanstack/query-core/build/lib/utils";
 import {
   Children,
   InputHTMLAttributes,
@@ -44,7 +45,7 @@ export function FancyInput({
   ...rest
 }: FancyInputProps) {
   const form = useFormContext();
-  let formState, register, errors;
+  let formState, register, errors, ref: any, regRest: any;
   if (form) {
     formState = form.formState;
     register = form.register;
@@ -55,8 +56,12 @@ export function FancyInput({
 
   const [labelSmall, setLabelSmall] = useState(false);
   const [isNumber] = useState(type === "number");
-  const { ref, ...regRest } =
-    name && register ? register(name, options) : { ref: null };
+  if (name && options && register) {
+    const reg = register(name, options);
+    ref = reg.ref;
+    regRest = reg;
+    regRest.ref = undefined;
+  }
 
   const handleFocus = (focus: boolean) => {
     if (isNumber) return;
@@ -64,8 +69,11 @@ export function FancyInput({
   };
 
   useEffect(() => {
-    if (initialValue) {
-      console.log(initialValue);
+    if (
+      initialValue !== undefined &&
+      initialValue !== "" &&
+      initialValue !== null
+    ) {
       if (inputRef.current) {
         inputRef.current.value = initialValue;
         setLabelSmall(true);
@@ -84,7 +92,7 @@ export function FancyInput({
     labelSmall: labelSmall ? "top-2 pl-2 text-xs opacity-80" : "",
     number: isNumber ? "appearance-none pt-2 [-moz-appearance:textfield]" : "",
     pseudo:
-      "focus:outline-none focus:ring-2 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe]",
+      "focus:outline-none focus:ring-2 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:shadow-[0_0_10px_2px_#bfdbfe] focus:shadow-[0_0_10px_2px_#bfdbfe] dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe] dark:focus:shadow-[0_0_10px_0px_#bfdbfe]",
     overrides: cOverrides ?? "",
   };
 
@@ -105,7 +113,10 @@ export function FancyInput({
           {...(ref ? regRest : {})}
           type={type}
           ref={(e) => {
-            if (!ref) return inputRef;
+            if (!ref) {
+              inputRef.current = e;
+              return inputRef;
+            }
             ref(e);
             inputRef.current = e;
           }}
@@ -140,12 +151,22 @@ export function FancySelect({
   placeholder,
   children,
   type,
+  initialValue,
   ...rest
 }: FancySelectProps) {
-  const { formState, register } = useFormContext();
-  const { errors } = formState;
-
-  const { ref, ...regRest } = name ? register(name, options) : { ref: null };
+  const form = useFormContext();
+  let formState, register, errors, ref: any, regRest: any;
+  if (form) {
+    formState = form.formState;
+    register = form.register;
+    errors = formState.errors;
+  }
+  if (name && options && register) {
+    const reg = register(name, options);
+    ref = reg.ref;
+    regRest = reg;
+    regRest.ref = undefined;
+  }
 
   const inputRef = useRef<HTMLSelectElement | null>(null);
 
@@ -157,10 +178,10 @@ export function FancySelect({
   };
 
   const classes = {
-    error: name && errors[name] ? "border-red-500 ring-red-300" : "",
-    main: "shadow-blue-200 rounded-md px-4 py-2 dark:bg-black bg-white-bright ring-blue-300 transition-all duration-200",
+    error: name && errors && errors[name] ? "border-red-500 ring-red-300" : "",
+    main: "shadow-blue-200 rounded-md px-4 py-2 dark:bg-neutral-800 bg-white-bright ring-blue-300 transition-all duration-200",
     pseudo:
-      "focus:outline-none focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:scale-[101.5%] hover:shadow-[0_0_10px_2px_#bfdbfe] dark:focus-within:shadow-[0_0_5px_#bfdbfe] focus:ring-2 dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe]",
+      "focus:outline-none focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:scale-[101.5%] hover:shadow-[0_0_10px_2px_#bfdbfe] focus:shadow-[0_0_10px_2px_#bfdbfe] focus:ring-2 dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe] dark:focus:shadow-[0_0_10px_0px_#bfdbfe]",
     override: cOverrides ?? "",
   };
 
@@ -171,12 +192,28 @@ export function FancySelect({
     classes.override,
   ].join(" ");
 
+  useEffect(() => {
+    if (
+      initialValue !== undefined &&
+      initialValue !== "" &&
+      initialValue !== null
+    ) {
+      if (inputRef.current) {
+        inputRef.current.value = initialValue;
+        setLabelSmall(true);
+      }
+    }
+  }, []);
+
   return (
     <select
       {...rest}
       {...(ref ? regRest : {})}
       ref={(e) => {
-        if (!ref) return inputRef;
+        if (!ref) {
+          inputRef.current = e;
+          return inputRef;
+        }
         ref(e);
         inputRef.current = e;
       }}
