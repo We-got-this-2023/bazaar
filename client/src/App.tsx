@@ -34,8 +34,6 @@ export default function App() {
           <Route path="/products/:id" element={<ProductInfo />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
-
-          {/* Protected Routes */}
           <Route
             path="/products"
             element={<ProtectedRoute element={<Products />} />}

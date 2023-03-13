@@ -8,7 +8,8 @@ import { Product, useMisc } from "../context/MiscContext";
 
 export default function Checkout() {
   const { user } = useAuth();
-  const { cart: items } = useMisc();
+  // Leaving cartAddItem to add mock data for now
+  const { cart: items, cartAddItem } = useMisc();
   const navigate = useNavigate();
 
   useEffect(() => {
