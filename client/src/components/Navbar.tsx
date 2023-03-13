@@ -70,7 +70,7 @@ export default function Navbar() {
       </div>
       <div className="flex h-full items-center gap-6">
         <button
-          className="rounded-md border-[2.5px] border-black bg-black p-2 font-display font-medium text-white transition-all duration-150 hover:scale-110 hover:bg-white hover:text-lg hover:text-black dark:border-white dark:bg-white dark:text-black dark:hover:bg-black dark:hover:text-white"
+          className="rounded-md border-[2.5px] border-black bg-black p-2 font-display font-medium text-white transition-all duration-150 hover:scale-105 hover:bg-white hover:text-black dark:border-white dark:bg-white dark:text-black dark:hover:bg-black dark:hover:text-white"
           onClick={toggleTheme}
         >
           Theme
