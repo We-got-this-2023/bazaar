@@ -55,8 +55,8 @@ export function FancyInput({
 
   const [labelSmall, setLabelSmall] = useState(false);
   const [isNumber] = useState(type === "number");
-  if (name && options && register) {
-    const reg = register(name, options);
+  if (name && register) {
+    const reg = register(name, options || {});
     ref = reg.ref;
     regRest = reg;
     regRest.ref = undefined;
@@ -160,8 +160,8 @@ export function FancySelect({
     register = form.register;
     errors = formState.errors;
   }
-  if (name && options && register) {
-    const reg = register(name, options);
+  if (name && register) {
+    const reg = register(name, options || {});
     ref = reg.ref;
     regRest = reg;
     regRest.ref = undefined;

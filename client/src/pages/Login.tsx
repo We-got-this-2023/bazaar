@@ -19,6 +19,7 @@ export default function Login() {
   }, [userLoggedIn]);
 
   const onSubmit = async (data: FormData) => {
+    console.log(data);
     return await login(data);
   };
 

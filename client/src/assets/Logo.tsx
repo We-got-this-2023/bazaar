@@ -1,5 +1,3 @@
-import { SVGProps } from "react";
-
 export default ({ isSmall = false }: { isSmall?: boolean }) => {
   return (
     <div className="flex items-center">
