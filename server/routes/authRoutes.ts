@@ -1,9 +1,21 @@
+import { validationMiddleware } from "../middleware/validationMiddleware.js";
+import { valCheck } from "../validators/authVal.js";
 import express from "express";
-import { signIn, signUp } from "../controllers/authController.js";
+import {
+  signIn,
+  signUp,
+  register,
+  login,
+} from "../controllers/authController.js";
 
 const router = express.Router();
 
-router.post("/login", signIn);
-router.post("/register", signUp);
+router.post("/login", valCheck.loginValidation, validationMiddleware, login);
+router.post(
+  "/register",
+  valCheck.registerValidation,
+  validationMiddleware,
+  register
+);
 
 export default router;

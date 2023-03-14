@@ -1,3 +1,5 @@
+import { validationMiddleware } from "./middleware/validationMiddleware.js";
+import { register } from "./controllers/authController.js";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -10,6 +12,7 @@ import path from "path";
 import { filesPayloadExists } from "./middleware/filePayloadExists.js";
 import { fileExtLimiter } from "./middleware/fileExtLimiter.js";
 import { fileSizeLimiter } from "./middleware/fileSizeLimiter.js";
+import { valCheck } from "./validators/authVal.js";
 
 dotenv.config();
 
@@ -21,6 +24,10 @@ app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Hello, world!");
+});
+
+app.get("/test", (req, res) => {
+  res.send("Hello, test");
 });
 
 app.get("/", (req, res) => {

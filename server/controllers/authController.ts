@@ -1,7 +1,11 @@
-import bcrypt from "bcrypt";
+import { constants } from "../constants/constants.js";
+import bcrypt, { hash } from "bcrypt";
+import pkg from "jsonwebtoken";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import prisma from "../prisma/prisma.js";
+
+const { sign } = pkg;
 
 //delete user password from response
 
@@ -54,5 +58,54 @@ export const signIn = async (req: Request, res: Response) => {
     res.status(200).json({ token });
   } catch (error) {
     res.status(404).json({ message: error.message });
+  }
+};
+
+// *** NEW AUTH ***
+
+export const register = async (req, res) => {
+  const { name, email, password } = req.body;
+
+  try {
+    const hashedPassword = await hash(password, 10);
+    await prisma.user.create({
+      data: { name, email, password: hashedPassword },
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "The registration was successful",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
+export const login = async (req, res) => {
+  // This was passed down from the loginFieldsCheck function in Validators/authVal
+  let user = req.user;
+
+  const payload = {
+    id: user.id,
+    email: user.email,
+  };
+
+  try {
+    // Get JWT token
+    const token = await sign(payload, constants.SECRET);
+
+    // Pass cookie
+    return res.status(200).cookie("token", token, { httpOnly: true }).json({
+      success: true,
+      message: "Logged in successfully",
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({
+      error: error.message,
+    });
   }
 };

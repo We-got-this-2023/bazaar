@@ -18,10 +18,10 @@ CREATE TABLE "Product" (
     "shippingMethodId" INTEGER NOT NULL,
     "imagesPath" TEXT[],
     "title" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
-    "rating" INTEGER NOT NULL,
+    "description" TEXT,
+    "rating" INTEGER,
     "tags" TEXT[],
-    "price" INTEGER NOT NULL,
+    "price" DECIMAL(65,30) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
