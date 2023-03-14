@@ -14,6 +14,7 @@ interface AuthContextI extends Context<{}> {
   user: any;
   isLoading: boolean;
   error: string;
+  setUserInformation: (user: any) => Promise<void>;
 }
 
 const prompt = (username: string) => console.log(`Welcome back, ${username}!`);
@@ -103,6 +104,24 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     setIsLoading(false);
   };
 
+  async function setUserInformation(data: { name: string; email: string }) {
+    try {
+      await fetch(`localhost:3000/users/${user.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          createdAt: new Date().toISOString(),
+        }),
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const value = {
     userLoggedIn,
     login,
@@ -110,6 +129,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     user,
     isLoading,
     error,
+    setUserInformation,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
