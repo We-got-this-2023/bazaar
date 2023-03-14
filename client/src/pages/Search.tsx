@@ -5,109 +5,41 @@ import FilterForm from "../components/FilterForm";
 import SearchResults from "./SearchResults";
 
 interface FormData {
-  t: "Today" | "This Week" | "This Month" | "This Year" | "All Time";
-  rlo: number;
-  rhi: number;
-  clo: number;
-  chi: number;
-  s: "Date" | "Rating" | "Cost";
-  o: "Ascending" | "Descending";
-  atags: string[];
-  ntags: string[];
-  stags: string[];
+  t: "Today" | "This Week" | "This Month" | "This Year" | "All Time"; // Filter by time
+  rlo: number; // Filter by rating lower bound
+  rhi: number; // Filter by rating upper bound
+  clo: number; // Filter by cost lower bound
+  chi: number; // Filter by cost upper bound
+  s: "Date" | "Rating" | "Cost"; // Sort by
+  o: "Ascending" | "Descending"; // Sort order
+  atags: string[]; // Filter by must-have tags
+  ntags: string[]; // Filter by cannot-have tags
+  stags: string[]; // Filter by has-some tags
 }
 
 export default function Search() {
-  // Legend:
-  // q - query
-  // t - time ago
-  // rlo - rating lower bound
-  // rhi - rating upper bound
-  // clo - cost lower bound
-  // chi - cost upper bound
-  // s - sort by
-  // o - order
-  // p - page
-  // stags - some tags
-  // atags - all tags
-  // ntags - no tags
+  const [results, setResults] = useState([]);
 
-  const item = sessionStorage.getItem("searchParams"),
-    session = (item ? JSON.parse(item) : {}) as FormData,
-    [searchParams] = useSearchParams(),
-    [results, setResults] = useState([]),
-    q = searchParams.get("q"),
-    t = searchParams.get("t"),
-    rlo = searchParams.get("r"),
-    rhi = searchParams.get("r"),
-    s = searchParams.get("s"),
-    o = searchParams.get("o"),
-    clo = searchParams.get("clo"),
-    chi = searchParams.get("chi"),
-    p = searchParams.get("p"),
-    stags = searchParams.get("stags"),
-    atags = searchParams.get("atags"),
-    ntags = searchParams.get("ntags"),
-    query = q
-      ? "?" +
-        [
-          q ? `q=${q}` : "",
-          t || session.t ? `t=${t || session.t}` : "",
-          rlo || session.rlo ? `rlo=${rlo || session.rlo}` : "",
-          rhi || session.rhi ? `rhi=${rhi || session.rhi}` : "",
-          clo || session.clo ? `clo=${clo || session.clo}` : "",
-          chi || session.chi ? `chi=${chi || session.chi}` : "",
-          s || session.s ? `s=${s || session.s}` : "",
-          o || session.o ? `o=${o || session.o}` : "",
-          p ? `p=${p}` : "",
-          stags || session.stags ? `stags=${stags || session.stags}` : "",
-          atags || session.atags ? `atags=${atags || session.atags}` : "",
-          ntags || session.ntags ? `ntags=${ntags || session.ntags}` : "",
-        ]
-          .filter((t) => t)
-          .join("&")
-      : "",
-    cleanQuery = (() => {
-      return query
-        .replaceAll("This Week", "week")
-        .replaceAll("This Month", "month")
-        .replaceAll("This Year", "year")
-        .replaceAll("All Time", "time")
-        .replaceAll("Today", "today")
-        .replaceAll("Date", "date")
-        .replaceAll("Rating", "rating")
-        .replaceAll("Cost", "cost")
-        .replaceAll("Ascending", "asc")
-        .replaceAll("Descending", "desc");
-    })(),
-    // Leaving this unused error, as I haven't implemented error handling yet
-    { data, isLoading, error } = useQuery(["search"], {
-      queryFn: async () => {
-        try {
-          const url = encodeURI(
-            `${import.meta.env.VITE_API}/products${cleanQuery}`
-          );
-          const json = await (await fetch(url)).json();
-          return json;
-        } catch (err) {
-          console.error(err);
-          return [];
-        }
-      },
-    });
+  const sessionParams: FormData = JSON.parse(
+    sessionStorage.getItem("searchParams") || "{}"
+  );
+  const [searchParams] = useSearchParams();
+  const queryString = buildQuery(searchParams, sessionParams);
+  const cleanQueryString = cleanQuery(queryString);
+
+  const { data, isLoading } = useSearch(cleanQueryString);
 
   useEffect(() => {
     if (data) setResults(data);
   }, [data]);
 
-  const onSubmit = async (data: FormData) => {
-    console.log(data);
+  async function setSessionParams(data: FormData) {
     sessionStorage.setItem("searchParams", JSON.stringify(data));
-  };
+  }
 
   return (
     <div className="mt-2 flex gap-3">
-      <FilterForm onSubmit={onSubmit} session={session} />
+      <FilterForm onSubmit={setSessionParams} session={sessionParams} />
       {searchParams.entries() && (
         <>
           {isLoading && <div>Loading...</div>}
@@ -116,4 +48,64 @@ export default function Search() {
       )}
     </div>
   );
+}
+
+function buildQuery(searchParams: URLSearchParams, sessionParams: FormData) {
+  const queryParams = [
+    ["q", searchParams.get("q")],
+    ["t", searchParams.get("t") || sessionParams.t],
+    ["rlo", searchParams.get("rlo") || sessionParams.rlo],
+    ["rhi", searchParams.get("rhi") || sessionParams.rhi],
+    ["clo", searchParams.get("clo") || sessionParams.clo],
+    ["chi", searchParams.get("chi") || sessionParams.chi],
+    ["s", searchParams.get("s") || sessionParams.s],
+    ["o", searchParams.get("o") || sessionParams.o],
+    ["p", searchParams.get("p")],
+    ["stags", searchParams.get("stags") || sessionParams.stags],
+    ["atags", searchParams.get("atags") || sessionParams.atags],
+    ["ntags", searchParams.get("ntags") || sessionParams.ntags],
+  ];
+  const queryString = queryParams
+    .filter(([, value]) => value)
+    .map(([key, value]) => `${key}=${value}`)
+    .join("&");
+  return queryString ? `?${queryString}` : "";
+}
+
+function cleanQuery(query: string) {
+  const replacements = [
+    ["This Week", "week"],
+    ["This Month", "month"],
+    ["This Year", "year"],
+    ["All Time", "time"],
+    ["Today", "today"],
+    ["Date", "date"],
+    ["Rating", "rating"],
+    ["Cost", "cost"],
+    ["Ascending", "asc"],
+    ["Descending", "desc"],
+  ];
+  let cleanQuery = query;
+  for (const [from, to] of replacements)
+    cleanQuery = cleanQuery.replaceAll(from, to);
+  return cleanQuery;
+}
+
+function useSearch(cleanQueryString: string) {
+  const query = useQuery(["search"], {
+    queryFn: async () => {
+      try {
+        const url = encodeURI(
+          `${import.meta.env.VITE_API}/products${cleanQueryString}`
+        );
+        const res = await fetch(url);
+        const json = await res.json();
+        return json;
+      } catch (err) {
+        console.error(err);
+        return [];
+      }
+    },
+  });
+  return query;
 }
