@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form } from "../components/Form";
-import { FancyInput as Input } from "../components/Input";
+import Input from "../components/Input";
 import { useAuth } from "../context/AuthContext";
 
 type FormData = {

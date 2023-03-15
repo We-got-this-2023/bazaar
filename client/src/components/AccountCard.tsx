@@ -2,7 +2,7 @@ import { useState } from "react";
 import UserImage from "../components/UserImage";
 import { useAuth } from "../context/AuthContext";
 import { Form } from "./Form";
-import { FancyInput as Input } from "./Input";
+import Input from "./Input";
 
 interface User {
   id: string;

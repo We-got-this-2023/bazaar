@@ -1,5 +1,6 @@
 import { Form } from "./Form";
-import { FancyInput as Input, FancySelect as Select } from "./Input";
+import Input from "./Input";
+import Select from "./Select";
 
 export default function FilterForm({
   onSubmit,

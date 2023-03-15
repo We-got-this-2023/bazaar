@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
 import { Form } from "./Form";
-import { FancyInput as Input } from "./Input";
+import Input from "./Input";
 
 type FormData = {
   country: string;
