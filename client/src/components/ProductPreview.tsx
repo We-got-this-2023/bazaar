@@ -39,11 +39,17 @@ export default function ProductPreview({
   let c = second;
   if (second.length === 1) c = `${second}0`;
 
-  const cl = type === "checkout" ? "py-4 px-8" : "py-6 px-8";
+  const checkout = type === "checkout" ? "py-4 px-8" : "py-6 px-8";
 
   return (
     <div
-      className={`${cl} rounded-3xl bg-neutral-200 shadow-[3px_3px_10px_1px_#00000060] transition-all duration-200 hover:-translate-y-[2px] hover:-translate-x-[2px] hover:shadow-[4px_4px_12px_2px_#00000060] hover:brightness-105 dark:bg-neutral-900 dark:hover:brightness-110`}
+      className={`
+      ${checkout} rounded-3xl bg-neutral-200 
+      shadow-[3px_3px_10px_1px_#00000060] transition-all duration-200 
+      hover:-translate-y-[2px] hover:-translate-x-[2px] 
+      hover:shadow-[4px_4px_12px_2px_#00000060] hover:brightness-105 
+      dark:bg-neutral-900 dark:hover:brightness-110
+      `}
     >
       <Link to={`/products/${id}`}>
         <h2 className="w-fit font-body text-lg hover:text-sky-500 hover:underline">
