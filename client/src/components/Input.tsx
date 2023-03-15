@@ -13,7 +13,6 @@ import Warning from "../assets/Warning";
 interface FancyInputProps extends InputHTMLAttributes<HTMLInputElement> {
   errors?: FieldErrors;
   name: string;
-  className?: string;
   options?: RegisterOptions;
   initialValue?: string;
   type: string;
@@ -24,7 +23,6 @@ interface FancyInputProps extends InputHTMLAttributes<HTMLInputElement> {
 interface FancySelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   errors?: FieldErrors;
   name: string;
-  className?: string;
   options?: RegisterOptions;
   placeholder?: string;
   children: JSX.Element[];
@@ -50,9 +48,7 @@ export function FancyInput({
     register = form.register;
     errors = formState.errors;
   }
-
   const inputRef = useRef<HTMLInputElement | HTMLSelectElement | null>(null);
-
   const [labelSmall, setLabelSmall] = useState(false);
   const [isNumber] = useState(type === "number");
   if (name && register) {
@@ -61,12 +57,10 @@ export function FancyInput({
     regRest = reg;
     regRest.ref = undefined;
   }
-
   const handleFocus = (focus: boolean) => {
     if (isNumber) return;
     inputRef.current?.value === "" ? setLabelSmall(focus) : setLabelSmall(true);
   };
-
   useEffect(() => {
     if (
       initialValue !== undefined &&
@@ -79,33 +73,8 @@ export function FancyInput({
       }
     }
   }, []);
-
-  const classes = {
-    error:
-      name && errors && errors[name]
-        ? "border-red-500 ring-red-300 border-1"
-        : "ring-blue-300",
-    main: "rounded-md p-4 pb-2 dark:bg-neutral-800 bg-white-bright shadow-blue-200 transition-all duration-200",
-    labelMain:
-      "pointer-events-none absolute select-none capitalize opacity-60 transition-all duration-300 ease-out top-1/2 -translate-y-1/2 pl-3 text-base",
-    labelSmall: labelSmall ? "top-2 pl-2 text-xs opacity-80" : "",
-    number: isNumber ? "appearance-none pt-2 [-moz-appearance:textfield]" : "",
-    pseudo:
-      "focus:outline-none focus:ring-2 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:shadow-[0_0_10px_2px_#bfdbfe] focus:shadow-[0_0_10px_2px_#bfdbfe] dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe] dark:focus:shadow-[0_0_10px_0px_#bfdbfe]",
-    overrides: cOverrides ?? "",
-  };
-
-  const classString = [
-    classes.error,
-    classes.main,
-    classes.number,
-    classes.pseudo,
-    classes.overrides,
-  ].join(" ");
-  const labelClassString = [classes.labelMain, classes.labelSmall].join(" ");
-
   return (
-    <div className={"mb-2 flex flex-col " + placementClassName}>
+    <div className={`mb-2 flex flex-col ${placementClassName}`}>
       <div className="relative flex flex-col gap-2">
         <input
           {...rest}
@@ -121,12 +90,34 @@ export function FancyInput({
           }}
           onFocus={() => handleFocus(true)}
           onBlur={() => handleFocus(false)}
-          className={classString}
+          className={`
+            rounded-md bg-white-bright p-4 pb-2 shadow-blue-200 transition-all duration-200 
+            focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:shadow-[0_0_10px_2px_#bfdbfe] 
+            focus:shadow-[0_0_10px_2px_#bfdbfe] focus:outline-none focus:ring-2 
+            dark:bg-neutral-800 dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 
+            dark:hover:shadow-[0_0_10px_0px_#bfdbfe] dark:focus:shadow
+            ${
+              name && errors && errors[name]
+                ? "border-1 border-red-500 ring-red-300"
+                : "ring-blue-300"
+            }
+            ${
+              isNumber ? "appearance-none pt-2 [-moz-appearance:textfield]" : ""
+            }
+            ${cOverrides ?? ""}
+          `}
           placeholder={isNumber ? placeholder ?? name : ""}
           aria-placeholder={placeholder ?? ""}
         />
         {!isNumber && (
-          <label className={labelClassString} htmlFor={placeholder ?? name}>
+          <label
+            className={`
+              pointer-events-none absolute top-1/2 -translate-y-1/2 
+              select-none pl-3 text-base capitalize opacity-60 
+              transition-all duration-300 ease-out 
+              ${labelSmall ? "top-2 pl-2 text-xs opacity-80" : ""}`}
+            htmlFor={placeholder ?? name}
+          >
             {placeholder ?? name}
           </label>
         )}
@@ -166,31 +157,12 @@ export function FancySelect({
     regRest = reg;
     regRest.ref = undefined;
   }
-
   const inputRef = useRef<HTMLSelectElement | null>(null);
-
   const setLabelSmall = useState(false)[1];
   const [isCheckbox] = useState(type === "checkbox");
-
   const handleFocus = (focus: boolean) => {
     inputRef.current?.value === "" ? setLabelSmall(focus) : setLabelSmall(true);
   };
-
-  const classes = {
-    error: name && errors && errors[name] ? "border-red-500 ring-red-300" : "",
-    main: "shadow-blue-200 rounded-md px-4 py-2 dark:bg-neutral-800 bg-white-bright ring-blue-300 transition-all duration-200",
-    pseudo:
-      "focus:outline-none focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:scale-[101.5%] hover:shadow-[0_0_10px_2px_#bfdbfe] focus:shadow-[0_0_10px_2px_#bfdbfe] focus:ring-2 dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe] dark:focus:shadow-[0_0_10px_0px_#bfdbfe]",
-    override: cOverrides ?? "",
-  };
-
-  const classString = [
-    classes.main,
-    classes.error,
-    classes.pseudo,
-    classes.override,
-  ].join(" ");
-
   useEffect(() => {
     if (
       initialValue !== undefined &&
@@ -203,7 +175,6 @@ export function FancySelect({
       }
     }
   }, []);
-
   return (
     <select
       {...rest}
@@ -218,12 +189,21 @@ export function FancySelect({
       }}
       onFocus={() => handleFocus(true)}
       onBlur={() => handleFocus(false)}
-      className={classString}
+      className={`
+        rounded-md bg-white-bright px-4 py-2 shadow-blue-200 
+        ring-blue-300 transition-all duration-200 focus-within:shadow-[0_0_10px_2px_#bfdbfe] 
+        focus-within:ring-[2px] hover:scale-[101.5%] 
+        hover:shadow-[0_0_10px_2px_#bfdbfe] focus:shadow-[0_0_10px_2px_#bfdbfe] 
+        focus:outline-none focus:ring-2 dark:bg-neutral-800 
+        dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe] dark:focus:shadow-[0_0_10px_0px_#bfdbfe]
+        ${name && errors && errors[name] ? "border-red-500 ring-red-300" : ""} 
+        ${cOverrides ?? ""} 
+      `}
       placeholder=""
       aria-placeholder={placeholder ?? ""}
     >
       {Children.map(children, (child: JSX.Element) => {
-        if (type !== "checkbox" && child.type !== "option")
+        if (type !== "checkbox" && child.type)
           throw new Error('Input.tsx:142 - child.type must be "option"');
         if (isCheckbox && child.type !== "input")
           throw new Error('Input.tsx:143 - child.type must be "input"');
