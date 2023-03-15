@@ -17,30 +17,73 @@ interface AuthContextI extends Context<{}> {
   setUserInformation: (user: any) => Promise<void>;
 }
 
-const prompt = (username: string) => console.log(`Welcome back, ${username}!`);
-
 const AuthContext = createContext({}) as AuthContextI;
 
 export function AuthProvider({ children }: { children: JSX.Element }) {
-  const [user, setUser] = useState<any>(null),
-    [userLoggedIn, setUserLoggedIn] = useState<boolean>(false),
-    [isLoading, setIsLoading] = useState<boolean>(true),
-    [error, setError] = useState<string | undefined>(),
-    clearUser = (error?: string) => {
-      setIsLoading(false);
-      localStorage.removeItem("token");
-      setUser(undefined);
-      if (error) setError(error);
-      setUserLoggedIn(false);
-    },
-    addUser = ({ user, token }: { user: any; token: string }) => {
-      setIsLoading(false);
-      localStorage.setItem("token", JSON.stringify(token));
-      setUser(user);
-      setUserLoggedIn(true);
-      setError(undefined);
-    };
+  const [user, setUser] = useState<any>(null);
+  const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | undefined>();
 
+  // Helper functions
+  const clearUser = (error?: string) => {
+    setIsLoading(false);
+    localStorage.removeItem("token");
+    setUser(undefined);
+    setError(error || undefined);
+    setUserLoggedIn(false);
+  };
+
+  const addUser = ({ user, token }: { user: any; token: string }) => {
+    setIsLoading(false);
+    localStorage.setItem("token", JSON.stringify(token));
+    setUser(user);
+    setUserLoggedIn(true);
+    setError(undefined);
+  };
+
+  const fetchWrapper = async ({
+    url,
+    method,
+    data,
+    errors,
+  }: {
+    url: string;
+    method?: string;
+    data: object;
+    errors?: {
+      [key: number]: string;
+    };
+  }) => {
+    try {
+      setIsLoading(true);
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        const { token } = await res.json();
+        const user = parseJWT(token);
+        if (!user) clearUser();
+        else addUser({ user, token });
+      } else {
+        clearUser();
+        setError(
+          errors
+            ? errors[res.status]
+            : "Something went wrong with the request. Please try again later."
+        );
+      }
+    } catch (err: any) {
+      clearUser(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Check JWT token for expiry on load
   useEffect(() => {
     const tokenUser = attemptTokenLogin();
     if (tokenUser) {
@@ -48,80 +91,54 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       setUserLoggedIn(true);
       setError(undefined);
       setIsLoading(false);
-    } else clearUser();
+    } else clearUser("Invalid token");
   }, []);
 
-  useEffect(() => prompt(user?.name), [user]);
-
-  const login = async (values: { email: string; password: string }) => {
-    setIsLoading(true);
-    const data = {
-      email: values.email.toLowerCase().trim(),
-      password: values.password,
-    };
-    const loggedInResponse = await fetch(
-      `${import.meta.env.VITE_API}/auth/login`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      }
-    );
-    if (loggedInResponse.ok) {
-      const { token } = await loggedInResponse.json();
-      const user = parseJWT(token);
-      if (!user) clearUser();
-      else addUser({ user, token });
-    } else clearUser("Invalid credentials");
-    setIsLoading(false);
+  const login = async (data: { email: string; password: string }) => {
+    data.email = data.email.toLowerCase().trim();
+    console.log(data);
+    fetchWrapper({
+      url: `${import.meta.env.VITE_API}/auth/login`,
+      method: "POST",
+      data,
+      errors: {
+        401: "Email or password is incorrect.",
+        404: "Email or password is incorrect.",
+      },
+    });
   };
 
-  const signup = async (values: {
+  const signup = async (data: {
     email: string;
     username: string;
     password: string;
   }) => {
-    setIsLoading(true);
-    const data = {
-      email: values.email.toLowerCase().trim(),
-      name: values.username,
-      password: values.password,
-    };
-    const loggedInResponse = await fetch(
-      `${import.meta.env.VITE_API}/auth/register`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      }
-    );
-    if (loggedInResponse.ok) {
-      const { token } = await loggedInResponse.json();
-      const user = parseJWT(token);
-      if (!user) clearUser();
-      else addUser({ user, token });
-    } else clearUser("Error registering user. Please try again later.");
-    setIsLoading(false);
+    data.email = data.email.toLowerCase().trim();
+
+    fetchWrapper({
+      url: `${import.meta.env.VITE_API}/register`,
+      method: "POST",
+      data,
+      errors: {
+        409: "Email already in use.",
+        500: "Something went wrong while registering. Please try again later.",
+      },
+    });
   };
 
   async function setUserInformation(data: { name: string; email: string }) {
-    try {
-      await fetch(`localhost:3000/users/${user.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: data.name,
-          email: data.email,
-          createdAt: new Date().toISOString(),
-        }),
-      });
-    } catch (error) {
-      console.error(error);
-    }
+    await fetchWrapper({
+      method: "PATCH",
+      url: `${import.meta.env.VITE_API}/users/${user.id}`,
+      data,
+      errors: {
+        401: "Invalid token.",
+        500: "Something went wrong while updating your profile. Please try again later.",
+      },
+    });
   }
 
+  // Auth context values
   const value = {
     userLoggedIn,
     login,
@@ -135,6 +152,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+// Custom hook to use auth context
 export function useAuth() {
   return useContext(AuthContext) as AuthContextI;
 }
