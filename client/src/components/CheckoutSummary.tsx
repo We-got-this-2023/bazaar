@@ -7,7 +7,13 @@ export default function CheckoutSummary({
 }) {
   return (
     <div
-      className={`m-8 mt-12 flex h-fit flex-col items-center justify-center gap-8 rounded-xl bg-neutral-200 px-12 py-36 shadow-[0_0_5px_1px_#00000050] transition-all duration-200 hover:shadow-[0_0_8px_2px_#00000070] dark:bg-neutral-900 dark:shadow-[0_0_5px_1px_#ffffff30] dark:hover:shadow-[0_0_6px_2px_#ffffff50] ${className}`}
+      className={`
+      m-8 mt-12 flex h-fit flex-col items-center justify-center 
+      gap-8 rounded-xl bg-neutral-200 px-12 py-36 
+      shadow-[0_0_5px_1px_#00000050] transition-all duration-200 
+      hover:shadow-[0_0_8px_2px_#00000070] dark:bg-neutral-900 
+      dark:shadow-[0_0_5px_1px_#ffffff30] dark:hover:shadow-[0_0_6px_2px_#ffffff50] 
+      ${className}`}
     >
       <h2 className="text-2xl font-bold">Checkout</h2>
       <div className="flex w-full justify-between p-4">
