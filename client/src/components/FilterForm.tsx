@@ -20,7 +20,13 @@ export default function FilterForm({
   session: any;
 }) {
   return (
-    <div className="flex w-[16rem] flex-col items-center rounded-2xl bg-neutral-200 p-4 shadow-[3px_3px_10px_1px_#00000060] transition-colors duration-200 dark:bg-neutral-900 max-md:hidden">
+    <div
+      className="
+    flex w-[16rem] flex-col items-center rounded-2xl 
+    bg-neutral-200 p-4 shadow-[3px_3px_10px_1px_#00000060] 
+    transition-colors duration-200 dark:bg-neutral-900 max-md:hidden
+    "
+    >
       <h2 className="text-lg font-semibold">Filters</h2>
       <div className="flex justify-between gap-20 p-3">
         <div className="flex gap-2">
@@ -110,7 +116,12 @@ export default function FilterForm({
             </Select>
             <label htmlFor="tags">Tags</label>
             <button
-              className="mt-6 rounded-lg bg-green-600 p-2 text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-green-800 hover:shadow-[0_0_10px_1px_#33aa3350] dark:bg-green-400 dark:text-black dark:hover:bg-green-500"
+              className="
+              mt-6 rounded-lg bg-green-600 p-2 
+              text-white shadow-lg transition-all duration-200 
+              hover:scale-105 hover:bg-green-800 hover:shadow-[0_0_10px_1px_#33aa3350] 
+              dark:bg-green-400 dark:text-black dark:hover:bg-green-500
+              "
               type="submit"
             >
               Save Changes
