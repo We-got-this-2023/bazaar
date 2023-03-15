@@ -64,7 +64,12 @@ export default function CardSlider({ className }: { className?: string }) {
         return (
           <SwiperSlide
             key={name + index}
-            className="group aspect-[4/3] overflow-hidden shadow-xl transition-transform duration-150 hover:scale-110 hover:shadow-2xl max-lg:rounded-[2em] max-sm:rounded-[1em] lg:rounded-[3em]"
+            className="
+            group aspect-[4/3] overflow-hidden 
+            shadow-xl transition-transform duration-150 
+            hover:scale-110 hover:shadow-2xl 
+            max-lg:rounded-[2em] max-sm:rounded-[1em] lg:rounded-[3em]
+            "
           >
             <Link to={link}>
               <img
@@ -74,8 +79,19 @@ export default function CardSlider({ className }: { className?: string }) {
                 ref={slideRef}
               />
               <div className="absolute bottom-0 left-0 right-0 mx-auto flex h-14 w-full items-center justify-center overflow-hidden">
-                <div className="absolute bottom-0 h-full w-full rounded-md bg-black opacity-30 transition-all duration-200 ease-out group-hover:bottom-1 group-hover:h-2 group-hover:w-[60%]" />
-                <h2 className="z-10 h-fit w-fit text-xl font-bold text-white transition-all duration-150 [text-shadow:_0_0_10px_#000000b0] group-hover:opacity-0">
+                <div
+                  className="
+                absolute bottom-0 h-full w-full rounded-md 
+                bg-black opacity-30 transition-all duration-200 ease-out 
+                group-hover:bottom-1 group-hover:h-2 group-hover:w-[60%]
+                "
+                />
+                <h2
+                  className="
+                z-10 h-fit w-fit text-xl font-bold 
+                text-white transition-all duration-150 
+                [text-shadow:_0_0_10px_#000000b0] group-hover:opacity-0"
+                >
                   {name}
                 </h2>
               </div>
