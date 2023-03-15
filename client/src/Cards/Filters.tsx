@@ -1,6 +1,6 @@
-import { Form } from "../components/Form";
-import Input from "../components/Input";
-import Select from "../components/Select";
+import { Form } from "../formElements/Form";
+import Input from "../formElements/Input";
+import Select from "../formElements/Select";
 
 export default function FilterForm({
   onSubmit,

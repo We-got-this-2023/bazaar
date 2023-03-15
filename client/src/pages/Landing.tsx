@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import CardSlider from "../components/CardSlider";
+import CardSlider from "../components/Carousel";
 
 export default function LandingPage() {
   return (

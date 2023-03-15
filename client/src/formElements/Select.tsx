@@ -92,10 +92,10 @@ export default function FancySelect({
         aria-placeholder={placeholder ?? ""}
       >
         {Children.map(children, (child: JSX.Element) => {
-          if (type !== "checkbox" && child.type)
-            throw new Error('Input.tsx:142 - child.type must be "option"');
+          if (!isCheckbox && child.type !== "option")
+            throw new Error('Select.tsx:96 - child.type must be "option"');
           if (isCheckbox && child.type !== "input")
-            throw new Error('Input.tsx:143 - child.type must be "input"');
+            throw new Error('Select.tsx:98 - child.type must be "input"');
           const { value } = child.props;
           if (isCheckbox) {
             return (

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import FilterForm from "../Cards/FiltersCard";
+import FilterForm from "../cards/Filters";
 import SearchResults from "../components/SearchResults";
 
 interface FormData {

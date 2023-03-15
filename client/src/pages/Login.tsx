@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Form } from "../components/Form";
-import Input from "../components/Input";
 import { useAuth } from "../contexts/AuthContext";
+import { Form } from "../formElements/Form";
+import Input from "../formElements/Input";
 
 type FormData = {
   email: string;

@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
-import { Form } from "../components/Form";
-import Input from "../components/Input";
+import { Form } from "../formElements/Form";
+import Input from "../formElements/Input";
 
 interface DeliveryFormProps {
   user: any;
