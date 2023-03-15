@@ -36,10 +36,13 @@ export default function DeliveryForm({
 
   return (
     <div
-      className={
-        "flex flex-col items-center justify-center gap-6 rounded-3xl border-[.5px] border-black bg-neutral-200 p-12 shadow-[0_0_5px_1px_#00000050] transition-all duration-200 hover:shadow-[0_0_8px_2px_#00000070] dark:border-white dark:bg-neutral-900 dark:shadow-[0_0_5px_1px_#ffffff80] dark:hover:shadow-[0_0_10px_2px_#ffffff90] " +
-        className
-      }
+      className={`
+        flex flex-col items-center justify-center gap-6 
+        rounded-3xl border-[.5px] border-black bg-neutral-200 p-12 
+        shadow-[0_0_5px_1px_#00000050] transition-all duration-200 
+        hover:shadow-[0_0_8px_2px_#00000070] dark:border-white dark:bg-neutral-900 
+        dark:shadow-[0_0_5px_1px_#ffffff80] dark:hover:shadow-[0_0_10px_2px_#ffffff90]
+        ${className}`}
     >
       <h2 className="text-2xl font-bold">{title ? title : "Delivery Form"}</h2>
       <Form
@@ -166,7 +169,12 @@ export default function DeliveryForm({
         />
 
         <button
-          className="col-span-2 col-start-3 row-start-[8] rounded-xl bg-emerald-600 p-3 text-white transition-all duration-200 hover:bg-emerald-400 hover:text-black hover:shadow-[0_0_5px_1px_#00000050] dark:bg-emerald-500 dark:text-black dark:hover:bg-emerald-600 dark:hover:text-white dark:hover:shadow-[0_0_5px_1px_#ffffff50]"
+          className="
+          col-span-2 col-start-3 row-start-[8] rounded-xl bg-emerald-600 
+          p-3 text-white transition-all duration-200 
+          hover:bg-emerald-400 hover:text-black hover:shadow-[0_0_5px_1px_#00000050] 
+          dark:bg-emerald-500 dark:text-black dark:hover:bg-emerald-600 
+          dark:hover:text-white dark:hover:shadow-[0_0_5px_1px_#ffffff50]"
           type="submit"
         >
           Submit
