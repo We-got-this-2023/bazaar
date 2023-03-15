@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import CardSlider from "../components/Carousel";
+import Carousel from "../components/Carousel";
 
 export default function LandingPage() {
   return (
@@ -15,7 +15,7 @@ export default function LandingPage() {
       >
         Get Started
       </Link>
-      <CardSlider />
+      <Carousel images={["electronics.jpg", "clothing.jpg", "glassware.jpg"]} />
     </main>
   );
 }

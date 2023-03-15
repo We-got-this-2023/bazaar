@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { Form } from "../formElements/Form";
 import Input from "../formElements/Input";
@@ -24,10 +25,16 @@ interface FormData {
 }
 
 export default function DeliveryForm({ title, className }: DeliveryFormProps) {
+  const [fileNamesOutlet, setFileNamesOutlet] = useState<JSX.Element>();
+
   const onSubmit = async (data: FormData) => {
     console.log(data);
     // TODO: Send data to server
   };
+
+  useEffect(() => {
+    console.log(fileNamesOutlet);
+  }, [fileNamesOutlet]);
 
   return (
     <div
@@ -135,9 +142,6 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
           placeholder="Confirm Email"
           options={{
             required: "Please confirm your email address.",
-            validate: (confirmEmail) =>
-              confirmEmail === useFormContext().getValues().email ||
-              "Email addresses do not match.",
           }}
           placementClassName="row-start-5 col-start-4 col-span-3"
         />

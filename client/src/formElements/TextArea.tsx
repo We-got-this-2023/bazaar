@@ -2,7 +2,6 @@ import { ErrorMessage } from "@hookform/error-message";
 import { InputHTMLAttributes, useEffect, useRef, useState } from "react";
 import { FieldErrors, RegisterOptions, useFormContext } from "react-hook-form";
 import Warning from "../assets/WarningIcon";
-import File from "./File";
 
 interface FancyInputProps extends InputHTMLAttributes<HTMLInputElement> {
   errors?: FieldErrors;
@@ -12,7 +11,6 @@ interface FancyInputProps extends InputHTMLAttributes<HTMLInputElement> {
   type: string;
   placementClassName?: string;
   placeholder?: string;
-  setFileNamesOutlet?: Function;
 }
 
 export default function FancyInput({
@@ -23,22 +21,8 @@ export default function FancyInput({
   placeholder,
   initialValue,
   placementClassName,
-  setFileNamesOutlet,
   ...rest
 }: FancyInputProps) {
-  if (type === "file")
-    return (
-      <File
-        name={name}
-        options={options}
-        setFileNamesOutlet={setFileNamesOutlet}
-        {...rest}
-      />
-    );
-  else if (setFileNamesOutlet)
-    throw new Error(
-      "Input.tsx:30 fileNamesOutlet is not supported in FancyInput"
-    );
   const form = useFormContext();
   let formState, register, errors, ref: any, regRest: any;
   if (form) {

@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import CheckoutSummary from "../cards/Checkout";
 import ProductPreview from "../cards/Product";
 import DeliveryForm from "../cards/Shipping";
@@ -10,13 +9,11 @@ export default function Checkout() {
   const { user } = useAuth();
   // Leaving cartAddItem to add mock data for now
   const { cart: items, cartAddItem } = useMisc();
-  const navigate = useNavigate();
 
   useEffect(() => {
     // Until we have a way to add a product to the cart,
     // I'm leaving this commented out function which will run on load
     // each time, as this is a quick way to add products to the cart.
-
     // cartAddItem({
     //   id: "Something",
     //   title: "something",
@@ -28,8 +25,6 @@ export default function Checkout() {
     //   userId: "",
     //   createdAt: "",
     // });
-
-    if (items.length === 0) navigate("/");
   }, []);
 
   return (
