@@ -2,7 +2,13 @@ import { useFormContext } from "react-hook-form";
 import { Form } from "./Form";
 import Input from "./Input";
 
-type FormData = {
+interface DeliveryFormProps {
+  user: any;
+  title?: string;
+  className?: string;
+}
+
+interface FormData {
   country: string;
   city: string;
   region: string;
@@ -15,20 +21,9 @@ type FormData = {
   confirmEmail: string;
   countryCallingCode: string;
   phoneNumber: string;
-};
+}
 
-// Leaving the user in the delivery form for now
-// This is because the form needs to autofill data from the backend
-
-export default function DeliveryForm({
-  user,
-  title,
-  className,
-}: {
-  user: any;
-  title?: string;
-  className?: string;
-}) {
+export default function DeliveryForm({ title, className }: DeliveryFormProps) {
   const onSubmit = async (data: FormData) => {
     console.log(data);
     // TODO: Send data to server
@@ -42,9 +37,9 @@ export default function DeliveryForm({
         shadow-[0_0_5px_1px_#00000050] transition-all duration-200 
         hover:shadow-[0_0_8px_2px_#00000070] dark:border-white dark:bg-neutral-900 
         dark:shadow-[0_0_5px_1px_#ffffff80] dark:hover:shadow-[0_0_10px_2px_#ffffff90]
-        ${className}`}
+        ${className || ""}`}
     >
-      <h2 className="text-2xl font-bold">{title ? title : "Delivery Form"}</h2>
+      <h2 className="text-2xl font-bold">{title || "Delivery Form"}</h2>
       <Form
         onSubmit={onSubmit}
         className="grid w-[34em] grid-cols-6 grid-rows-[8] gap-1 gap-x-3"
