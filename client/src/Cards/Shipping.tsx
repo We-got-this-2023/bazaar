@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
-import { Form } from "./Form";
-import Input from "./Input";
+import { Form } from "../components/Form";
+import Input from "../components/Input";
 
 interface DeliveryFormProps {
   user: any;
@@ -39,7 +39,7 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
         dark:shadow-[0_0_5px_1px_#ffffff80] dark:hover:shadow-[0_0_10px_2px_#ffffff90]
         ${className || ""}`}
     >
-      <h2 className="text-2xl font-bold">{title || "Delivery Form"}</h2>
+      <h2 className="text-2xl font-bold">{title || "Shipping Form"}</h2>
       <Form
         onSubmit={onSubmit}
         className="grid w-[34em] grid-cols-6 grid-rows-[8] gap-1 gap-x-3"

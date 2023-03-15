@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import Warning from "../assets/Warning";
+import Warning from "../assets/WarningIcon";
 
 interface FormProps {
   defaultValues?: any;

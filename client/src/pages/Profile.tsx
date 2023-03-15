@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import AccountCard from "../components/AccountCard";
-import DeliveryForm from "../components/DeliveryForm";
-import { useAuth } from "../context/AuthContext";
+import AccountCard from "../Cards/Account";
+import DeliveryForm from "../Cards/Shipping";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Profile() {
   const { id } = useParams();

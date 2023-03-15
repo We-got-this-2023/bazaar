@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import CheckoutSummary from "../components/CheckoutSummary";
-import DeliveryForm from "../components/DeliveryForm";
-import ProductPreview from "../components/ProductPreview";
-import { useAuth } from "../context/AuthContext";
-import { Product, useMisc } from "../context/MiscContext";
+import CheckoutSummary from "../Cards/Checkout";
+import ProductPreview from "../Cards/Product";
+import DeliveryForm from "../Cards/Shipping";
+import { useAuth } from "../contexts/AuthContext";
+import { Product, useMisc } from "../contexts/MiscContext";
 
 export default function Checkout() {
   const { user } = useAuth();

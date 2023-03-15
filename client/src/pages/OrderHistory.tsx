@@ -1,5 +1,5 @@
 import OrderCard from "../components/OrderCard";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 export default function Orders() {
   const { user } = useAuth();
   // Leaving this unused variable as it I haven't set up

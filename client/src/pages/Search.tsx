@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import FilterForm from "../components/FilterForm";
-import SearchResults from "./SearchResults";
+import FilterForm from "../Cards/FiltersCard";
+import SearchResults from "../components/SearchResults";
 
 interface FormData {
   t: "Today" | "This Week" | "This Month" | "This Year" | "All Time"; // Filter by time

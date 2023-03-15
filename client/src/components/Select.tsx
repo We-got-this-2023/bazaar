@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { FieldErrors, RegisterOptions, useFormContext } from "react-hook-form";
-import Warning from "../assets/Warning";
+import Warning from "../assets/WarningIcon";
 
 interface FancySelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   errors?: FieldErrors;

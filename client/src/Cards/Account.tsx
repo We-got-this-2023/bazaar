@@ -1,8 +1,8 @@
 import { useState } from "react";
+import { Form } from "../components/Form";
+import Input from "../components/Input";
 import UserImage from "../components/UserImage";
-import { useAuth } from "../context/AuthContext";
-import { Form } from "./Form";
-import Input from "./Input";
+import { useAuth } from "../contexts/AuthContext";
 
 interface User {
   id: string;

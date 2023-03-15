@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { Form } from "./Form";
-import Input from "./Input";
+import { Form } from "../components/Form";
+import Input from "../components/Input";
 
 type Product = {
   id: string;
