@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { Form } from "../formElements/Form";
 import Input from "../formElements/Input";
+import TextArea from "../formElements/TextArea";
 
 interface DeliveryFormProps {
   user: any;
@@ -166,6 +167,8 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
           }}
           placementClassName="row-start-6 col-start-2 col-span-5"
         />
+
+        <TextArea name="description" />
 
         <button
           className="
