@@ -7,17 +7,9 @@ import { UsersModule } from './users/users.module';
 import { ProductModule } from './product/product.module';
 import { ProductService } from './product/product.service';
 import { OrderModule } from './order/order.module';
-import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
-  imports: [
-    PrismaModule,
-    MulterModule.register({ dest: './uploads' }),
-    AuthModule,
-    UsersModule,
-    ProductModule,
-    OrderModule,
-  ],
+  imports: [PrismaModule, AuthModule, UsersModule, ProductModule, OrderModule],
   controllers: [AppController],
   providers: [AppService, ProductService],
 })
