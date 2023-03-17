@@ -15,14 +15,17 @@ import { fileSizeLimiter } from "./middleware/fileSizeLimiter.js";
 import { valCheck } from "./validators/authVal.js";
 import cookieParser from "cookie-parser";
 import passport from "passport";
+import { constants } from "./constants/constants.js";
 dotenv.config();
 
+// const { cookieParser } = pkg;
+
 const app = express();
-app.use(express.json());
 const port = 3000;
+app.use(express.json());
 
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({ origin: constants.CLIENT_URL, credentials: true }));
 app.use(passport.initialize());
 
 app.get("/", (req, res) => {
