@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { onLogin } from "../api/authAPI";
 import { Form } from "../components/Form";
 import { FancyInput as Input } from "../components/Input";
 import { useAuth } from "../context/AuthContext";
@@ -10,7 +11,7 @@ type FormData = {
 };
 
 export default function Login() {
-  const { userLoggedIn, login } = useAuth();
+  const { userLoggedIn, login, authenticateUser, isAuth } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,7 +20,13 @@ export default function Login() {
   }, [userLoggedIn]);
 
   const onSubmit = async (data: FormData) => {
-    return await login(data);
+    try {
+      await onLogin(data);
+      authenticateUser();
+      localStorage.setItem("localAuth", "true");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

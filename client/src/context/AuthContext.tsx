@@ -14,6 +14,9 @@ interface AuthContextI extends Context<{}> {
   user: any;
   isLoading: boolean;
   error: string;
+  isAuth: any;
+  authenticateUser: () => Promise<void>;
+  unAuthenticateUser: () => Promise<void>;
 }
 
 const prompt = (username: string) => console.log(`Welcome back, ${username}!`);
@@ -100,6 +103,26 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     setIsLoading(false);
   };
 
+  // *** New Auth ***
+
+  const localAuth = localStorage.getItem("localAuth");
+  const [auth, setAuth] = useState(false);
+
+  const isAuth = () => {
+    if (localAuth || auth) {
+      return true;
+    }
+    return false;
+  };
+
+  const authenticateUser = () => {
+    setAuth(true);
+  };
+
+  const unAuthenticateUser = () => {
+    setAuth(false);
+  };
+
   const value = {
     userLoggedIn,
     login,
@@ -107,6 +130,9 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     user,
     isLoading,
     error,
+    isAuth,
+    authenticateUser,
+    unAuthenticateUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

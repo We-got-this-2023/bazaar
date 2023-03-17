@@ -96,6 +96,7 @@ export const login = async (req, res) => {
   try {
     // Get JWT token
     const token = await sign(payload, constants.SECRET);
+    console.log("SIGNIN RAN", token);
 
     // Pass cookie
     return res.status(200).cookie("token", token, { httpOnly: true }).json({

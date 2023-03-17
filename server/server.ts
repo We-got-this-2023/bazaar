@@ -13,14 +13,17 @@ import { filesPayloadExists } from "./middleware/filePayloadExists.js";
 import { fileExtLimiter } from "./middleware/fileExtLimiter.js";
 import { fileSizeLimiter } from "./middleware/fileSizeLimiter.js";
 import { valCheck } from "./validators/authVal.js";
-
+import cookieParser from "cookie-parser";
+import passport from "passport";
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 const port = 3000;
 
+app.use(cookieParser());
 app.use(cors());
+app.use(passport.initialize());
 
 app.get("/", (req, res) => {
   res.send("Hello, world!");

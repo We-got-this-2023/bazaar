@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { onRegistration } from "../api/authAPI";
 import { Form } from "../components/Form";
 import { FancyInput as Input } from "../components/Input";
 import { useAuth } from "../context/AuthContext";
@@ -20,8 +21,19 @@ export default function Signup() {
     if (userLoggedIn) navigate("/");
   }, [userLoggedIn]);
 
+  // New Auth
   const onSubmit = async (data: FormData) => {
-    await signup(data);
+    let form = {
+      name: [data.username][0],
+      email: [data.email][0],
+      password: [data.password][0],
+    };
+
+    try {
+      onRegistration(form);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
