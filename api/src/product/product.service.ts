@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { ProductDto } from './dto/product.dto';
 import { ProductParamsDto } from './dto/productParams.dto';
-import { Request } from 'express';
+import { addProductDto } from './dto/addProduct.dto';
 
 @Injectable()
 export class ProductService {
@@ -27,12 +27,25 @@ export class ProductService {
     });
   }
 
-  async addProduct(productDto: ProductDto) {
-    return this.prisma.product.create({
+  async addProduct(file: any, addProductDto: addProductDto) {
+    const { id, userId, categoryName, name, description, price } =
+      addProductDto;
+
+    const imagePath = file.path;
+
+    // need to add category table to reference category or to create new one
+
+    const product = await this.prisma.product.create({
       data: {
-        ...productDto,
+        id,
+        userId,
+        name,
+        description,
+        imagesPath: imagePath,
+        price: Number(price),
       },
     });
+    return product;
   }
 
   // async getProductWithParams(productParamsDto: ProductParamsDto) {
