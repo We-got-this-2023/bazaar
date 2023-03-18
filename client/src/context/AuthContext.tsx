@@ -17,9 +17,11 @@ interface AuthContextI extends Context<{}> {
   isAuth: any;
   authenticateUser: () => Promise<void>;
   unAuthenticateUser: () => Promise<void>;
+  createUser: (token: any) => Promise<void>;
+  setUser: (val: any) => Promise<void>;
 }
 
-const prompt = (username: string) => console.log(`Welcome back, ${username}!`);
+// const prompt = (username: string) => console.log(`Welcome back, ${username}!`);
 
 const AuthContext = createContext({}) as AuthContextI;
 
@@ -53,7 +55,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     } else clearUser();
   }, []);
 
-  useEffect(() => prompt(user?.name), [user]);
+  // useEffect(() => prompt(user?.name), [user]);
 
   const login = async (values: { email: string; password: string }) => {
     setIsLoading(true);
@@ -123,11 +125,20 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     setAuth(false);
   };
 
+  const createUser = (token: any) => {
+    const user = parseJWT(token);
+    localStorage.setItem("email", user.email);
+    setUser(user);
+    setUserLoggedIn(true);
+  };
+
   const value = {
     userLoggedIn,
     login,
     signup,
     user,
+    setUser,
+    createUser,
     isLoading,
     error,
     isAuth,

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import PrivateRoutes from "./components/PrivateRoutes";
 import ProtectedRoute from "./components/ProtectedRoute";
+import RestrictedRoutes from "./components/RestrictedRoutes";
 import About from "./pages/About";
 import Checkout from "./pages/Checkout";
 import LandingPage from "./pages/LandingPage";
@@ -39,23 +41,18 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
 
           {/* Protected Routes */}
-          <Route
-            path="/products"
-            element={<ProtectedRoute element={<Products />} />}
-          />
-          <Route
-            path="/profile"
-            element={<ProtectedRoute element={<Profile />} />}
-          />
-          <Route
-            path="/orders"
-            element={<ProtectedRoute element={<Orders />} />}
-          />
+          <Route element={<PrivateRoutes />}>
+            <Route path="/products" element={<Products />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/orders" element={<Orders />} />
+          </Route>
         </Route>
 
         {/* Routes without a navbar */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route element={<RestrictedRoutes />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Route>
       </Routes>
     </>
   );

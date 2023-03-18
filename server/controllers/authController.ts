@@ -91,6 +91,8 @@ export const login = async (req, res) => {
   const payload = {
     id: user.id,
     email: user.email,
+    name: user.name,
+    createdAt: user.createdAt,
   };
 
   try {
@@ -102,11 +104,27 @@ export const login = async (req, res) => {
     return res.status(200).cookie("token", token, { httpOnly: true }).json({
       success: true,
       message: "Logged in successfully",
+      token: token,
     });
   } catch (error) {
     console.log(error.message);
     return res.status(500).json({
       error: error.message,
     });
+  }
+};
+
+export const userData = async (req, res) => {
+  const { userEmail } = req.params;
+  try {
+    const response = await prisma.user.findUnique({
+      where: {
+        email: userEmail,
+      },
+    });
+
+    return res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
   }
 };

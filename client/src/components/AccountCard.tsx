@@ -12,6 +12,9 @@ interface User {
 }
 
 export default function AccountCard({ user }: { user: User }) {
+  if (!user) {
+    return <h1>Loading...</h1>;
+  }
   const [date, setDate] = useState(
     new Date(user.createdAt).toLocaleDateString("default", {
       year: "numeric",

@@ -12,3 +12,9 @@ export async function onLogin(loginData: any) {
     withCredentials: true,
   });
 }
+
+export async function userData(user: any) {
+  return await axios.get(`http://localhost:3000/auth/${user}`, {
+    withCredentials: true,
+  });
+}

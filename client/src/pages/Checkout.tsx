@@ -11,21 +11,6 @@ export default function Checkout() {
   const { cart: items, cartAddItem } = useMisc();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // cartAddItem({
-    //   id: "Something",
-    //   title: "something",
-    //   price: "10.24",
-    //   quantity: 1,
-    //   description: "this is a something",
-    //   images: [],
-    //   tags: [],
-    //   userId: "",
-    //   createdAt: "",
-    // });
-    if (items.length === 0) navigate("/");
-  }, []);
-
   return (
     <div className="flex h-full w-full justify-between px-8">
       <div className="m-4 flex w-full max-w-3xl flex-col gap-8">

@@ -11,7 +11,7 @@ type FormData = {
 };
 
 export default function Login() {
-  const { userLoggedIn, login, authenticateUser, isAuth } = useAuth();
+  const { userLoggedIn, authenticateUser, createUser } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,7 +21,9 @@ export default function Login() {
 
   const onSubmit = async (data: FormData) => {
     try {
-      await onLogin(data);
+      const response = await onLogin(data);
+      const { token } = response.data;
+      createUser(token);
       authenticateUser();
       localStorage.setItem("localAuth", "true");
     } catch (error) {

@@ -9,6 +9,7 @@ import {
   signUp,
   register,
   login,
+  userData,
 } from "../controllers/authController.js";
 
 // const { cookieParser } = pkg;
@@ -28,5 +29,6 @@ router.post(
   validationMiddleware,
   register
 );
+router.get("/:userEmail", userData);
 
 export default router;
