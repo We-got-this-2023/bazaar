@@ -3,7 +3,10 @@ import axios from "axios";
 export async function onRegistration(registrationData: any) {
   return await axios.post(
     "http://localhost:3000/auth/register",
-    registrationData
+    registrationData,
+    {
+      withCredentials: true,
+    }
   );
 }
 

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { onRegistration } from "../api/authAPI";
+import { onLogin, onRegistration } from "../api/authAPI";
 import { Form } from "../components/Form";
 import { FancyInput as Input } from "../components/Input";
 import { useAuth } from "../context/AuthContext";
@@ -13,7 +13,7 @@ type FormData = {
 };
 
 export default function Signup() {
-  const { userLoggedIn, signup } = useAuth();
+  const { userLoggedIn, signup, createUser, authenticateUser } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,7 +30,12 @@ export default function Signup() {
     };
 
     try {
-      onRegistration(form);
+      await onRegistration(form);
+      const response = await onLogin(data);
+      const { token } = response.data;
+      createUser(token);
+      authenticateUser();
+      localStorage.setItem("localAuth", "true");
     } catch (error) {
       console.log(error);
     }
