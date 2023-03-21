@@ -34,7 +34,7 @@ model Product {
  name     String
  description String?
  imagesPath String[]
- price     Int
+ price     Float
  createdAt DateTime @default(now())
  updatedAt DateTime @updatedAt
  productTags ProductTags[]
