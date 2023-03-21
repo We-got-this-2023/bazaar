@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Form } from "../formElements/Form";
+import Form from "../formElements/Form";
 import Input from "../formElements/Input";
 
 type Product = {

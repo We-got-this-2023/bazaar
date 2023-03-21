@@ -1,7 +1,7 @@
 import { useState } from "react";
 import UserImage from "../components/UserImage";
 import { useAuth } from "../contexts/AuthContext";
-import { Form } from "../formElements/Form";
+import Form from "../formElements/Form";
 import Input from "../formElements/Input";
 
 interface User {

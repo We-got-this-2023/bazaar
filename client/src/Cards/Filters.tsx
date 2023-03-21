@@ -1,4 +1,4 @@
-import { Form } from "../formElements/Form";
+import Form from "../formElements/Form";
 import Input from "../formElements/Input";
 import Select from "../formElements/Select";
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { Form } from "../formElements/Form";
+import Form from "../formElements/Form";
 import Input from "../formElements/Input";
 import TextArea from "../formElements/TextArea";
 

@@ -52,7 +52,7 @@ export default function Carousel({ images, className }: CarouselProps) {
             <Link to={`/search?q=${name}`}>
               <img
                 className="aspect-[4/3] w-full object-cover transition-all duration-200"
-                src={`/public/${image}`}
+                src={`/${image}`}
                 alt={`Image of ${name}`}
                 ref={slideRef}
               />

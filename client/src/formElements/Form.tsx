@@ -9,7 +9,7 @@ interface FormProps {
   className?: string;
 }
 
-export function Form({
+export default function Form({
   defaultValues,
   children,
   onSubmit,

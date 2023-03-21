@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Form } from "../components/Form";
-import { FancyInput, FancySelect as Select } from "../components/Input";
+import Form from "../formElements/Form";
 import Input from "../formElements/Input";
+import Select from "../formElements/Select";
 
 interface FormDataStruct {
   name: string;
@@ -51,7 +51,7 @@ export default function Products() {
             />
           </div>
           <div className="w-[480px] bg-white">
-            <FancyInput
+            <Input
               name="name"
               type="text"
               options={{
@@ -59,7 +59,7 @@ export default function Products() {
               }}
               placementClassName="w-full"
             />
-            <FancyInput
+            <Input
               className="h-[120px]"
               name="description"
               type="text"
@@ -67,7 +67,7 @@ export default function Products() {
               options={{}}
             />
             <div className="flex gap-[10px]">
-              <FancyInput
+              <Input
                 name="price"
                 type="number"
                 className="h-[44px]"
@@ -80,7 +80,7 @@ export default function Products() {
                 }}
                 placementClassName="w-full"
               />
-              <FancyInput
+              <Input
                 className="h-[44px]"
                 name="category"
                 type="text"
@@ -88,7 +88,7 @@ export default function Products() {
                 options={{}}
               />
             </div>
-            <FancyInput
+            <Input
               name="tags"
               type="text"
               placementClassName="w-full"
