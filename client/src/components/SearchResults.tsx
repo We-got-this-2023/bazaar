@@ -1,4 +1,4 @@
-import ProductPreview from "../components/ProductPreview";
+import ProductPreview from "../cards/Product";
 
 export default function SearchResults({ data }: any) {
   return (

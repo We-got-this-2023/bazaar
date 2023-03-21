@@ -3,11 +3,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import { AuthProvider } from "./context/AuthContext";
-import { MiscProvider } from "./context/MiscContext";
+import { AuthProvider } from "./contexts/AuthContext";
+import { MiscProvider } from "./contexts/MiscContext";
 import "./index.css";
-import { init } from "./utils/settings";
-init();
+import { initSettings } from "./utils/settings";
+initSettings();
 
 const queryClient = new QueryClient();
 

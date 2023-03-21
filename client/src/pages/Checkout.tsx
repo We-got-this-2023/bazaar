@@ -1,17 +1,19 @@
-import { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import CheckoutSummary from "../components/CheckoutSummary";
-import DeliveryForm from "../components/DeliveryForm";
-import ProductPreview from "../components/ProductPreview";
-import { useAuth } from "../context/AuthContext";
-import { Product, useMisc } from "../context/MiscContext";
+import { useEffect } from "react";
+import CheckoutSummary from "../cards/Checkout";
+import ProductPreview from "../cards/Product";
+import DeliveryForm from "../cards/Shipping";
+import { useAuth } from "../contexts/AuthContext";
+import { Product, useMisc } from "../contexts/MiscContext";
 
 export default function Checkout() {
   const { user } = useAuth();
+  // Leaving cartAddItem to add mock data for now
   const { cart: items, cartAddItem } = useMisc();
-  const navigate = useNavigate();
 
   useEffect(() => {
+    // Until we have a way to add a product to the cart,
+    // I'm leaving this commented out function which will run on load
+    // each time, as this is a quick way to add products to the cart.
     // cartAddItem({
     //   id: "Something",
     //   title: "something",
@@ -23,7 +25,6 @@ export default function Checkout() {
     //   userId: "",
     //   createdAt: "",
     // });
-    if (items.length === 0) navigate("/");
   }, []);
 
   return (
@@ -57,9 +58,4 @@ export default function Checkout() {
       <CheckoutSummary className="w-[25rem]" price="23.43" />
     </div>
   );
-}
-
-{
-  /* <div className="flex flex-col items-center justify-center gap-6 rounded-3xl border-[.5px] border-black bg-neutral-200 p-12 shadow-[0_0_5px_1px_#00000050] transition-all duration-200 hover:shadow-[0_0_8px_2px_#00000070] dark:border-white dark:bg-neutral-900 dark:shadow-[0_0_5px_1px_#ffffff80] dark:hover:shadow-[0_0_10px_2px_#ffffff90]">
-<h1 className="text-2xl font-bold">My Profile</h1> */
 }

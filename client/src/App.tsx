@@ -1,19 +1,17 @@
-import { useState } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import About from "./pages/About";
 import Checkout from "./pages/Checkout";
-import LandingPage from "./pages/LandingPage";
+import LandingPage from "./pages/Landing";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
-import Orders from "./pages/Orders";
+import Orders from "./pages/OrderHistory";
 import ProductInfo from "./pages/ProductInfo";
 import Products from "./pages/Products";
 import Profile from "./pages/Profile";
 import Search from "./pages/Search";
 import Signup from "./pages/Signup";
-import isEmptySearch from "./utils/isEmptySearch";
 
 function LayoutWithNavbar() {
   return (
@@ -25,7 +23,6 @@ function LayoutWithNavbar() {
 }
 
 export default function App() {
-  const [isEmpty, setIsEmpty] = useState(isEmptySearch());
   return (
     <>
       <Routes>
@@ -37,8 +34,6 @@ export default function App() {
           <Route path="/products/:id" element={<ProductInfo />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
-
-          {/* Protected Routes */}
           <Route
             path="/products"
             element={<ProtectedRoute element={<Products />} />}
@@ -52,8 +47,6 @@ export default function App() {
             element={<ProtectedRoute element={<Orders />} />}
           />
         </Route>
-
-        {/* Routes without a navbar */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>

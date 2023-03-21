@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Form } from "../components/Form";
-import { FancyInput as Input } from "../components/Input";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
+import { Form } from "../formElements/Form";
+import Input from "../formElements/Input";
 
 type FormData = {
   email: string;
@@ -14,7 +14,6 @@ export default function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(userLoggedIn);
     if (userLoggedIn) navigate("/");
   }, [userLoggedIn]);
 
@@ -24,7 +23,15 @@ export default function Login() {
 
   return (
     <div className="flex h-full w-full items-center justify-center">
-      <div className="flex h-[32em] w-[36em] flex-col items-center justify-center gap-6 rounded-3xl border-[.5px] border-black bg-neutral-200 p-12 shadow-[0_0_5px_1px_#00000050] transition-all duration-200 hover:shadow-[0_0_8px_2px_#00000070] dark:border-white dark:bg-neutral-900 dark:shadow-[0_0_5px_1px_#ffffff80] dark:hover:shadow-[0_0_10px_2px_#ffffff90] ">
+      <div
+        className="
+      flex h-[32em] w-[36em] flex-col items-center justify-center gap-6 
+      rounded-3xl border-[.5px] border-black bg-neutral-200 
+      p-12 shadow-[0_0_5px_1px_#00000050] transition-all duration-200 
+      hover:shadow-[0_0_8px_2px_#00000070] dark:border-white dark:bg-neutral-900 
+      dark:shadow-[0_0_5px_1px_#ffffff80] dark:hover:shadow-[0_0_10px_2px_#ffffff90]
+      "
+      >
         <h1 className="mt-4 mb-8 text-2xl font-bold">Login</h1>
         <Form
           onSubmit={onSubmit}

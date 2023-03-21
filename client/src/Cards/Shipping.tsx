@@ -1,10 +1,16 @@
+import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import { Form } from "./Form";
-import { FancyInput as Input } from "./Input";
+import { Form } from "../formElements/Form";
+import Input from "../formElements/Input";
+import TextArea from "../formElements/TextArea";
 
-type FormData = {
+interface DeliveryFormProps {
+  user: any;
+  title?: string;
+  className?: string;
+}
+
+interface FormData {
   country: string;
   city: string;
   region: string;
@@ -17,30 +23,31 @@ type FormData = {
   confirmEmail: string;
   countryCallingCode: string;
   phoneNumber: string;
-};
+}
 
-export default function DeliveryForm({
-  user,
-  title,
-  className,
-}: {
-  user: any;
-  title?: string;
-  className?: string;
-}) {
+export default function DeliveryForm({ title, className }: DeliveryFormProps) {
+  const [fileNamesOutlet, setFileNamesOutlet] = useState<JSX.Element>();
+
   const onSubmit = async (data: FormData) => {
     console.log(data);
     // TODO: Send data to server
   };
 
+  useEffect(() => {
+    console.log(fileNamesOutlet);
+  }, [fileNamesOutlet]);
+
   return (
     <div
-      className={
-        "flex flex-col items-center justify-center gap-6 rounded-3xl border-[.5px] border-black bg-neutral-200 p-12 shadow-[0_0_5px_1px_#00000050] transition-all duration-200 hover:shadow-[0_0_8px_2px_#00000070] dark:border-white dark:bg-neutral-900 dark:shadow-[0_0_5px_1px_#ffffff80] dark:hover:shadow-[0_0_10px_2px_#ffffff90] " +
-        className
-      }
+      className={`
+        flex flex-col items-center justify-center gap-6 
+        rounded-3xl border-[.5px] border-black bg-neutral-200 p-12 
+        shadow-[0_0_5px_1px_#00000050] transition-all duration-200 
+        hover:shadow-[0_0_8px_2px_#00000070] dark:border-white dark:bg-neutral-900 
+        dark:shadow-[0_0_5px_1px_#ffffff80] dark:hover:shadow-[0_0_10px_2px_#ffffff90]
+        ${className || ""}`}
     >
-      <h2 className="text-2xl font-bold">{title ? title : "Delivery Form"}</h2>
+      <h2 className="text-2xl font-bold">{title || "Shipping Form"}</h2>
       <Form
         onSubmit={onSubmit}
         className="grid w-[34em] grid-cols-6 grid-rows-[8] gap-1 gap-x-3"
@@ -136,9 +143,6 @@ export default function DeliveryForm({
           placeholder="Confirm Email"
           options={{
             required: "Please confirm your email address.",
-            validate: (confirmEmail) =>
-              confirmEmail === useFormContext().getValues().email ||
-              "Email addresses do not match.",
           }}
           placementClassName="row-start-5 col-start-4 col-span-3"
         />
@@ -164,8 +168,15 @@ export default function DeliveryForm({
           placementClassName="row-start-6 col-start-2 col-span-5"
         />
 
+        <TextArea name="description" />
+
         <button
-          className="col-span-2 col-start-3 row-start-[8] rounded-xl bg-emerald-600 p-3 text-white transition-all duration-200 hover:bg-emerald-400 hover:text-black hover:shadow-[0_0_5px_1px_#00000050] dark:bg-emerald-500 dark:text-black dark:hover:bg-emerald-600 dark:hover:text-white dark:hover:shadow-[0_0_5px_1px_#ffffff50]"
+          className="
+          col-span-2 col-start-3 row-start-[8] rounded-xl bg-emerald-600 
+          p-3 text-white transition-all duration-200 
+          hover:bg-emerald-400 hover:text-black hover:shadow-[0_0_5px_1px_#00000050] 
+          dark:bg-emerald-500 dark:text-black dark:hover:bg-emerald-600 
+          dark:hover:text-white dark:hover:shadow-[0_0_5px_1px_#ffffff50]"
           type="submit"
         >
           Submit

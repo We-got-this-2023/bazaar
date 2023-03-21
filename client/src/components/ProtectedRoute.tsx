@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function ProtectedRoute({ element }: { element: JSX.Element }) {
   const { userLoggedIn, isLoading } = useAuth();

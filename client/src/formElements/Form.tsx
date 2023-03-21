@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import Warning from "../assets/Warning";
+import Warning from "../assets/WarningIcon";
 
 interface FormProps {
   defaultValues?: any;
@@ -12,16 +12,18 @@ interface FormProps {
 export function Form({
   defaultValues,
   children,
-  onSubmit: sendForm,
+  onSubmit,
   className,
 }: FormProps) {
-  if (!children) return <></>;
+  if (!children) return null;
+
   const methods = useForm({ defaultValues });
-  const { handleSubmit: testSyntax } = methods;
-  const [formError, setMainError] = useState();
+  const { handleSubmit } = methods;
+  const [formError, setMainError] = useState<string | undefined>();
+
   const submit = async (data: any) => {
     try {
-      await sendForm(data);
+      await onSubmit(data);
       setMainError(undefined);
     } catch (error: any) {
       setMainError(error.message);
@@ -29,7 +31,7 @@ export function Form({
   };
 
   return (
-    <form className={className || ""} onSubmit={testSyntax(submit)}>
+    <form className={className} onSubmit={handleSubmit(submit)}>
       {formError && (
         <div className="flex gap-2">
           <Warning className="h-5 w-5" />
