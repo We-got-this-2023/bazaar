@@ -11,8 +11,6 @@ datasource db {
 }
 model User {
  id        Int      @default(autoincrement()) @id
- orderId   Int? 
- order Order? @relation(fields: [orderId], references: [id])
  name      String
  email     String   @unique
  ratings   Int[]
@@ -21,6 +19,7 @@ model User {
  updatedAt DateTime @updatedAt
  products  Product[]
  address Address[]
+ orders Order[]
 }
 
 
@@ -35,7 +34,7 @@ model Product {
  name     String
  description String?
  imagesPath String[]
- price     Int
+ price     Float
  createdAt DateTime @default(now())
  updatedAt DateTime @updatedAt
  productTags ProductTags[]
@@ -87,9 +86,10 @@ model Order {
  id        Int      @default(autoincrement()) @id
  paymentMethodId Int
  paymentMethod PaymentMethod @relation(fields: [paymentMethodId], references: [id])
- orderAmount Int
+ userId Int?
+ user User? @relation(fields: [userId], references: [id])
+ orderStatus String
  createdAt DateTime @default(now())
  updatedAt DateTime @updatedAt
- users User[]
  products Product[]
 }
