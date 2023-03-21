@@ -8,7 +8,8 @@ import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Orders from "./pages/OrderHistory";
 import ProductInfo from "./pages/ProductInfo";
-import Products from "./pages/Products";
+import EditProduct from "./pages/Products";
+import ProductsPage from "./pages/ProductsPage";
 import Profile from "./pages/Profile";
 import Search from "./pages/Search";
 import Signup from "./pages/Signup";
@@ -36,11 +37,15 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
           <Route
             path="/products"
-            element={<ProtectedRoute element={<Products />} />}
+            element={<ProtectedRoute element={<ProductsPage />} />}
           />
           <Route
             path="/profile"
             element={<ProtectedRoute element={<Profile />} />}
+          />
+          <Route
+            path="/edit/:id"
+            element={<ProtectedRoute element={<EditProduct />} />}
           />
           <Route
             path="/orders"

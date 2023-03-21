@@ -1,4 +1,7 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import EditIcon from "../assets/EditIcon";
+import { useAuth } from "../contexts/AuthContext";
 import Form from "../formElements/Form";
 import Input from "../formElements/Input";
 
@@ -22,7 +25,15 @@ export default function ProductPreview({
   type?: string;
   amount?: number;
 }) {
-  const { id, price, title, description } = product;
+  const { user, userLoggedIn } = useAuth();
+  const [isOwner, setIsOwner] = useState(false);
+  const { id, price, title, description, userId } = product;
+  useEffect(() => {
+    if (userLoggedIn) {
+      if (user.id === product.userId) setIsOwner(true);
+      else setIsOwner(false);
+    }
+  }, [user]);
   const split = price.split(".");
   let first = split[0],
     second;
@@ -44,43 +55,50 @@ export default function ProductPreview({
   return (
     <div
       className={`
-      ${checkout} rounded-3xl bg-neutral-200 
+      ${checkout} relative flex rounded-3xl bg-neutral-200
       shadow-[3px_3px_10px_1px_#00000060] transition-all duration-200 
       hover:-translate-y-[2px] hover:-translate-x-[2px] 
       hover:shadow-[4px_4px_12px_2px_#00000060] hover:brightness-105 
       dark:bg-neutral-900 dark:hover:brightness-110
       `}
     >
-      <Link to={`/products/${id}`}>
-        <h2 className="w-fit font-body text-lg hover:text-sky-500 hover:underline">
-          {title}
-        </h2>
-      </Link>
-      <div className="flex justify-start gap-4">
-        <div className="flex flex-col">
-          <div className="flex w-32 items-start">
-            <span className="py-[.5rem] text-2xl font-bold">{d}</span>
-            <span className="text-xl">{c}</span>
+      <div>
+        <Link to={`/products/${id}`}>
+          <h2 className="w-fit font-body text-lg hover:text-sky-500 hover:underline">
+            {title}
+          </h2>
+        </Link>
+        <div className="flex justify-start gap-4">
+          <div className="flex flex-col">
+            <div className="flex w-32 items-start">
+              <span className="py-[.5rem] text-2xl font-bold">{d}</span>
+              <span className="text-xl">{c}</span>
+            </div>
+            {type === "checkout" && amount && (
+              <Form onSubmit={changeQuantity}>
+                <Input
+                  name="Quantity"
+                  type="number"
+                  initialValue={amount.toString()}
+                  className="w-20"
+                  onChange={(e) => {
+                    if (e.target.value === "" || parseInt(e.target.value) < 0)
+                      e.target.value = "0";
+                    if (parseInt(e.target.value) !== amount)
+                      changeQuantity(e.target.value);
+                  }}
+                />
+              </Form>
+            )}
           </div>
-          {type === "checkout" && amount && (
-            <Form onSubmit={changeQuantity}>
-              <Input
-                name="Quantity"
-                type="number"
-                initialValue={amount.toString()}
-                className="w-20"
-                onChange={(e) => {
-                  if (e.target.value === "" || parseInt(e.target.value) < 0)
-                    e.target.value = "0";
-                  if (parseInt(e.target.value) !== amount)
-                    changeQuantity(e.target.value);
-                }}
-              />
-            </Form>
-          )}
+          <p className="w-full opacity-50">{description}</p>
         </div>
-        <p className="w-full opacity-50">{description}</p>
       </div>
+      {type === "products-page" && (
+        <Link to={`/edit/${id}`}>
+          <EditIcon className="w-12" />
+        </Link>
+      )}
     </div>
   );
 }

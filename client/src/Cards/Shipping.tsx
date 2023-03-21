@@ -168,8 +168,6 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
           placementClassName="row-start-6 col-start-2 col-span-5"
         />
 
-        <TextArea name="description" />
-
         <button
           className="
           col-span-2 col-start-3 row-start-[8] rounded-xl bg-emerald-600 

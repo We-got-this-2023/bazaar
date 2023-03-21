@@ -1,7 +1,12 @@
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { Product } from "../contexts/MiscContext";
 import Form from "../formElements/Form";
 import Input from "../formElements/Input";
 import Select from "../formElements/Select";
+import TextArea from "../formElements/TextArea";
 
 interface FormDataStruct {
   name: string;
@@ -12,32 +17,39 @@ interface FormDataStruct {
   images?: File[];
 }
 
-const onSubmit = async (data: any) => {
-  const formData = new FormData();
-  formData.append("file", data.file[0]);
-  formData.append("name", data.name);
-  formData.append("description", data.description);
-  formData.append("price", data.price);
-  formData.append("category", data.category);
-  formData.append("tags", data.tags);
-
-  const res = await fetch("http://localhost:3000/product", {
-    method: "POST",
-    body: formData,
-  });
-  const json = await res.json();
-
-  if (!res.ok) throw Error(json.message);
-
-  return json;
-};
-
 export default function Products() {
-  const [data, setData] = useState([]);
+  const { id } = useParams();
+  const { user } = useAuth();
+
+  const product: any = fetch(`http://localhost:3000/products/${id}`)
+    .then((res) => res.json())
+    .catch((err) => console.log(err));
+
+  const onSubmit = async (data: any) => {
+    const formData = new FormData();
+    formData.append("file", data.file[0]);
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    formData.append("price", data.price);
+    formData.append("category", data.category);
+    formData.append("tags", data.tags);
+    formData.append("userId", user.id);
+
+    const res = await fetch("http://localhost:3000/products/add", {
+      method: product?.id ? "PATCH" : "POST",
+      body: formData,
+    });
+    const json = await res.json();
+
+    if (!res.ok) throw Error(json.message);
+
+    return json;
+  };
+
   return (
-    <div className="">
-      <h2 className="flex content-center justify-center pt-12 text-6xl">
-        Add a product
+    <div>
+      <h2 className="flex content-center justify-center pt-12 text-6xl capitalize">
+        {product?.id ? "Edit" : "Create"} product
       </h2>
       <div className="flex h-full w-full content-center justify-center pt-6">
         <Form onSubmit={onSubmit} className="flex gap-2">
@@ -48,6 +60,7 @@ export default function Products() {
               type="file"
               placementClassName="w-full"
               className="h-[286px]"
+              initialValue={product?.file}
             />
           </div>
           <div className="w-[480px] bg-white">
@@ -58,15 +71,16 @@ export default function Products() {
                 required: "Name is required",
               }}
               placementClassName="w-full"
+              initialValue={product?.name}
             />
-            <Input
+            <TextArea
               className="h-[120px]"
               name="description"
-              type="text"
               placementClassName="w-full"
               options={{}}
+              initialValue={product?.description}
             />
-            <div className="flex gap-[10px]">
+            <div className="flex gap-2">
               <Input
                 name="price"
                 type="number"
@@ -79,6 +93,7 @@ export default function Products() {
                   },
                 }}
                 placementClassName="w-full"
+                initialValue={product?.price}
               />
               <Input
                 className="h-[44px]"
@@ -86,6 +101,7 @@ export default function Products() {
                 type="text"
                 placementClassName="w-full"
                 options={{}}
+                initialValue={product?.category}
               />
             </div>
             <Input
@@ -93,6 +109,7 @@ export default function Products() {
               type="text"
               placementClassName="w-full"
               options={{}}
+              initialValue={product?.tags}
             />
           </div>
 

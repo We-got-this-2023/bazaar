@@ -11,7 +11,11 @@ interface AuthContextI extends Context<{}> {
     password: string;
     confirmPassword: string;
   }) => Promise<void>;
-  user: any;
+  user: {
+    id: string;
+    username: string;
+    email: string;
+  };
   isLoading: boolean;
   error: string;
   setUserInformation: (user: any) => Promise<void>;
