@@ -28,7 +28,7 @@ function toggleTheme() {
   setTheme(newTheme);
 }
 
-function init() {
+function initSettings() {
   // Set the theme on page load
   const theme = setTheme() as Theme;
 
@@ -39,4 +39,4 @@ function init() {
   }
 }
 
-export { init, toggleTheme, setTheme };
+export { initSettings, toggleTheme, setTheme };

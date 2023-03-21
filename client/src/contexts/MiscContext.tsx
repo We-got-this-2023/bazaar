@@ -23,7 +23,10 @@ export type Product = {
 const MiscContext = createContext({}) as MiscContextI;
 
 export function MiscProvider({ children }: { children: JSX.Element }) {
+  // leaving this unused function for now
+  // This is because I haven't set up the search for no results yet
   const [searchIsEmpty, setSearchIsEmpty] = useState<boolean>(isEmptySearch());
+
   function getCart() {
     const cart = localStorage.getItem("cart");
     if (cart) return JSON.parse(cart);

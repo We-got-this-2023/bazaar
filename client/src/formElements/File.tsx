@@ -1,7 +1,7 @@
 import { ErrorMessage } from "@hookform/error-message";
 import { InputHTMLAttributes, useEffect, useRef, useState } from "react";
 import { FieldErrors, RegisterOptions, useFormContext } from "react-hook-form";
-import Warning from "../assets/Warning";
+import Warning from "../assets/WarningIcon";
 
 interface FancyInputProps extends InputHTMLAttributes<HTMLInputElement> {
   errors?: FieldErrors;
