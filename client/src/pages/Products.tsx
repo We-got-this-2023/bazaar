@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Form } from "../components/Form";
-import { FancyInput, FancySelect as Select } from "../components/Input";
-import Input from "../formElements/Input";
+import Input from "../formElements/File";
+import { Form } from "../formElements/Form";
+import FancyInput from "../formElements/Input";
 
 interface FormDataStruct {
   name: string;
@@ -18,7 +18,7 @@ const onSubmit = async (data: any) => {
   formData.append("name", data.name);
   formData.append("description", data.description);
   formData.append("price", data.price);
-  formData.append("category", data.category);
+  formData.append("categoryName", data.categoryName);
   formData.append("tags", data.tags);
 
   const res = await fetch("http://localhost:3000/product", {
@@ -82,7 +82,7 @@ export default function Products() {
               />
               <FancyInput
                 className="h-[44px]"
-                name="category"
+                name="categoryName"
                 type="text"
                 placementClassName="w-full"
                 options={{}}
