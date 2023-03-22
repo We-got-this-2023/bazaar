@@ -38,7 +38,6 @@ export class ProductController {
     @Body() addProductDto: ProductDto,
   ) {
     console.log(addProductDto);
-    console.log(file);
     return this.productService.addProduct(file, addProductDto);
   }
 
