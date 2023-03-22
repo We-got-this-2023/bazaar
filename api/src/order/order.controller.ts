@@ -8,8 +8,11 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Post()
-  addOrder(@Body() orderDto: OrderDto): Promise<OrderDto> {
-    return this.orderService.addOrder(orderDto);
+  addOrder(
+    @Body() productIds: number[],
+    orderDto: OrderDto,
+  ): Promise<OrderDto> {
+    return this.orderService.addOrder(productIds, orderDto);
   }
 
   @Get('all/:id')
