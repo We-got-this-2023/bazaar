@@ -19,15 +19,26 @@ export class OrderService {
     return orders;
   }
 
-  async addOrder(orderDto: OrderDto): Promise<OrderDto> {
+  async addOrder(productIds: number[], orderDto: OrderDto): Promise<OrderDto> {
     const order = await this.prisma.order.create({
       data: {
         paymentMethodId: orderDto.paymentMethodId,
         orderStatus: orderDto.orderStatus,
         userId: orderDto.userId,
       },
-      //need to add products
     });
+
+    const products = await this.prisma.product.updateMany({
+      where: {
+        id: {
+          in: productIds,
+        },
+      },
+      data: {
+        orderId: order.id,
+      },
+    });
+
     return order;
   }
 }

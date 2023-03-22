@@ -42,8 +42,8 @@ model Product {
 
 model Category {
   id        Int      @default(autoincrement()) @id
-  categoryName String 
-  categoryDescription String
+  categoryName String @unique
+  description String?
   products Product[]
 }
 
