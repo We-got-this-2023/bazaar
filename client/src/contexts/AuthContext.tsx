@@ -1,6 +1,4 @@
 import { Context, createContext, useContext, useEffect, useState } from "react";
-import attemptTokenLogin from "../utils/attemptTokenLogin";
-import parseJWT from "../utils/parseJWT";
 
 interface AuthContextI extends Context<{}> {
   userLoggedIn: boolean;
@@ -32,48 +30,50 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   // Helper functions
   const clearUser = (error?: string) => {
     setIsLoading(false);
-    localStorage.removeItem("token");
     setUser(undefined);
     setError(error || undefined);
     setUserLoggedIn(false);
   };
 
-  const addUser = ({ user, token }: { user: any; token: string }) => {
-    setIsLoading(false);
-    localStorage.setItem("token", JSON.stringify(token));
+  const addUser = ({ user }: { user: any }) => {
+    setIsLoading(true);
     setUser(user);
-    setUserLoggedIn(true);
+    setUserLoggedIn(false);
     setError(undefined);
   };
 
-  const fetchWrapper = async ({
-    url,
-    method,
-    data,
-    errors,
-  }: {
-    url: string;
-    method?: string;
-    data: object;
-    errors?: {
-      [key: number]: string;
-    };
-  }) => {
+  const fetchWrapper = async (
+    url: string,
+    {
+      method,
+      data,
+      errors,
+      options,
+      credentials,
+    }: {
+      method?: string;
+      data?: object;
+      errors?: {
+        [key: number]: string;
+      };
+      options?: any;
+      credentials?: string;
+    }
+  ) => {
     try {
       setIsLoading(true);
-      const res = await fetch(url, {
+      console.log(import.meta.env.VITE_API + url);
+      const res = await fetch(import.meta.env.VITE_API + url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: data ? JSON.stringify(data) : undefined,
+        credentials: credentials ?? undefined,
+        ...options,
       });
 
       if (res.ok) {
-        const { token } = await res.json();
-        const user = parseJWT(token);
-        if (!user) clearUser();
-        else addUser({ user, token });
+        return await res.json();
       } else {
-        clearUser();
         setError(
           errors
             ? errors[res.status]
@@ -81,35 +81,11 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
         );
       }
     } catch (err: any) {
-      clearUser(err.message);
+      console.log(err);
+      setError(err);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Check JWT token for expiry on load
-  useEffect(() => {
-    const tokenUser = attemptTokenLogin();
-    if (tokenUser) {
-      setUser(tokenUser);
-      setUserLoggedIn(true);
-      setError(undefined);
-      setIsLoading(false);
-    } else clearUser("Invalid token");
-  }, []);
-
-  const login = async (data: { email: string; password: string }) => {
-    data.email = data.email.toLowerCase().trim();
-    console.log(data);
-    fetchWrapper({
-      url: `${import.meta.env.VITE_API}/auth/login`,
-      method: "POST",
-      data,
-      errors: {
-        401: "Email or password is incorrect.",
-        404: "Email or password is incorrect.",
-      },
-    });
   };
 
   const signup = async (data: {
@@ -119,8 +95,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   }) => {
     data.email = data.email.toLowerCase().trim();
 
-    fetchWrapper({
-      url: `${import.meta.env.VITE_API}/register`,
+    const val = await fetchWrapper(`/auth/register`, {
       method: "POST",
       data,
       errors: {
@@ -131,16 +106,48 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   };
 
   async function setUserInformation(data: { name: string; email: string }) {
-    await fetchWrapper({
+    const val = await fetchWrapper(`/users/${user.id}`, {
       method: "PATCH",
-      url: `${import.meta.env.VITE_API}/users/${user.id}`,
       data,
       errors: {
         401: "Invalid token.",
         500: "Something went wrong while updating your profile. Please try again later.",
       },
     });
+    setUser(val);
   }
+
+  async function login(data: { email: string; password: string }) {
+    const res = await fetchWrapper(`/auth/signin`, {
+      method: "POST",
+      data,
+      credentials: "include",
+    });
+    console.log(res);
+  }
+
+  // Function to get the current user from the server
+  async function getCurrentUser() {
+    const res = await fetchWrapper(`/currentUser`, {
+      method: "GET",
+      credentials: "include",
+    });
+    console.log(res);
+    return res;
+  }
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setUser(await getCurrentUser());
+      } catch (err: any) {
+        setUser(null);
+        setError(err);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, []);
 
   // Auth context values
   const value = {

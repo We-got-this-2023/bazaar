@@ -29,26 +29,30 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LayoutWithNavbar />}>
           <Route index element={<LandingPage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/products/:id" element={<ProductInfo />} />
-          <Route path="/profile/:id" element={<Profile />} />
+          <Route path="about" element={<About />} />
+          <Route path="checkout" element={<Checkout />} />
+          <Route path="search" element={<Search />} />
+          <Route path="products/:id" element={<ProductInfo />} />
+          <Route path="profile/:id" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
           <Route
-            path="/products"
+            path="products"
             element={<ProtectedRoute element={<ProductsPage />} />}
           />
           <Route
-            path="/profile"
+            path="profile"
             element={<ProtectedRoute element={<Profile />} />}
           />
           <Route
-            path="/edit/:id"
+            path="edit"
             element={<ProtectedRoute element={<EditProduct />} />}
           />
           <Route
-            path="/orders"
+            path="edit/:id"
+            element={<ProtectedRoute element={<EditProduct />} />}
+          />
+          <Route
+            path="orders"
             element={<ProtectedRoute element={<Orders />} />}
           />
         </Route>
