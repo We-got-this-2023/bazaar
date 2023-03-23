@@ -1,15 +1,8 @@
 import { useState } from "react";
 import UserImage from "../components/UserImage";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth, User } from "../contexts/AuthContext";
 import Form from "../formElements/Form";
 import Input from "../formElements/Input";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  createdAt: string;
-}
 
 export default function AccountCard({ user }: { user: User }) {
   const [createdAt] = useState(
@@ -42,8 +35,9 @@ export default function AccountCard({ user }: { user: User }) {
           onSubmit={setUserInformation}
           className="flex flex-col justify-around"
         >
-          <Input name="Name" type="text" initialValue={user.name} />
-          <Input name="Email" type="email" initialValue={user.email} />
+          <Input name="name" type="text" initialValue={user.name} />
+          <Input name="email" type="email" initialValue={user.email} />
+          <button type="submit">Submit</button>
         </Form>
       </div>
     </div>

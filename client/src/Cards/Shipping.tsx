@@ -28,9 +28,6 @@ interface FormData {
 
 export default function DeliveryForm({ title, className }: DeliveryFormProps) {
   const { user, isLoading } = useAuth();
-
-  console.log("user");
-  console.log(user);
   const [fileNamesOutlet, setFileNamesOutlet] = useState<JSX.Element>();
   const [delivery, setDelivery] = useState<FormData>();
   const getDeliveryInformation = async () => {
@@ -58,8 +55,6 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
   useEffect(() => {
     (async () => {
       const res = await getDeliveryInformation();
-      console.log("Delivery");
-      console.log(res);
       if (res) setDelivery(res);
     })();
   }, [user, isLoading]);

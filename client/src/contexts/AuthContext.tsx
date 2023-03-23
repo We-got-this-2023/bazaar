@@ -10,20 +10,25 @@ interface AuthContextI extends Context<{}> {
     password: string;
     confirmPassword: string;
   }) => Promise<void>;
-  user: {
-    id: string;
-    username: string;
-    email: string;
-  };
+  user: User;
   isLoading: boolean;
   error: string;
   setUserInformation: (user: any) => Promise<void>;
 }
 
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  ratings: [];
+  createdAt: string;
+  updatedAt: string;
+}
+
 const AuthContext = createContext({}) as AuthContextI;
 
 export function AuthProvider({ children }: { children: JSX.Element }) {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | undefined>();
   const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | undefined>();
@@ -37,7 +42,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     setUserLoggedIn(false);
   };
 
-  const addUser = ({ user }: { user: any }) => {
+  const addUser = ({ user }: { user: User }) => {
     setIsLoading(true);
     setUser(user);
     setUserLoggedIn(false);
@@ -51,10 +56,12 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       data,
       errors,
       options,
+      headers,
       credentials,
     }: {
       method?: string;
       data?: object;
+      headers?: { [key: string]: string };
       errors?: {
         [key: number]: string;
       };
@@ -64,10 +71,9 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   ) => {
     try {
       setIsLoading(true);
-      console.log(import.meta.env.VITE_API + url);
       const res = await fetch(import.meta.env.VITE_API + url, {
         method,
-        headers: { "Content-Type": "application/json" },
+        headers: headers ?? { "Content-Type": "application/json" },
         body: data ? JSON.stringify(data) : undefined,
         credentials: credentials ?? undefined,
         ...options,
@@ -107,9 +113,18 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   };
 
   async function setUserInformation(data: { name: string; email: string }) {
-    const val = await fetchWrapper(`/users/me/${user.id}`, {
+    const val = await fetchWrapper(`/users/${user?.id}`, {
       method: "PATCH",
       data,
+      headers: {
+        Authorization:
+          "Bearer " +
+          document.cookie
+            .split(";")
+            .filter((val) => val.startsWith("token="))[0]
+            .split("=")[1],
+        "Content-Type": "application/json",
+      },
       errors: {
         401: "Invalid token.",
         500: "Something went wrong while updating your profile. Please try again later.",
@@ -117,7 +132,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     });
     console.log("User");
     console.log(val);
-    setUser(val);
+    // setUser(val);
   }
 
   async function login(data: { email: string; password: string }) {
@@ -134,18 +149,16 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   async function getUser(id: number) {
     const res = await fetchWrapper(`/users/me/${id}`, {
       method: "GET",
-      options: {
-        headers: {
-          Authorization:
-            "Bearer " +
-            document.cookie
-              .split(";")
-              .filter((val) => val.startsWith("token="))[0]
-              .split("=")[1],
-        },
+      headers: {
+        Authorization:
+          "Bearer " +
+          document.cookie
+            .split(";")
+            .filter((val) => val.startsWith("token="))[0]
+            .split("=")[1],
+        "Content-Type": "application/json",
       },
     });
-    console.log(res);
     return res.user;
   }
 
@@ -160,11 +173,9 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
         const parsedToken = token
           ? JSON.parse(atob(token.split(".")[1]))
           : null;
-        console.log(parsedToken);
         setUser(await getUser(parsedToken.id));
-        console.log(user);
       } catch (err: any) {
-        setUser(null);
+        setUser(undefined);
         setError(err);
       } finally {
         setIsLoading(false);
