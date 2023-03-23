@@ -65,13 +65,8 @@ export default function FancyInput({
     inputRef.current?.value === "" ? setLabelSmall(focus) : setLabelSmall(true);
   };
   useEffect(() => {
-    if (initialValue !== undefined && initialValue !== null) {
-      if (inputRef.current) {
-        inputRef.current.value = initialValue;
-        setLabelSmall(true);
-      }
-    }
-  }, [initialValue]);
+    if (initialValue) setLabelSmall(true);
+  });
   return (
     <div className={`mb-2 flex flex-col ${placementClassName}`}>
       <div className="relative flex flex-col gap-2">
@@ -107,6 +102,7 @@ export default function FancyInput({
           `}
           placeholder={isNumber ? placeholder ?? name : ""}
           aria-placeholder={placeholder ?? ""}
+          defaultValue={initialValue ?? ""}
         />
         {!isNumber && (
           <label

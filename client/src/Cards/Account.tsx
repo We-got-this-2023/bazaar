@@ -15,6 +15,12 @@ export default function AccountCard({ user }: { user: User }) {
   const { setUserInformation } = useAuth();
 
   const onSubmit = async (data: FormData) => {
+    console.log("user");
+    console.log(user);
+    console.log("data");
+    console.log(data);
+    console.log("all");
+    console.log({ ...user, ...data });
     await setUserInformation({ ...user, ...data });
   };
 

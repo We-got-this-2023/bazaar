@@ -50,16 +50,7 @@ export default function FancySelect({
     inputRef.current?.value === "" ? setLabelSmall(focus) : setLabelSmall(true);
   };
   useEffect(() => {
-    if (
-      initialValue !== undefined &&
-      initialValue !== "" &&
-      initialValue !== null
-    ) {
-      if (inputRef.current) {
-        inputRef.current.value = initialValue;
-        setLabelSmall(true);
-      }
-    }
+    if (initialValue) setLabelSmall(true);
   }, []);
   return (
     <div className={`mb-2 flex flex-col ${placementClassName}`}>
@@ -90,6 +81,7 @@ export default function FancySelect({
         `}
         placeholder=""
         aria-placeholder={placeholder ?? ""}
+        defaultValue={initialValue ?? ""}
       >
         {Children.map(children, (child: JSX.Element) => {
           if (!isCheckbox && child.type !== "option")
