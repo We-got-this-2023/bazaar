@@ -53,7 +53,7 @@ export default function Signup() {
             placementClassName="w-full"
           />
           <Input
-            name="username"
+            name="name"
             type="text"
             options={{
               required: "Please enter a username.",

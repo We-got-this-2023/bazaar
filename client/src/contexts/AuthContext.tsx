@@ -1,4 +1,5 @@
 import { Context, createContext, useContext, useEffect, useState } from "react";
+import { redirect, useNavigate } from "react-router-dom";
 
 interface AuthContextI extends Context<{}> {
   userLoggedIn: boolean;
@@ -26,6 +27,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | undefined>();
+  const navigate = useNavigate();
 
   // Helper functions
   const clearUser = (error?: string) => {
@@ -79,6 +81,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
             ? errors[res.status]
             : "Something went wrong with the request. Please try again later."
         );
+        console.log(error);
       }
     } catch (err: any) {
       console.log(err);
@@ -90,19 +93,17 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
 
   const signup = async (data: {
     email: string;
-    username: string;
+    name: string;
     password: string;
   }) => {
     data.email = data.email.toLowerCase().trim();
 
-    const val = await fetchWrapper(`/auth/register`, {
+    const val = await fetchWrapper(`http://localhost:3000/auth/signup`, {
       method: "POST",
       data,
-      errors: {
-        409: "Email already in use.",
-        500: "Something went wrong while registering. Please try again later.",
-      },
     });
+    console.log(val);
+    return val;
   };
 
   async function setUserInformation(data: { name: string; email: string }) {
@@ -118,17 +119,18 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   }
 
   async function login(data: { email: string; password: string }) {
+    data.email = data.email.toLowerCase().trim();
     const res = await fetchWrapper(`/auth/signin`, {
       method: "POST",
       data,
       credentials: "include",
     });
-    console.log(res);
+    navigate("/");
   }
 
   // Function to get the current user from the server
-  async function getCurrentUser() {
-    const res = await fetchWrapper(`/currentUser`, {
+  async function getUser(id: number) {
+    const res = await fetchWrapper(`/users/${id}`, {
       method: "GET",
       credentials: "include",
     });
@@ -139,7 +141,16 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   useEffect(() => {
     (async () => {
       try {
-        setUser(await getCurrentUser());
+        // Parse the token from the cookies
+        const token = document.cookie
+          .split("; ")
+          .filter((cookie) => cookie.startsWith("token="))[0]
+          .split("=")[1];
+        const parsedToken = token
+          ? JSON.parse(atob(token.split(".")[1]))
+          : null;
+        console.log(parsedToken);
+        setUser(await getUser(parsedToken.id));
       } catch (err: any) {
         setUser(null);
         setError(err);
