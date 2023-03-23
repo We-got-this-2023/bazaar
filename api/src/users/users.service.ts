@@ -13,6 +13,8 @@ export class UsersService {
 
   async getMyUser(id: number, req: Request): Promise<{ user: UserDto }> {
     const decodedUserInfo = req.user as { id: number; email: string };
+    id = Number(id);
+    decodedUserInfo.id = Number(decodedUserInfo.id);
 
     const foundUser = await this.prisma.user.findUnique({ where: { id } });
 

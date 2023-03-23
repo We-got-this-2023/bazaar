@@ -107,7 +107,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   };
 
   async function setUserInformation(data: { name: string; email: string }) {
-    const val = await fetchWrapper(`/users/${user.id}`, {
+    const val = await fetchWrapper(`/users/me/${user.id}`, {
       method: "PATCH",
       data,
       errors: {
@@ -115,6 +115,8 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
         500: "Something went wrong while updating your profile. Please try again later.",
       },
     });
+    console.log("User");
+    console.log(val);
     setUser(val);
   }
 
@@ -130,9 +132,18 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
 
   // Function to get the current user from the server
   async function getUser(id: number) {
-    const res = await fetchWrapper(`/users/${id}`, {
+    const res = await fetchWrapper(`/users/me/${id}`, {
       method: "GET",
-      credentials: "include",
+      options: {
+        headers: {
+          Authorization:
+            "Bearer " +
+            document.cookie
+              .split(";")
+              .filter((val) => val.startsWith("token="))[0]
+              .split("=")[1],
+        },
+      },
     });
     console.log(res);
     return res;
@@ -151,6 +162,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
           : null;
         console.log(parsedToken);
         setUser(await getUser(parsedToken.id));
+        console.log(user);
       } catch (err: any) {
         setUser(null);
         setError(err);

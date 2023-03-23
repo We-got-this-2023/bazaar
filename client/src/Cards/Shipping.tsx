@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
+import { useAuth } from "../contexts/AuthContext";
 import Form from "../formElements/Form";
 import Input from "../formElements/Input";
 import TextArea from "../formElements/TextArea";
@@ -20,22 +21,58 @@ interface FormData {
   firstName: string;
   lastName: string;
   email: string;
-  confirmEmail: string;
+  confirmEmail?: string;
   countryCallingCode: string;
   phoneNumber: string;
 }
 
 export default function DeliveryForm({ title, className }: DeliveryFormProps) {
+  const { user, isLoading } = useAuth();
   const [fileNamesOutlet, setFileNamesOutlet] = useState<JSX.Element>();
+  const [delivery, setDelivery] = useState<FormData>({
+    country: "",
+    city: "",
+    region: "",
+    address: "",
+    address2: "",
+    postalCode: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    confirmEmail: "",
+    countryCallingCode: "",
+    phoneNumber: "",
+  });
+  const getDeliveryInformation = async () => {
+    if (isLoading) return;
+    if (!user) return;
+    return {
+      country: "United States",
+      city: "San Francisco",
+      region: "California",
+      address: "123 Main St",
+      address2: "Apt 1",
+      postalCode: "94107",
+      firstName: "Jane",
+      lastName: "Doe",
+      email: user.email,
+      countryCallingCode: "+1",
+      phoneNumber: "555-555-5555",
+    };
+  };
 
   const onSubmit = async (data: FormData) => {
     console.log(data);
     // TODO: Send data to server
   };
-
   useEffect(() => {
-    console.log(fileNamesOutlet);
-  }, [fileNamesOutlet]);
+    (async () => {
+      const res = await getDeliveryInformation();
+      console.log("Delivery");
+      console.log(res);
+      if (res) setDelivery(res);
+    })();
+  }, [user]);
 
   return (
     <div
@@ -58,6 +95,7 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
           options={{
             required: "Please enter a country.",
           }}
+          initialValue={delivery.country}
           placementClassName="col-span-2"
         />
 
@@ -67,6 +105,7 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
           options={{
             required: "Please enter a city.",
           }}
+          initialValue={delivery.city}
           placementClassName="col-span-2 row-start-2"
         />
 
@@ -76,6 +115,7 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
           options={{
             required: "Please enter a region.",
           }}
+          initialValue={delivery.region}
           placementClassName="col-span-2 row-start-2 col-start-3"
         />
 
@@ -86,6 +126,7 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
           options={{
             required: "Please enter a postal code.",
           }}
+          initialValue={delivery.postalCode}
           placementClassName="col-span-2 row-start-2 col-start-5"
         />
 
@@ -95,12 +136,14 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
           options={{
             required: "Please enter an address.",
           }}
+          initialValue={delivery.address}
           placementClassName="row-start-3 col-span-3"
         />
 
         <Input
           type="text"
           name="Address 2"
+          initialValue={delivery.address2}
           placementClassName="row-start-3 col-start-4 col-span-3"
         />
 
@@ -111,6 +154,7 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
           options={{
             required: "Please enter a first name.",
           }}
+          initialValue={delivery.firstName}
           placementClassName="row-start-4 col-span-3"
         />
 
@@ -121,6 +165,7 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
           options={{
             required: "Please enter a last name.",
           }}
+          initialValue={delivery.lastName}
           placementClassName="row-start-4 col-start-4 col-span-3"
         />
 
@@ -134,6 +179,7 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
               message: "Please enter a valid email address.",
             },
           }}
+          initialValue={delivery.email}
           placementClassName="row-start-5 col-span-3"
         />
 
@@ -154,7 +200,7 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
           options={{
             required: "Please enter a country calling code.",
           }}
-          initialValue={"+1"}
+          initialValue={delivery.countryCallingCode}
           placementClassName="row-start-6 col-start-1 col-span-1"
         />
 
@@ -165,6 +211,7 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
           options={{
             required: "Please enter a phone number.",
           }}
+          initialValue={delivery.phoneNumber}
           placementClassName="row-start-6 col-start-2 col-span-5"
         />
 
