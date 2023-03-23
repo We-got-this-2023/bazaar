@@ -8,7 +8,8 @@ import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Orders from "./pages/OrderHistory";
 import ProductInfo from "./pages/ProductInfo";
-import Products from "./pages/Products";
+import EditProduct from "./pages/Products";
+import ProductsPage from "./pages/ProductsPage";
 import Profile from "./pages/Profile";
 import Search from "./pages/Search";
 import Signup from "./pages/Signup";
@@ -28,22 +29,30 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LayoutWithNavbar />}>
           <Route index element={<LandingPage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/products/:id" element={<ProductInfo />} />
-          <Route path="/profile/:id" element={<Profile />} />
+          <Route path="about" element={<About />} />
+          <Route path="checkout" element={<Checkout />} />
+          <Route path="search" element={<Search />} />
+          <Route path="products/:id" element={<ProductInfo />} />
+          <Route path="profile/:id" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
           <Route
-            path="/products"
-            element={<ProtectedRoute element={<Products />} />}
+            path="products"
+            element={<ProtectedRoute element={<ProductsPage />} />}
           />
           <Route
-            path="/profile"
+            path="profile"
             element={<ProtectedRoute element={<Profile />} />}
           />
           <Route
-            path="/orders"
+            path="edit"
+            element={<ProtectedRoute element={<EditProduct />} />}
+          />
+          <Route
+            path="edit/:id"
+            element={<ProtectedRoute element={<EditProduct />} />}
+          />
+          <Route
+            path="orders"
             element={<ProtectedRoute element={<Orders />} />}
           />
         </Route>

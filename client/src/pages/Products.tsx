@@ -1,3 +1,10 @@
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { Product } from "../contexts/MiscContext";
+import Form from "../formElements/Form";
+import Input from "../formElements/Input";
+import TextArea from "../formElements/TextArea";
 import { useState } from "react";
 import Input from "../formElements/File";
 import { Form } from "../formElements/Form";
@@ -12,32 +19,58 @@ interface FormDataStruct {
   images?: File[];
 }
 
-const onSubmit = async (data: any) => {
-  const formData = new FormData();
-  formData.append("file", data.file[0]);
-  formData.append("name", data.name);
-  formData.append("description", data.description);
-  formData.append("price", data.price);
-  formData.append("categoryName", data.categoryName);
-  formData.append("tags", data.tags);
+  useEffect(() => {
+    if (id)
+      (async () => {
+        const res = await fetch(`${import.meta.env.VITE_API}/products/${id}`);
+        const data = await res.json();
+        setProduct(data);
+      })();
+  }, []);
 
-  const res = await fetch("http://localhost:3000/product", {
-    method: "POST",
-    body: formData,
-  });
-  const json = await res.json();
+  if (userIsLoading) return null;
+  if (isLoading) return null;
+  if (!user) return null;
 
-  if (!res.ok) throw Error(json.message);
+  const onSubmit = async (data: any) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", data.file[0]);
+      formData.append("name", data.name);
+      formData.append("description", data.description);
+      formData.append("price", data.price);
+      formData.append("category", data.category);
+      formData.append("tags", data.tags);
+      formData.append("userId", user.id.toString());
 
-  return json;
-};
+      if (id) {
+        const res = await fetch(import.meta.env.VITE_API + "/product/" + id, {
+          method: "PATCH",
+          body: formData,
+        });
+        const json = await res.json();
 
-export default function Products() {
-  const [data, setData] = useState([]);
+        if (!res.ok) throw new Error(json.message);
+        return json;
+      } else {
+        const res = await fetch(import.meta.env.VITE_API + "/product", {
+          method: "POST",
+          body: formData,
+        });
+        const json = await res.json();
+
+        if (!res.ok) throw new Error(json.message);
+        navigate("/products");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
-    <div className="">
-      <h2 className="flex content-center justify-center pt-12 text-6xl">
-        Add a product
+    <div>
+      <h2 className="flex content-center justify-center pt-12 text-6xl capitalize">
+        {id ? "Edit" : "Create"} product
       </h2>
       <div className="flex h-full w-full content-center justify-center pt-6">
         <Form onSubmit={onSubmit} className="flex gap-2">
@@ -48,26 +81,28 @@ export default function Products() {
               type="file"
               placementClassName="w-full"
               className="h-[286px]"
+              initialValue={product?.file}
             />
           </div>
           <div className="w-[480px] bg-white">
-            <FancyInput
+            <Input
               name="name"
               type="text"
               options={{
                 required: "Name is required",
               }}
               placementClassName="w-full"
+              initialValue={product?.name}
             />
-            <FancyInput
+            <TextArea
               className="h-[120px]"
               name="description"
-              type="text"
               placementClassName="w-full"
               options={{}}
+              initialValue={product?.description}
             />
-            <div className="flex gap-[10px]">
-              <FancyInput
+            <div className="flex gap-2">
+              <Input
                 name="price"
                 type="number"
                 className="h-[44px]"
@@ -79,20 +114,24 @@ export default function Products() {
                   },
                 }}
                 placementClassName="w-full"
+                initialValue={product?.price}
               />
-              <FancyInput
+              <Input
                 className="h-[44px]"
                 name="categoryName"
                 type="text"
                 placementClassName="w-full"
                 options={{}}
+                initialValue={product?.category}
               />
             </div>
-            <FancyInput
+            <Input
               name="tags"
               type="text"
               placementClassName="w-full"
               options={{}}
+              // initialValue={product?.tags}
+              // have to update this when we figure out how to handle multiple tags
             />
           </div>
 

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { Form } from "../formElements/Form";
+import Form from "../formElements/Form";
 import Input from "../formElements/Input";
 
 type FormData = {
@@ -53,7 +53,7 @@ export default function Signup() {
             placementClassName="w-full"
           />
           <Input
-            name="username"
+            name="name"
             type="text"
             options={{
               required: "Please enter a username.",

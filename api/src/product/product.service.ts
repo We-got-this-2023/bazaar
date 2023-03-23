@@ -8,10 +8,10 @@ import { addProductDto } from './dto/addProduct.dto';
 export class ProductService {
   constructor(private prisma: PrismaService) {}
 
-  async findOneProduct(id: number) {
+  async findOneProduct(id: string) {
     return this.prisma.product.findUnique({
       where: {
-        id,
+        id: Number(id),
       },
     });
   }
@@ -185,7 +185,7 @@ export class ProductService {
     }
   }
 
-  async getProductsOffset(id: number) {
+  async getProductsOffset(id: string) {
     try {
       const products = await this.prisma.product.findMany({
         skip: Number(id) - 1,
@@ -197,12 +197,12 @@ export class ProductService {
     }
   }
 
-  async updateProduct(id: number, productDto: ProductDto) {
+  async updateProduct(id: string, productDto: ProductDto) {
     try {
       //might need to deconstruct productDto from body
       const product = await this.prisma.product.update({
         where: {
-          id,
+          id: Number(id),
         },
         data: {
           ...productDto,
@@ -214,11 +214,11 @@ export class ProductService {
     }
   }
 
-  async deleteProduct(id: number) {
+  async deleteProduct(id: string) {
     try {
       const product = await this.prisma.product.delete({
         where: {
-          id,
+          id: Number(id),
         },
       });
       return product;

@@ -24,6 +24,7 @@ export const getProductsWithParams = async (req: Request, res: Response) => {
     stags,
     atags,
     ntags,
+    id,
   }: {
     q?: string;
     p?: string;
@@ -37,6 +38,7 @@ export const getProductsWithParams = async (req: Request, res: Response) => {
     stags?: string;
     atags?: string;
     ntags?: string;
+    id?: number;
   } = req.query;
 
   const query = q ?? "",
@@ -89,6 +91,11 @@ export const getProductsWithParams = async (req: Request, res: Response) => {
           hasEvery: allTags,
           hasSome: someTags,
         },
+        userId: id
+          ? {
+              equals: id,
+            }
+          : {},
       },
       orderBy: {
         [sortBy]: order,
@@ -129,8 +136,16 @@ export const getProductDetails = async (req: Request, res: Response) => {
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const { title, price, userId, shippingMethodId, rating, description } =
+    let { title, price, userId, shippingMethodId, rating, description } =
       req.body;
+    console.log(req.body);
+
+    title = title ? title : "";
+    price = price ? price : 0;
+    rating = rating ? rating : 0;
+    description = description ? description : "";
+    shippingMethodId = shippingMethodId ? shippingMethodId : 1;
+
     const product = await prisma.product.create({
       data: {
         title,

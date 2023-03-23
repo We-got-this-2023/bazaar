@@ -9,15 +9,17 @@ interface MiscContextI extends Context<{}> {
 }
 
 export type Product = {
-  id: string;
-  title: string;
+  id: number;
+  name: string;
   price: string;
   quantity: number;
   description: string;
   images: string[];
   tags: string[];
-  userId: string;
+  userId: number;
   createdAt: string;
+  file?: File;
+  category: string;
 };
 
 const MiscContext = createContext({}) as MiscContextI;
@@ -38,7 +40,7 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
     localStorage.setItem("cart", JSON.stringify(cart));
   }
   function cartRemoveItem(id: string) {
-    setCart(cart.filter((item) => item.id !== id));
+    setCart(cart.filter((item) => item.id !== Number(id)));
     localStorage.setItem("cart", JSON.stringify(cart));
   }
 

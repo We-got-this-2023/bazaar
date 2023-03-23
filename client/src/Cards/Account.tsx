@@ -1,15 +1,8 @@
 import { useState } from "react";
 import UserImage from "../components/UserImage";
-import { useAuth } from "../contexts/AuthContext";
-import { Form } from "../formElements/Form";
+import { useAuth, User } from "../contexts/AuthContext";
+import Form from "../formElements/Form";
 import Input from "../formElements/Input";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  createdAt: string;
-}
 
 export default function AccountCard({ user }: { user: User }) {
   const [createdAt] = useState(
@@ -20,6 +13,16 @@ export default function AccountCard({ user }: { user: User }) {
     })
   );
   const { setUserInformation } = useAuth();
+
+  const onSubmit = async (data: FormData) => {
+    console.log("user");
+    console.log(user);
+    console.log("data");
+    console.log(data);
+    console.log("all");
+    console.log({ ...user, ...data });
+    await setUserInformation({ ...user, ...data });
+  };
 
   return (
     <div
@@ -38,12 +41,10 @@ export default function AccountCard({ user }: { user: User }) {
           <UserImage user={user} className="w-44" />
           <span className="opacity-60">User since {createdAt}</span>
         </div>
-        <Form
-          onSubmit={setUserInformation}
-          className="flex flex-col justify-around"
-        >
-          <Input name="Name" type="text" initialValue={user.name} />
-          <Input name="Email" type="email" initialValue={user.email} />
+        <Form onSubmit={onSubmit} className="flex flex-col justify-around">
+          <Input name="name" type="text" initialValue={user.name} />
+          <Input name="email" type="email" initialValue={user.email} />
+          <button type="submit">Submit</button>
         </Form>
       </div>
     </div>

@@ -7,14 +7,14 @@ import { useAuth } from "../contexts/AuthContext";
 export default function Profile() {
   const { id } = useParams();
   const [isOwner, setIsOwner] = useState(false);
-  const { userLoggedIn, user } = useAuth();
+  const { isLoading, user } = useAuth();
 
   useEffect(() => {
-    if (userLoggedIn) {
-      if (!id || user.id === id) setIsOwner(true);
+    if (!isLoading) {
+      if (!id || user.id === Number(id)) setIsOwner(true);
       else setIsOwner(false);
     }
-  }, [userLoggedIn, id]);
+  }, [isLoading, id]);
 
   return (
     <div className="relative top-24 flex h-full flex-col items-center gap-4">

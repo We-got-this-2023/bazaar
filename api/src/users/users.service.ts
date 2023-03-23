@@ -13,6 +13,8 @@ export class UsersService {
 
   async getMyUser(id: number, req: Request): Promise<{ user: UserDto }> {
     const decodedUserInfo = req.user as { id: number; email: string };
+    id = Number(id);
+    decodedUserInfo.id = Number(decodedUserInfo.id);
 
     const foundUser = await this.prisma.user.findUnique({ where: { id } });
 
@@ -50,6 +52,7 @@ export class UsersService {
   }
 
   async updateUser(id: number, userDto: UserDto): Promise<{ user: UserDto }> {
+    id = Number(id);
     const updatedUser = await this.prisma.user.update({
       where: { id },
       data: {

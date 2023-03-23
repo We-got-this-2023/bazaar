@@ -1,6 +1,5 @@
 import { Context, createContext, useContext, useEffect, useState } from "react";
-import attemptTokenLogin from "../utils/attemptTokenLogin";
-import parseJWT from "../utils/parseJWT";
+import { redirect, useNavigate } from "react-router-dom";
 
 interface AuthContextI extends Context<{}> {
   userLoggedIn: boolean;
@@ -11,142 +10,190 @@ interface AuthContextI extends Context<{}> {
     password: string;
     confirmPassword: string;
   }) => Promise<void>;
-  user: any;
+  user: User;
   isLoading: boolean;
   error: string;
   setUserInformation: (user: any) => Promise<void>;
 }
 
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  ratings: [];
+  createdAt: string;
+  updatedAt: string;
+}
+
 const AuthContext = createContext({}) as AuthContextI;
 
 export function AuthProvider({ children }: { children: JSX.Element }) {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | undefined>();
   const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | undefined>();
+  const navigate = useNavigate();
 
   // Helper functions
   const clearUser = (error?: string) => {
     setIsLoading(false);
-    localStorage.removeItem("token");
     setUser(undefined);
     setError(error || undefined);
     setUserLoggedIn(false);
   };
 
-  const addUser = ({ user, token }: { user: any; token: string }) => {
-    setIsLoading(false);
-    localStorage.setItem("token", JSON.stringify(token));
+  const addUser = ({ user }: { user: User }) => {
+    setIsLoading(true);
     setUser(user);
-    setUserLoggedIn(true);
+    setUserLoggedIn(false);
     setError(undefined);
   };
 
-  const fetchWrapper = async ({
-    url,
-    method,
-    data,
-    errors,
-  }: {
-    url: string;
-    method?: string;
-    data: object;
-    errors?: {
-      [key: number]: string;
-    };
-  }) => {
+  const fetchWrapper = async (
+    url: string,
+    {
+      method,
+      data,
+      errors,
+      options,
+      headers,
+      credentials,
+    }: {
+      method?: string;
+      data?: object;
+      headers?: { [key: string]: string };
+      errors?: {
+        [key: number]: string;
+      };
+      options?: any;
+      credentials?: string;
+    }
+  ) => {
     try {
       setIsLoading(true);
-      const res = await fetch(url, {
+      const res = await fetch(import.meta.env.VITE_API + url, {
         method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        headers: headers ?? { "Content-Type": "application/json" },
+        body: data ? JSON.stringify(data) : undefined,
+        credentials: credentials ?? undefined,
+        ...options,
       });
 
       if (res.ok) {
-        const { token } = await res.json();
-        const user = parseJWT(token);
-        if (!user) clearUser();
-        else addUser({ user, token });
+        return await res.json();
       } else {
-        clearUser();
         setError(
           errors
             ? errors[res.status]
             : "Something went wrong with the request. Please try again later."
         );
+        console.log(error);
       }
     } catch (err: any) {
-      clearUser(err.message);
+      console.log(err);
+      setError(err);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Check JWT token for expiry on load
-  useEffect(() => {
-    const tokenUser = attemptTokenLogin();
-    if (tokenUser) {
-      setUser(tokenUser);
-      setUserLoggedIn(true);
-      setError(undefined);
-      setIsLoading(false);
-    } else clearUser("Invalid token");
-  }, []);
-
-  const login = async (data: { email: string; password: string }) => {
-    data.email = data.email.toLowerCase().trim();
-    console.log(data);
-    fetchWrapper({
-      url: `${import.meta.env.VITE_API}/auth/login`,
-      method: "POST",
-      data,
-      errors: {
-        401: "Email or password is incorrect.",
-        404: "Email or password is incorrect.",
-      },
-    });
-  };
-
   const signup = async (data: {
     email: string;
-    username: string;
+    name: string;
     password: string;
   }) => {
     data.email = data.email.toLowerCase().trim();
 
-    fetchWrapper({
-      url: `${import.meta.env.VITE_API}/register`,
+    const val = await fetchWrapper(`http://localhost:3000/auth/signup`, {
       method: "POST",
       data,
-      errors: {
-        409: "Email already in use.",
-        500: "Something went wrong while registering. Please try again later.",
-      },
     });
+    console.log(val);
+    return val;
   };
 
   async function setUserInformation(data: { name: string; email: string }) {
-    await fetchWrapper({
+    const val = await fetchWrapper(`/users/${user?.id}`, {
       method: "PATCH",
-      url: `${import.meta.env.VITE_API}/users/${user.id}`,
       data,
+      headers: {
+        Authorization:
+          "Bearer " +
+          document.cookie
+            .split(";")
+            .filter((val) => val.startsWith("token="))[0]
+            .split("=")[1],
+        "Content-Type": "application/json",
+      },
       errors: {
         401: "Invalid token.",
         500: "Something went wrong while updating your profile. Please try again later.",
       },
     });
+    console.log("User");
+    console.log(val);
+    // setUser(val);
   }
 
-  // Auth context values
-  const value = {
+  async function login(data: { email: string; password: string }) {
+    data.email = data.email.toLowerCase().trim();
+    const res = await fetchWrapper(`/auth/signin`, {
+      method: "POST",
+      data,
+      credentials: "include",
+    });
+    navigate("/");
+  }
+
+  // Function to get the current user from the server
+  async function getUser(id: number) {
+    const res = await fetchWrapper(`/users/me/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization:
+          "Bearer " +
+          document.cookie
+            .split(";")
+            .filter((val) => val.startsWith("token="))[0]
+            .split("=")[1],
+        "Content-Type": "application/json",
+      },
+    });
+    return res.user;
+  }
+
+  useEffect(() => {
+    (async () => {
+      try {
+        // Parse the token from the cookies
+        const token = document.cookie
+          .split("; ")
+          .filter((cookie) => cookie.startsWith("token="))[0]
+          .split("=")[1];
+        const parsedToken = token
+          ? JSON.parse(atob(token.split(".")[1]))
+          : null;
+        setUser(await getUser(parsedToken.id));
+      } catch (err: any) {
+        setUser(undefined);
+        setError(err);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, []);
+
+  let value = {
+    user,
     userLoggedIn,
     login,
     signup,
-    user,
+    clearUser,
+    addUser,
+    setUserInformation,
+    getUser,
     isLoading,
     error,
-    setUserInformation,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
