@@ -96,9 +96,14 @@ function useSearch(cleanQueryString: string) {
     queryFn: async () => {
       try {
         const url = encodeURI(
-          `${import.meta.env.VITE_API}/products${cleanQueryString}`
+          `${import.meta.env.VITE_API}/product/params${cleanQueryString}`
         );
-        const res = await fetch(url);
+        const res = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         const json = await res.json();
         return json;
       } catch (err) {

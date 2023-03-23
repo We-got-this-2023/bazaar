@@ -47,11 +47,6 @@ export class ProductController {
     return this.productService.getProducts();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: number): Promise<ProductDto> {
-    return this.productService.findOneProduct(id);
-  }
-
   @Get('cursor')
   getProductsCurosr(
     @Query('take') take: number,
@@ -69,20 +64,25 @@ export class ProductController {
   }
 
   @Get('offset')
-  getProductsOffset(@Param('id') id: number): Promise<ProductDto[]> {
+  getProductsOffset(@Param('id') id: string): Promise<ProductDto[]> {
     return this.productService.getProductsOffset(id);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string): Promise<ProductDto> {
+    return this.productService.findOneProduct(id);
   }
 
   @Patch(':id')
   updateProduct(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() productDto: ProductDto,
   ): Promise<ProductDto> {
     return this.productService.updateProduct(id, productDto);
   }
 
   @Delete(':id')
-  deleteProduct(@Param('id') id: number): Promise<ProductDto> {
+  deleteProduct(@Param('id') id: string): Promise<ProductDto> {
     return this.productService.deleteProduct(id);
   }
 }
