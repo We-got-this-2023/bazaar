@@ -17,4 +17,6 @@ export class addProductDto {
   price: number;
 
   imagesPath?: string[];
+
+  tags?: string;
 }

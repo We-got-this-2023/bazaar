@@ -1,4 +1,4 @@
-import OrderCard from "../cards/Order";
+import OrderCard from "../Cards/Order";
 import { useAuth } from "../contexts/AuthContext";
 export default function Orders() {
   const { user } = useAuth();

@@ -28,24 +28,70 @@ export class ProductService {
   }
 
   async addProduct(file: any, addProductDto: addProductDto) {
-    const { id, userId, categoryName, name, description, price } =
-      addProductDto;
+    try {
+      const { userId, categoryName, name, description, price, tags } =
+        addProductDto;
+      const imagePath = file.path;
+      const updatedTags = tags.split(' ');
 
-    const imagePath = file.path;
+      const category = await this.prisma.category.findFirst({
+        where: {
+          categoryName: categoryName,
+        },
+      });
 
-    // need to add category table to reference category or to create new one
+      if (!category) {
+        const category = await this.prisma.category.create({
+          data: {
+            categoryName: categoryName,
+            description: 'description',
+          },
+        });
+      }
 
-    const product = await this.prisma.product.create({
-      data: {
-        id,
-        userId,
-        name,
-        description,
-        imagesPath: imagePath,
-        price: Number(price),
-      },
-    });
-    return product;
+      const tagsList = await this.prisma.tags.findMany({
+        where: {
+          name: {
+            in: updatedTags,
+          },
+        },
+      });
+
+      if (tagsList.length !== updatedTags.length) {
+        const tagList = [];
+        for (const tag of updatedTags) {
+          console.log(tag);
+          const tagItem = await this.prisma.tags.create({
+            data: {
+              name: tag,
+            },
+          });
+          tagsList.push(tagItem);
+        }
+      }
+
+      const product = await this.prisma.product.create({
+        data: {
+          userId,
+          catoegoryId: category.id,
+          name,
+          description,
+          imagesPath: imagePath,
+          price: Number(price),
+        },
+      });
+
+      const productTags = await this.prisma.productTags.createMany({
+        data: tagsList.map((tag) => ({
+          productId: product.id,
+          tagId: tag.id,
+        })),
+      });
+
+      return { product, productTags, category, tagsList };
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   // async getProductWithParams(productParamsDto: ProductParamsDto) {
