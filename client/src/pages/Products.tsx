@@ -5,6 +5,10 @@ import { Product } from "../contexts/MiscContext";
 import Form from "../formElements/Form";
 import Input from "../formElements/Input";
 import TextArea from "../formElements/TextArea";
+import { useState } from "react";
+import Input from "../formElements/File";
+import { Form } from "../formElements/Form";
+import FancyInput from "../formElements/Input";
 
 interface FormDataStruct {
   name: string;
@@ -14,13 +18,6 @@ interface FormDataStruct {
   category?: string;
   images?: File[];
 }
-
-export default function EditProduct() {
-  const { id } = useParams();
-  const { user, isLoading: userIsLoading } = useAuth();
-  const [product, setProduct] = useState<Product>();
-  const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (id)
@@ -121,7 +118,7 @@ export default function EditProduct() {
               />
               <Input
                 className="h-[44px]"
-                name="category"
+                name="categoryName"
                 type="text"
                 placementClassName="w-full"
                 options={{}}
