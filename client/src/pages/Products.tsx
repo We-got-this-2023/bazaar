@@ -23,7 +23,7 @@ export default function EditProduct() {
   useEffect(() => {
     if (id)
       (async () => {
-        const res = await fetch(`${import.meta.env.VITE_API}/products/${id}`);
+        const res = await fetch(`${import.meta.env.VITE_API}/product/${id}`);
         const data = await res.json();
         setProduct(data);
       })();
