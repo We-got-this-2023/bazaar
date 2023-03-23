@@ -146,7 +146,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       },
     });
     console.log(res);
-    return res;
+    return res.user;
   }
 
   useEffect(() => {
@@ -172,15 +172,17 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     })();
   }, []);
 
-  // Auth context values
-  const value = {
+  let value = {
+    user,
     userLoggedIn,
     login,
     signup,
-    user,
+    clearUser,
+    addUser,
+    setUserInformation,
+    getUser,
     isLoading,
     error,
-    setUserInformation,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

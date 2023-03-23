@@ -70,7 +70,7 @@ export default function FancyInput({
         setLabelSmall(true);
       }
     }
-  }, []);
+  }, [initialValue]);
   return (
     <div className={`mb-2 flex flex-col ${placementClassName}`}>
       <div className="relative flex flex-col gap-2">
