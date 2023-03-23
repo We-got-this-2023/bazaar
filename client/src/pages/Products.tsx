@@ -133,7 +133,8 @@ export default function EditProduct() {
               type="text"
               placementClassName="w-full"
               options={{}}
-              initialValue={product?.tags}
+              // initialValue={product?.tags}
+              // have to update this when we figure out how to handle multiple tags
             />
           </div>
 
