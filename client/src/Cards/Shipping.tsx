@@ -27,12 +27,16 @@ interface FormData {
 }
 
 export default function DeliveryForm({ title, className }: DeliveryFormProps) {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, setUserInformation } = useAuth();
   const [fileNamesOutlet, setFileNamesOutlet] = useState<JSX.Element>();
   const [delivery, setDelivery] = useState<FormData>();
   const getDeliveryInformation = async () => {
     if (isLoading) return;
     if (!user) return;
+
+    // return user.address
+
+    // Temporary solution
     return {
       country: "United States",
       city: "San Francisco",
@@ -49,8 +53,7 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
   };
 
   const onSubmit = async (data: FormData) => {
-    console.log(data);
-    // TODO: Send data to server
+    await setUserInformation({ ...user, ...data });
   };
   useEffect(() => {
     (async () => {

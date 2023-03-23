@@ -14,6 +14,10 @@ export default function AccountCard({ user }: { user: User }) {
   );
   const { setUserInformation } = useAuth();
 
+  const onSubmit = async (data: FormData) => {
+    await setUserInformation({ ...user, ...data });
+  };
+
   return (
     <div
       className="
@@ -31,10 +35,7 @@ export default function AccountCard({ user }: { user: User }) {
           <UserImage user={user} className="w-44" />
           <span className="opacity-60">User since {createdAt}</span>
         </div>
-        <Form
-          onSubmit={setUserInformation}
-          className="flex flex-col justify-around"
-        >
+        <Form onSubmit={onSubmit} className="flex flex-col justify-around">
           <Input name="name" type="text" initialValue={user.name} />
           <Input name="email" type="email" initialValue={user.email} />
           <button type="submit">Submit</button>
