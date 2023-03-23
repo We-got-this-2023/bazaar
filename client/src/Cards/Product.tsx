@@ -2,19 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import EditIcon from "../assets/EditIcon";
 import { useAuth } from "../contexts/AuthContext";
+import { Product } from "../contexts/MiscContext";
 import Form from "../formElements/Form";
 import Input from "../formElements/Input";
-
-type Product = {
-  id: string;
-  title: string;
-  price: string;
-  description: string;
-  images: string[];
-  createdAt: string;
-  tags: string[];
-  userId: string;
-};
 
 export default function ProductPreview({
   product,
@@ -27,7 +17,7 @@ export default function ProductPreview({
 }) {
   const { user, userLoggedIn } = useAuth();
   const [isOwner, setIsOwner] = useState(false);
-  const { id, price, title, description, userId } = product;
+  const { id, price, name, description, userId } = product;
   useEffect(() => {
     if (userLoggedIn) {
       if (user.id === product.userId) setIsOwner(true);
@@ -65,7 +55,7 @@ export default function ProductPreview({
       <div>
         <Link to={`/products/${id}`}>
           <h2 className="w-fit font-body text-lg hover:text-sky-500 hover:underline">
-            {title}
+            {name}
           </h2>
         </Link>
         <div className="flex justify-start gap-4">

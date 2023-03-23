@@ -9,6 +9,7 @@ interface FancyInputProps extends InputHTMLAttributes<HTMLInputElement> {
   options?: RegisterOptions;
   setFileNamesOutlet?: Function;
   placementClassName?: string;
+  initialValue?: File | FileList | string;
 }
 
 export default function FancyInput({
@@ -16,8 +17,11 @@ export default function FancyInput({
   options,
   className: cOverrides,
   setFileNamesOutlet,
+  initialValue,
   ...rest
 }: FancyInputProps) {
+  if (initialValue && typeof initialValue === "string")
+    throw new Error("initialValue must be a File.");
   const form = useFormContext();
   let formState, register, errors, ref: any, regRest: any;
   const [files, setFiles] = useState<FileList>([] as unknown as FileList);
@@ -54,6 +58,22 @@ export default function FancyInput({
       setFiles((inputRef.current!.files || []) as FileList);
     };
   }, []);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      if (initialValue instanceof File) {
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(initialValue);
+        inputRef.current.files = dataTransfer.files;
+      } else if (initialValue instanceof FileList) {
+        const dataTransfer = new DataTransfer();
+        for (let file in initialValue) {
+          dataTransfer.items.add(initialValue[file]);
+        }
+      }
+    }
+  }, [initialValue]);
+
   return (
     <div className="relative flex flex-col items-center gap-2">
       <button

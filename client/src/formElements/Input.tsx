@@ -8,7 +8,7 @@ interface FancyInputProps extends InputHTMLAttributes<HTMLInputElement> {
   errors?: FieldErrors;
   name: string;
   options?: RegisterOptions;
-  initialValue?: string;
+  initialValue?: string | File | FileList;
   type: string;
   placementClassName?: string;
   placeholder?: string;
@@ -31,14 +31,19 @@ export default function FancyInput({
       <File
         name={name}
         options={options}
+        initialValue={initialValue}
         setFileNamesOutlet={setFileNamesOutlet}
         {...rest}
       />
     );
-  else if (setFileNamesOutlet)
-    throw new Error(
-      "Input.tsx:30 fileNamesOutlet is not supported in FancyInput"
-    );
+  else {
+    if (setFileNamesOutlet)
+      throw new Error(
+        "Input.tsx:30 fileNamesOutlet is not supported in FancyInput."
+      );
+    if (initialValue && typeof initialValue !== "string")
+      throw new Error("Input.tsx:31 initialValue must be a string.");
+  }
   const form = useFormContext();
   let formState, register, errors, ref: any, regRest: any;
   if (form) {
@@ -60,11 +65,7 @@ export default function FancyInput({
     inputRef.current?.value === "" ? setLabelSmall(focus) : setLabelSmall(true);
   };
   useEffect(() => {
-    if (
-      initialValue !== undefined &&
-      initialValue !== "" &&
-      initialValue !== null
-    ) {
+    if (initialValue !== undefined && initialValue !== null) {
       if (inputRef.current) {
         inputRef.current.value = initialValue;
         setLabelSmall(true);

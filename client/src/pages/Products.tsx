@@ -1,11 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Product } from "../contexts/MiscContext";
 import Form from "../formElements/Form";
 import Input from "../formElements/Input";
-import Select from "../formElements/Select";
 import TextArea from "../formElements/TextArea";
 
 interface FormDataStruct {
@@ -17,39 +15,65 @@ interface FormDataStruct {
   images?: File[];
 }
 
-export default function Products() {
+export default function EditProduct() {
   const { id } = useParams();
-  const { user } = useAuth();
+  const { user, isLoading: userIsLoading } = useAuth();
+  const [product, setProduct] = useState<Product>();
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
-  const product: any = fetch(`http://localhost:3000/products/${id}`)
-    .then((res) => res.json())
-    .catch((err) => console.log(err));
+  useEffect(() => {
+    if (id)
+      (async () => {
+        const res = await fetch(`${import.meta.env.VITE_API}/products/${id}`);
+        const data = await res.json();
+        setProduct(data);
+      })();
+  }, []);
+
+  if (userIsLoading) return null;
+  if (isLoading) return null;
+  if (!user) return null;
 
   const onSubmit = async (data: any) => {
-    const formData = new FormData();
-    formData.append("file", data.file[0]);
-    formData.append("name", data.name);
-    formData.append("description", data.description);
-    formData.append("price", data.price);
-    formData.append("category", data.category);
-    formData.append("tags", data.tags);
-    formData.append("userId", user.id);
+    try {
+      const formData = new FormData();
+      formData.append("file", data.file[0]);
+      formData.append("name", data.name);
+      formData.append("description", data.description);
+      formData.append("price", data.price);
+      formData.append("category", data.category);
+      formData.append("tags", data.tags);
+      formData.append("userId", user.id.toString());
 
-    const res = await fetch("http://localhost:3000/products/add", {
-      method: product?.id ? "PATCH" : "POST",
-      body: formData,
-    });
-    const json = await res.json();
+      if (id) {
+        const res = await fetch(import.meta.env.VITE_API + "/product/" + id, {
+          method: "PATCH",
+          body: formData,
+        });
+        const json = await res.json();
 
-    if (!res.ok) throw Error(json.message);
+        if (!res.ok) throw new Error(json.message);
+        return json;
+      } else {
+        const res = await fetch(import.meta.env.VITE_API + "/product", {
+          method: "POST",
+          body: formData,
+        });
+        const json = await res.json();
 
-    return json;
+        if (!res.ok) throw new Error(json.message);
+        navigate("/products");
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
     <div>
       <h2 className="flex content-center justify-center pt-12 text-6xl capitalize">
-        {product?.id ? "Edit" : "Create"} product
+        {id ? "Edit" : "Create"} product
       </h2>
       <div className="flex h-full w-full content-center justify-center pt-6">
         <Form onSubmit={onSubmit} className="flex gap-2">
