@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import CheckoutSummary from "../Cards/Checkout";
-import ProductPreview from "../Cards/Product";
-import DeliveryForm from "../Cards/Shipping";
+import CheckoutSummary from "../cards/Checkout";
+import ProductPreview from "../cards/Product";
+import DeliveryForm from "../cards/Shipping";
 import { useAuth } from "../contexts/AuthContext";
 import { Product, useMisc } from "../contexts/MiscContext";
 
