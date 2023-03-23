@@ -11,4 +11,5 @@ export class ProductParamsDto {
   stags?: string;
   atags?: string;
   ntags?: string;
+  tags?: string;
 }
