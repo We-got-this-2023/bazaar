@@ -14,7 +14,7 @@ export default function ProductPreview({
   type?: string;
 }) {
   const { user, userLoggedIn } = useAuth();
-  const { cartAddItem } = useMisc();
+  const { cartAddItem, changeQuantity } = useMisc();
   const [added, setAdded] = useState(checkIfAdded());
   function checkIfAdded() {
     const cart = JSON.parse(localStorage.getItem("cart") ?? "[]");
@@ -35,11 +35,6 @@ export default function ProductPreview({
   const split = price.toString().split(".");
   let first = split[0],
     second;
-
-  async function changeQuantity(number: string) {
-    // Need to add Change Quantity function from client/src/components/Cart.tsx
-    // Will do it later
-  }
 
   if (split.length === 1) second = "00";
   else second = split[1];
@@ -80,19 +75,19 @@ export default function ProductPreview({
                 <span className="text-lg">{c}</span>
               </div>
               {type === "checkout" && (
-                <Form onSubmit={changeQuantity}>
+                <Form
+                  onSubmit={async ({ quantity }) => {
+                    changeQuantity(product, Number(quantity));
+                  }}
+                  className="flex items-center gap-2"
+                >
                   <Input
-                    name="Quantity"
+                    name="quantity"
                     type="number"
-                    initialValue={product.quantity.toString()}
+                    initialValue={product?.quantity?.toString()}
                     className="w-20"
-                    onChange={(e) => {
-                      if (e.target.value === "" || parseInt(e.target.value) < 0)
-                        e.target.value = "0";
-                      if (parseInt(e.target.value) !== product.quantity)
-                        changeQuantity(e.target.value);
-                    }}
                   />
+                  <button type="submit">Save</button>
                 </Form>
               )}
             </div>

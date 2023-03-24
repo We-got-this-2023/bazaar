@@ -6,6 +6,7 @@ interface MiscContextI extends Context<{}> {
   cart: Product[];
   cartAddItem: (item: Product) => void;
   cartRemoveItem: (item: Product) => void;
+  changeQuantity: (product: Product, number: number) => void;
 }
 
 export type Product = {
@@ -51,6 +52,7 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
       localStorage.setItem("cart", `[${JSON.stringify(item)}]`);
     else localStorage.setItem("cart", JSON.stringify(cart));
   }
+
   function cartRemoveItem(id: number) {
     for (let i = 0; i < cart.length; i++) {
       if (cart[i].id === id) {
@@ -72,7 +74,40 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
     localStorage.setItem("cart", JSON.stringify(cart));
   }
 
-  const value = { searchIsEmpty, cart, cartAddItem, cartRemoveItem };
+  function cartRemoveAllItem(id: number) {
+    setCart(cart.filter((item) => item.id !== Number(id)));
+    localStorage.setItem(
+      "cart",
+      JSON.stringify(cart.filter((item) => item.id !== Number(id)))
+    );
+  }
+
+  function changeQuantity(product: Product, quantity: number) {
+    if (typeof quantity !== "number") return;
+    if (quantity == 0) {
+      cartRemoveAllItem(product.id);
+      return;
+    }
+    for (let i = 0; i < cart.length; i++) {
+      if (cart[i].id === product.id) {
+        cart[i].quantity = quantity;
+        setCart([...cart]);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        return;
+      }
+    }
+    product.quantity = quantity;
+    setCart([...cart, product]);
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }
+
+  const value = {
+    searchIsEmpty,
+    cart,
+    cartAddItem,
+    cartRemoveItem,
+    changeQuantity,
+  };
 
   return <MiscContext.Provider value={value}>{children}</MiscContext.Provider>;
 }
