@@ -17,7 +17,7 @@ export default function Profile() {
   }, [isLoading, id]);
 
   return (
-    <div className="relative top-24 flex h-full h-fit flex-col items-center gap-4">
+    <div className="relative top-24 flex flex-col items-center gap-4">
       {isOwner && (
         <>
           <AccountCard user={user} />

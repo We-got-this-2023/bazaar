@@ -95,7 +95,7 @@ export default function ProductPreview({
           </div>
         </div>
         {type === "products-page" && (
-          <Link to={`/edit/${id}`}>
+          <Link to={`/edit/${id}`} className="absolute top-3 right-3">
             <EditIcon className="w-12" />
           </Link>
         )}

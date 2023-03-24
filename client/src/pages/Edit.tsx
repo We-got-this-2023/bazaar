@@ -95,7 +95,7 @@ export default function EditProduct() {
               initialValue={product?.file}
             />
           </div>
-          <div className="w-[480px] bg-white">
+          <div className="w-[480px]">
             <Input
               name="name"
               type="text"
