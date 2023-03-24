@@ -41,7 +41,6 @@ export default function ProductPreview({
   if (second.length === 1) c = `${second}0`;
 
   const checkout = type === "checkout" ? "py-4 px-8" : "py-6 px-8";
-  console.log(product);
 
   return (
     <div className="flex h-fit gap-2">
