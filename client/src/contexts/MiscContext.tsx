@@ -11,7 +11,7 @@ interface MiscContextI extends Context<{}> {
 export type Product = {
   id: number;
   name: string;
-  price: string;
+  price: number;
   quantity: number;
   description: string;
   images: string[];
@@ -20,6 +20,7 @@ export type Product = {
   createdAt: string;
   file?: File;
   category: string;
+  imagesPath?: string[];
 };
 
 const MiscContext = createContext({}) as MiscContextI;

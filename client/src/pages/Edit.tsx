@@ -71,7 +71,7 @@ export default function EditProduct() {
         });
         console.log(res);
         if (!res.ok) throw new Error(res.statusText);
-        // navigate("/products");
+        navigate("/products");
       }
     } catch (err) {
       console.error(err);
@@ -125,7 +125,7 @@ export default function EditProduct() {
                   },
                 }}
                 placementClassName="w-full"
-                initialValue={product?.price}
+                initialValue={product?.price?.toString()}
               />
               <Input
                 className="h-[44px]"
