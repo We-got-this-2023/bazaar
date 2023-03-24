@@ -37,10 +37,37 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
   }
   const [cart, setCart] = useState<Product[]>(getCart());
   function cartAddItem(item: Product) {
+    for (let i = 0; i < cart.length; i++) {
+      if (cart[i].id === item.id) {
+        cart[i].quantity += item.quantity;
+        setCart([...cart]);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        return;
+      }
+    }
+    item.quantity = 1;
     setCart([...cart, item]);
-    localStorage.setItem("cart", JSON.stringify(cart));
+    if (!localStorage.getItem("cart"))
+      localStorage.setItem("cart", `[${JSON.stringify(item)}]`);
+    else localStorage.setItem("cart", JSON.stringify(cart));
   }
-  function cartRemoveItem(id: string) {
+  function cartRemoveItem(id: number) {
+    for (let i = 0; i < cart.length; i++) {
+      if (cart[i].id === id) {
+        if (cart[i].quantity > 1) {
+          cart[i].quantity -= 1;
+          if (cart[i].quantity === 0) {
+            setCart(cart.filter((item) => item.id !== Number(id)));
+            localStorage.setItem("cart", JSON.stringify(cart));
+            return;
+          } else {
+            setCart([...cart]);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            return;
+          }
+        }
+      }
+    }
     setCart(cart.filter((item) => item.id !== Number(id)));
     localStorage.setItem("cart", JSON.stringify(cart));
   }

@@ -9,7 +9,6 @@ import LandingPage from "./pages/Landing";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Orders from "./pages/OrderHistory";
-import ProductInfo from "./pages/ProductInfo";
 import ProductsPage from "./pages/ProductsPage";
 import Profile from "./pages/Profile";
 import Search from "./pages/Search";
@@ -42,7 +41,6 @@ export default function App() {
           <Route element={<LayoutWithSidebar />}>
             <Route path="search" element={<Search />} />
             <Route path="profile/:id" element={<Profile />} />
-            <Route path="products/:id" element={<ProductInfo />} />
             <Route
               path="orders"
               element={<ProtectedRoute element={<Orders />} />}

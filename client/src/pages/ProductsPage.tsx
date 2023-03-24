@@ -48,13 +48,15 @@ export default function ProductsPage() {
         ) : error ? (
           <div>Error: {error.message}</div>
         ) : (
-          products?.map((product: Product) => (
-            <ProductPreview
-              key={product.id}
-              product={product}
-              type="products-page"
-            />
-          ))
+          products?.map((product: Product) => {
+            return (
+              <ProductPreview
+                key={product.id}
+                product={product}
+                type="products-page"
+              />
+            );
+          })
         )}
       </div>
     </div>

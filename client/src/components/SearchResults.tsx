@@ -5,7 +5,11 @@ export default function SearchResults({ data }: any) {
     <div className="m-10 ml-0 mt-0 flex w-full flex-col gap-2">
       {Array.isArray(data) &&
         data.map((product: any) => (
-          <ProductPreview key={product.id} product={product} />
+          <ProductPreview
+            key={product.id}
+            product={product}
+            type="search-page"
+          />
         ))}
     </div>
   );
