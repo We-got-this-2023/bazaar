@@ -1,9 +1,10 @@
-import { Context, createContext, useContext, useState } from "react";
+import { Context, createContext, useContext, useEffect, useState } from "react";
 import isEmptySearch from "../utils/isEmptySearch";
 
 interface MiscContextI extends Context<{}> {
   searchEmpty: boolean;
   cart: Product[];
+  cartNumber: number;
   cartAddItem: (item: Product) => void;
   cartRemoveItem: (item: Product) => void;
   changeQuantity: (product: Product, number: number) => void;
@@ -30,27 +31,36 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
   // leaving this unused function for now
   // This is because I haven't set up the search for no results yet
   const [searchIsEmpty, setSearchIsEmpty] = useState<boolean>(isEmptySearch());
+  const [cartNumber, setCartNumber] = useState<number>(0);
+  const [cart, setCart] = useState<Product[]>([]);
+  useEffect(() => {
+    setCart(getCart());
+  }, []);
+
+  function resetCartNumber(passCart: Product[]) {
+    let number = 0;
+    for (let i = 0; i < passCart.length; i++) number += passCart[i].quantity;
+    setCartNumber(number);
+  }
 
   function getCart() {
-    const cart = localStorage.getItem("cart");
-    if (cart) return JSON.parse(cart);
+    const stored = localStorage.getItem("cart");
+    let newCart;
+    if (stored) newCart = JSON.parse(stored);
+    if (newCart) {
+      newCart = newCart.filter(
+        (item: Product) =>
+          typeof item.quantity === "number" && item.quantity > 0
+      );
+      localStorage.setItem("cart", JSON.stringify(newCart));
+      resetCartNumber(newCart);
+      return newCart;
+    }
     return [];
   }
-  const [cart, setCart] = useState<Product[]>(getCart());
   function cartAddItem(item: Product) {
-    for (let i = 0; i < cart.length; i++) {
-      if (cart[i].id === item.id) {
-        cart[i].quantity += item.quantity;
-        setCart([...cart]);
-        localStorage.setItem("cart", JSON.stringify(cart));
-        return;
-      }
-    }
-    item.quantity = 1;
-    setCart([...cart, item]);
-    if (!localStorage.getItem("cart"))
-      localStorage.setItem("cart", `[${JSON.stringify(item)}]`);
-    else localStorage.setItem("cart", JSON.stringify(cart));
+    const cartItem = cart.find((cartItem) => cartItem.id === item.id) || null;
+    changeQuantity(item, cartItem ? cartItem.quantity + 1 : 1);
   }
 
   function cartRemoveItem(id: number) {
@@ -75,30 +85,38 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
   }
 
   function cartRemoveAllItem(id: number) {
-    setCart(cart.filter((item) => item.id !== Number(id)));
-    localStorage.setItem(
-      "cart",
-      JSON.stringify(cart.filter((item) => item.id !== Number(id)))
-    );
+    const newCart = cart.filter((item) => item.id !== Number(id));
+    setCart(newCart);
+    localStorage.setItem("cart", JSON.stringify(newCart));
+    resetCartNumber(newCart);
   }
 
   function changeQuantity(product: Product, quantity: number) {
     if (typeof quantity !== "number") return;
     if (quantity == 0) {
       cartRemoveAllItem(product.id);
+      resetCartNumber(cart);
       return;
     }
+    const newCart: Product[] = [];
+    let hasChanged = false;
     for (let i = 0; i < cart.length; i++) {
+      newCart.push(cart[i]);
       if (cart[i].id === product.id) {
-        cart[i].quantity = quantity;
-        setCart([...cart]);
-        localStorage.setItem("cart", JSON.stringify(cart));
-        return;
+        newCart[i].quantity = quantity;
+        hasChanged = true;
       }
+      setCart([...newCart]);
+      localStorage.setItem("cart", JSON.stringify([...newCart]));
+      resetCartNumber([...newCart]);
     }
-    product.quantity = quantity;
-    setCart([...cart, product]);
-    localStorage.setItem("cart", JSON.stringify(cart));
+    if (!hasChanged) {
+      product.quantity = quantity;
+      newCart.push(product);
+      setCart([...newCart]);
+      localStorage.setItem("cart", JSON.stringify([...newCart]));
+      resetCartNumber([...newCart]);
+    }
   }
 
   const value = {
@@ -107,6 +125,7 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
     cartAddItem,
     cartRemoveItem,
     changeQuantity,
+    cartNumber,
   };
 
   return <MiscContext.Provider value={value}>{children}</MiscContext.Provider>;

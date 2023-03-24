@@ -15,12 +15,6 @@ export default function ProductPreview({
 }) {
   const { user, userLoggedIn } = useAuth();
   const { cartAddItem, changeQuantity } = useMisc();
-  const [added, setAdded] = useState(checkIfAdded());
-  function checkIfAdded() {
-    const cart = JSON.parse(localStorage.getItem("cart") ?? "[]");
-    if (cart.find((item: Product) => item.id === product.id)) return true;
-    return false;
-  }
   const [isOwner, setIsOwner] = useState(false);
   const { id, price, name, description, userId } = product;
   useEffect(() => {
@@ -65,9 +59,7 @@ export default function ProductPreview({
       `}
       >
         <div>
-          <h2 className="w-fit font-body text-lg hover:text-sky-500 hover:underline">
-            {name}
-          </h2>
+          <h2 className="w-fit font-body text-lg">{name}</h2>
           <div className="flex justify-start gap-4">
             <div className="flex flex-col">
               <div className="flex w-32 items-start">
@@ -99,19 +91,14 @@ export default function ProductPreview({
             <EditIcon className="w-12" />
           </Link>
         )}
-        {type === "search-page" &&
-          (!added ? (
-            <button
-              onClick={handleAdd}
-              className="absolute bottom-3 right-3 rounded-lg bg-silk-blue p-2 text-sm text-white hover:brightness-95"
-            >
-              Add to Cart
-            </button>
-          ) : (
-            <span className="absolute bottom-3 right-3 rounded-lg p-2 text-sm">
-              Product added!
-            </span>
-          ))}
+        {type === "search-page" && (
+          <button
+            onClick={handleAdd}
+            className="absolute bottom-3 right-3 rounded-lg bg-silk-blue p-2 text-sm text-white hover:brightness-95"
+          >
+            Add to Cart
+          </button>
+        )}
       </div>
     </div>
   );

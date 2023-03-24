@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CartIcon from "../assets/CartIcon";
 import DefaultImage from "../assets/DefaultImage";
@@ -9,7 +9,7 @@ import { useMisc } from "../contexts/MiscContext";
 import { toggleTheme } from "../utils/settings";
 
 export default function Navbar() {
-  const { cart } = useMisc();
+  const { cart, cartNumber } = useMisc();
   const [centerSearchBar, setCenterSearchBar] = useState();
   const searchRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
@@ -80,7 +80,7 @@ export default function Navbar() {
         </button>{" "}
         <Link to="/checkout" className="relative">
           <CartIcon
-            number={cart.length}
+            number={cartNumber}
             className="w-16 transition-transform duration-200 hover:scale-110"
           />
         </Link>
