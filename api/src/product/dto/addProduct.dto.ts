@@ -6,7 +6,7 @@ export class addProductDto {
   @IsNotEmpty()
   userId: number;
 
-  categoryName?: string;
+  category?: string;
 
   @IsNotEmpty()
   name: string;

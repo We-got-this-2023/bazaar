@@ -3,9 +3,11 @@ import { useState } from "react";
 import ReactDOM from "react-dom";
 import { Link } from "react-router-dom";
 import ProductPreview from "../cards/Product";
+import { useAuth } from "../contexts/AuthContext";
 import { Product } from "../contexts/MiscContext";
 
 export default function ProductsPage() {
+  const { user } = useAuth();
   const {
     data: products,
     isLoading,
@@ -13,11 +15,19 @@ export default function ProductsPage() {
   }: { data: any; isLoading: boolean; error: any } = useQuery(
     ["products"],
     async () => {
-      const res = await fetch(import.meta.env.VITE_API + "/products");
-      const data = await res.json();
-      return data || {};
+      const res = await fetch(
+        import.meta.env.VITE_API + "/product/params?userId=" + user.id
+      );
+      if (res.ok) {
+        const data = await res.json();
+        return data || {};
+      } else {
+        console.log(res);
+        throw new Error(res.statusText);
+      }
     }
   );
+  console.log(products);
   const [openProduct, setOpenProduct] = useState({
     id: "",
     title: "",
@@ -38,7 +48,7 @@ export default function ProductsPage() {
         ) : error ? (
           <div>Error: {error.message}</div>
         ) : (
-          products.map((product: Product) => (
+          products?.map((product: Product) => (
             <ProductPreview
               key={product.id}
               product={product}

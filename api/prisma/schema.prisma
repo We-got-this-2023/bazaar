@@ -27,8 +27,8 @@ model Product {
  id        Int      @default(autoincrement()) @id
  userId Int?
  user User? @relation(fields: [userId], references: [id])
- catoegoryId Int?
- category Category? @relation(fields: [catoegoryId], references: [id])
+ categoryId Int?
+ category Category? @relation(fields: [categoryId], references: [id])
  orderId Int?
  order Order? @relation(fields: [orderId], references: [id])
  name     String
