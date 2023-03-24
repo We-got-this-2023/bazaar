@@ -26,7 +26,7 @@ function LayoutWithNavbar() {
 
 function LayoutWithSidebar() {
   return (
-    <div className="flex">
+    <div className="relative">
       <Outlet />
       <Sidebar />
     </div>
