@@ -69,6 +69,7 @@ export class ProductService {
           tagsList = [];
           for (const tag of updatedTags) {
             console.log(tag);
+            if (tagsList.includes(tag)) break;
             const tagItem = await this.prisma.tags.create({
               data: {
                 name: tag,
