@@ -8,24 +8,7 @@ import { Product, useMisc } from "../contexts/MiscContext";
 export default function Checkout() {
   const { user } = useAuth();
   // Leaving cartAddItem to add mock data for now
-  const { cart: items, cartAddItem } = useMisc();
-
-  useEffect(() => {
-    // Until we have a way to add a product to the cart,
-    // I'm leaving this commented out function which will run on load
-    // each time, as this is a quick way to add products to the cart.
-    // cartAddItem({
-    //   id: "Something",
-    //   title: "something",
-    //   price: "10.24",
-    //   quantity: 1,
-    //   description: "this is a something",
-    //   images: [],
-    //   tags: [],
-    //   userId: "",
-    //   createdAt: "",
-    // });
-  }, []);
+  const { cart: items, cartAddItem, checkoutPrice } = useMisc();
 
   return (
     <div className="flex h-full w-full justify-between px-8">
@@ -54,7 +37,7 @@ export default function Checkout() {
           className="w-fit self-center"
         />
       </div>
-      <CheckoutSummary className="w-[25rem]" price="23.43" />
+      <CheckoutSummary className="w-[25rem]" price={checkoutPrice.toString()} />
     </div>
   );
 }

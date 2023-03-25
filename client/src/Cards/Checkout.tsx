@@ -23,8 +23,8 @@ export default function CheckoutSummary({ price, className = "" }: Props) {
           <h3>Shipping:</h3>
           <h3>Taxes:</h3>
         </div>
-        <div className="flex w-1/4 flex-col justify-end text-lg">
-          <p>{price}</p>
+        <div className="flex w-1/4 flex-col justify-end">
+          <p>${price}</p>
           <p>$0.00</p>
           <p>$0.00</p>
         </div>
