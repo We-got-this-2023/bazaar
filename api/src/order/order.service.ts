@@ -9,7 +9,7 @@ export class OrderService {
   async getOrders(id: number) {
     const orders = await this.prisma.order.findMany({
       where: {
-        userId: id,
+        userId: Number(id),
       },
       include: {
         products: true,
@@ -25,7 +25,7 @@ export class OrderService {
       data: {
         // paymentMethodId: orderDto.paymentMethodId,
         orderStatus: orderDto.orderStatus,
-        userId: orderDto.userId,
+        userId: Number(orderDto.userId),
       },
     });
 
@@ -36,7 +36,7 @@ export class OrderService {
         },
       },
       data: {
-        orderId: order.id,
+        orderId: Number(order.id),
       },
     });
 

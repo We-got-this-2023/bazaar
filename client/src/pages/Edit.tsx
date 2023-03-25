@@ -54,9 +54,9 @@ export default function EditProduct() {
         const json = await res.json();
 
         if (!res.ok) throw new Error(json.message);
+        navigate("/products");
         return json;
       } else {
-        console.log(formData);
         const res = await fetch(import.meta.env.VITE_API + "/product", {
           method: "POST",
           body: formData,
@@ -69,7 +69,6 @@ export default function EditProduct() {
                 .split("=")[1],
           },
         });
-        console.log(res);
         if (!res.ok) throw new Error(res.statusText);
         navigate("/products");
       }

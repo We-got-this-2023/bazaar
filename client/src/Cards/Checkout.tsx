@@ -1,11 +1,22 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import { Product, useMisc } from "../contexts/MiscContext";
 
 interface Props {
   price: string;
   className?: string;
 }
 
+export interface Order {
+  paymentMethodId: number;
+  userId: number;
+  orderStatus: string;
+  products: Product[];
+}
+
 export default function CheckoutSummary({ price, className = "" }: Props) {
+  const { cart } = useMisc();
+  const { user } = useAuth();
   const [total, setTotal] = useState("0.00");
   const [tax, setTax] = useState("1.0825");
 
@@ -25,6 +36,39 @@ export default function CheckoutSummary({ price, className = "" }: Props) {
     else cent = "00";
     setTotal(dol + "." + cent);
   }, [price]);
+
+  const getOrder = (): Order => {
+    const order: Order = {
+      paymentMethodId: 0,
+      userId: user.id,
+      orderStatus: "pending",
+      products: cart,
+    };
+    return order;
+  };
+
+  async function submit() {
+    try {
+      const order = getOrder();
+      const res = await fetch(import.meta.env.VITE_API + "/order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            document.cookie
+              .split(";")
+              .filter((item) => item.startsWith("token="))[0]
+              .split("=")[1],
+        },
+        body: JSON.stringify(order),
+      });
+      if (!res.ok) throw new Error("Something went wrong");
+      return res.json();
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   return (
     <div
@@ -58,7 +102,10 @@ export default function CheckoutSummary({ price, className = "" }: Props) {
         </div>
       </div>
       <div className="mt-8 flex flex-col items-center justify-center gap-8">
-        <button className="w-fit rounded-lg p-4 outline outline-1 dark:outline-white">
+        <button
+          onClick={submit}
+          className="w-fit rounded-lg p-4 outline outline-1 dark:outline-white"
+        >
           Pay Now
         </button>
         <p className="text-center text-sm opacity-50">
