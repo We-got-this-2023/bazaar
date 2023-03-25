@@ -38,7 +38,12 @@ export default function AccountCard({ user }: { user: User }) {
         <Form onSubmit={onSubmit} className="flex flex-col justify-around">
           <Input name="name" type="text" initialValue={user.name} />
           <Input name="email" type="email" initialValue={user.email} />
-          <button type="submit">Submit</button>
+          <button
+            className="h-fit w-fit self-center rounded-lg bg-silk-blue p-3 text-white transition-all duration-200 hover:brightness-95 "
+            type="submit"
+          >
+            Submit
+          </button>
         </Form>
       </div>
     </div>
