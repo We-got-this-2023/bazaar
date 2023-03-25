@@ -19,4 +19,6 @@ export class addProductDto {
   imagesPath?: string[];
 
   tags?: string;
+
+  ratings?: number[];
 }

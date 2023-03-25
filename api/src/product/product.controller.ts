@@ -17,6 +17,7 @@ import { ProductDto } from './dto/product.dto';
 import { ProductService } from './product.service';
 import { ProductParamsDto } from './dto/productParams.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { addProductDto } from './dto/addProduct.dto';
 
 @Controller('product')
 export class ProductController {
@@ -35,7 +36,7 @@ export class ProductController {
       }),
     )
     file: Express.Multer.File,
-    @Body() addProductDto: ProductDto,
+    @Body() addProductDto: addProductDto,
   ) {
     console.log(addProductDto);
     return this.productService.addProduct(file, addProductDto);
