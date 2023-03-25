@@ -7,7 +7,6 @@ export default function UserImage({
   user: any;
   className?: string;
 }) {
-  console.log(user);
   if (user.photoURL)
     return <img src={user.photoURL} alt={user.name} className={className} />;
   return <DefaultImage className={className} />;

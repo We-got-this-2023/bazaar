@@ -27,7 +27,6 @@ export default function Orders() {
         );
         const json = await res.json();
         if (!res.ok) throw new Error(json.message);
-        console.log(json);
         setOrders(json);
       } catch (err) {
         console.error(err);
@@ -41,7 +40,7 @@ export default function Orders() {
       <div className="flex flex-col gap-3">
         {(orders.length &&
           orders.map((order: any) => {
-            return <OrderCard order={order} />;
+            return <OrderCard key={order.id} order={order} />;
           })) || <div>You have no orders</div>}
       </div>
     </div>
