@@ -42,7 +42,6 @@ export default function Checkout() {
                     product={item}
                     type="checkout"
                     key={item.id}
-                    amount={item.quantity}
                   />
                 );
               })}

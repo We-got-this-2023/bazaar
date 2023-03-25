@@ -21,12 +21,14 @@ export default function EditProduct() {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   useEffect(() => {
-    if (id)
-      (async () => {
+    (async () => {
+      if (id) {
         const res = await fetch(`${import.meta.env.VITE_API}/product/${id}`);
         const data = await res.json();
         setProduct(data);
-      })();
+      }
+      setIsLoading(false);
+    })();
   }, []);
 
   if (userIsLoading) return null;
@@ -36,12 +38,12 @@ export default function EditProduct() {
   const onSubmit = async (data: any) => {
     try {
       const formData = new FormData();
-      formData.append("file", data.file[0]);
+      if (data.file[0]) formData.append("file", data.file[0]);
       formData.append("name", data.name);
       formData.append("description", data.description);
       formData.append("price", data.price);
-      formData.append("category", data.category);
-      formData.append("tags", data.tags);
+      if (data.category) formData.append("category", data.category);
+      if (data.tags) formData.append("tags", data.tags);
       formData.append("userId", user.id.toString());
 
       if (id) {
@@ -54,13 +56,21 @@ export default function EditProduct() {
         if (!res.ok) throw new Error(json.message);
         return json;
       } else {
+        console.log(formData);
         const res = await fetch(import.meta.env.VITE_API + "/product", {
           method: "POST",
           body: formData,
+          headers: {
+            Authorization:
+              "Bearer " +
+              document.cookie
+                .split(";")
+                .filter((item) => item.startsWith("token="))[0]
+                .split("=")[1],
+          },
         });
-        const json = await res.json();
-
-        if (!res.ok) throw new Error(json.message);
+        console.log(res);
+        if (!res.ok) throw new Error(res.statusText);
         navigate("/products");
       }
     } catch (err) {
@@ -85,7 +95,7 @@ export default function EditProduct() {
               initialValue={product?.file}
             />
           </div>
-          <div className="w-[480px] bg-white">
+          <div className="w-[480px]">
             <Input
               name="name"
               type="text"
@@ -115,7 +125,7 @@ export default function EditProduct() {
                   },
                 }}
                 placementClassName="w-full"
-                initialValue={product?.price}
+                initialValue={product?.price?.toString()}
               />
               <Input
                 className="h-[44px]"

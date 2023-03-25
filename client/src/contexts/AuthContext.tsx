@@ -113,6 +113,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   };
 
   async function setUserInformation(data: { name: string; email: string }) {
+    data.email = data.email.toLowerCase().trim();
     const val = await fetchWrapper(`/users/${user?.id}`, {
       method: "PATCH",
       data,

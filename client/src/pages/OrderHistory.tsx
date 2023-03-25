@@ -6,7 +6,7 @@ export default function Orders() {
   // the functionality for requesting to the backend yet.
 
   return (
-    <div className="mt-2 flex flex-col items-center justify-center gap-3">
+    <div className="flex flex-col items-center justify-center gap-3">
       <h2 className="text-2xl font-bold">Order History</h2>
       <div className="flex flex-col gap-3">
         {/* Not functional at the moment */}

@@ -1,17 +1,15 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CartIcon from "../assets/CartIcon";
 import DefaultImage from "../assets/DefaultImage";
 import Logo from "../assets/Logo";
 import SearchIcon from "../assets/SearchIcon";
+import { useMisc } from "../contexts/MiscContext";
 import { toggleTheme } from "../utils/settings";
 
 export default function Navbar() {
-  // Leaving these unused functions for now.
-  // This is because I haven't set up the cart state yet,
-  // and haven't set up the search page for an empty search.
-  const [cartNumber, setCartNumber] = useState(0);
+  const { cart, cartNumber } = useMisc();
   const [centerSearchBar, setCenterSearchBar] = useState();
   const searchRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
@@ -58,7 +56,7 @@ export default function Navbar() {
             onClick={handleSearch}
           />
           <input
-            className="w-full bg-transparent"
+            className="w-full bg-transparent outline-none"
             type="text"
             ref={searchRef}
             placeholder="Search for something..."

@@ -1,9 +1,12 @@
+import { useMisc } from "../contexts/MiscContext";
+
 interface Props {
   price: string;
   className?: string;
 }
 
 export default function CheckoutSummary({ price, className = "" }: Props) {
+  const { cart } = useMisc();
   return (
     <div
       className={`

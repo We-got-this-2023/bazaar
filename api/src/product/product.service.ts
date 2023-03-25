@@ -29,64 +29,78 @@ export class ProductService {
 
   async addProduct(file: any, addProductDto: addProductDto) {
     try {
-      const { userId, categoryName, name, description, price, tags } =
-        addProductDto;
+      const {
+        userId,
+        category: categoryName,
+        name,
+        description,
+        price,
+        tags,
+      } = addProductDto;
       const imagePath = file.path;
-      const updatedTags = tags.split(' ');
+      const updatedTags = tags?.split(' ');
 
-      const category = await this.prisma.category.findFirst({
-        where: {
-          categoryName: categoryName,
-        },
-      });
-
-      if (!category) {
-        const category = await this.prisma.category.create({
-          data: {
-            categoryName: categoryName,
-            description: 'description',
-          },
-        });
+      let category;
+      if (categoryName) {
+        category =
+          (await this.prisma.category.findFirst({
+            where: {
+              categoryName: categoryName,
+            },
+          })) ??
+          (await this.prisma.category.create({
+            data: {
+              categoryName: categoryName,
+              description: 'description',
+            },
+          }));
       }
 
-      const tagsList = await this.prisma.tags.findMany({
-        where: {
-          name: {
-            in: updatedTags,
-          },
-        },
-      });
-
-      if (tagsList.length !== updatedTags.length) {
-        const tagList = [];
-        for (const tag of updatedTags) {
-          console.log(tag);
-          const tagItem = await this.prisma.tags.create({
-            data: {
-              name: tag,
+      let tagsList;
+      if (tags) {
+        tagsList = await this.prisma.tags.findMany({
+          where: {
+            name: {
+              in: updatedTags,
             },
-          });
-          tagsList.push(tagItem);
+          },
+        });
+        if (tagsList.length !== updatedTags.length) {
+          tagsList = [];
+          for (const tag of updatedTags) {
+            console.log(tag);
+            if (tagsList.includes(tag)) break;
+            const tagItem = await this.prisma.tags.create({
+              data: {
+                name: tag,
+              },
+            });
+            tagsList.push(tagItem);
+          }
         }
       }
 
       const product = await this.prisma.product.create({
         data: {
-          userId,
-          categoryId: category.id,
+          userId: Number(userId),
           name,
+          categoryId: categoryName ? Number(category.id) : undefined,
           description,
           imagesPath: imagePath,
           price: Number(price),
         },
       });
 
-      const productTags = await this.prisma.productTags.createMany({
-        data: tagsList.map((tag) => ({
-          productId: product.id,
-          tagId: tag.id,
-        })),
-      });
+      console.log(product);
+      let productTags;
+      if (tags) {
+        productTags = await this.prisma.productTags.createMany({
+          data: tagsList.map((tag) => ({
+            productId: product.id,
+            tagId: tag.id,
+          })),
+        });
+      }
 
       return { product, productTags, category, tagsList };
     } catch (error) {
