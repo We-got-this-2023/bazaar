@@ -132,6 +132,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       },
     });
     setUser(val.user);
+    navigate("/login");
   }
 
   async function login(data: { email: string; password: string }) {
