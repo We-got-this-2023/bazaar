@@ -28,7 +28,6 @@ interface FormData {
 
 export default function DeliveryForm({ title, className }: DeliveryFormProps) {
   const { user, isLoading, setUserInformation } = useAuth();
-  const [fileNamesOutlet, setFileNamesOutlet] = useState<JSX.Element>();
   const [delivery, setDelivery] = useState<FormData>();
   const getDeliveryInformation = async () => {
     if (isLoading) return;
@@ -55,6 +54,7 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
   const onSubmit = async (data: FormData) => {
     await setUserInformation({ ...user, ...data });
   };
+
   useEffect(() => {
     (async () => {
       const res = await getDeliveryInformation();

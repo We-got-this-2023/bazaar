@@ -11,7 +11,7 @@ export default function Checkout() {
   const { cart: items, cartAddItem, checkoutPrice } = useMisc();
 
   return (
-    <div className="flex h-full w-full justify-between px-8">
+    <div className="flex w-full justify-between px-8">
       <div className="m-4 flex w-full max-w-3xl flex-col gap-8">
         <div className="flex flex-col">
           <h1 className="self-center pb-12 pt-6 text-2xl font-bold">
