@@ -84,8 +84,8 @@ model PaymentMethod {
 
 model Order {
  id        Int      @default(autoincrement()) @id
- paymentMethodId Int
- paymentMethod PaymentMethod @relation(fields: [paymentMethodId], references: [id])
+ paymentMethodId Int?
+ paymentMethod PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
  userId Int?
  user User? @relation(fields: [userId], references: [id])
  orderStatus String

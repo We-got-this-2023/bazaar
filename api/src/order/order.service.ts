@@ -19,10 +19,11 @@ export class OrderService {
     return orders;
   }
 
-  async addOrder(productIds: number[], orderDto: OrderDto): Promise<OrderDto> {
+  async addOrder(orderDto: OrderDto) {
+    console.log(orderDto);
     const order = await this.prisma.order.create({
       data: {
-        paymentMethodId: orderDto.paymentMethodId,
+        // paymentMethodId: orderDto.paymentMethodId,
         orderStatus: orderDto.orderStatus,
         userId: orderDto.userId,
       },
@@ -31,7 +32,7 @@ export class OrderService {
     const products = await this.prisma.product.updateMany({
       where: {
         id: {
-          in: productIds,
+          in: orderDto.productIds,
         },
       },
       data: {
@@ -39,6 +40,7 @@ export class OrderService {
       },
     });
 
+    // convert to async promise shit
     return order;
   }
 }
