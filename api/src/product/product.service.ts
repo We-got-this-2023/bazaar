@@ -162,7 +162,6 @@ export class ProductService {
               OR: [
                 { name: { contains: query, mode: 'insensitive' } },
                 { description: { contains: query, mode: 'insensitive' } },
-                // { tags: { has: query } },
               ],
             },
           ],
@@ -213,15 +212,67 @@ export class ProductService {
 
   async updateProduct(id: string, productDto: ProductDto) {
     try {
-      //might need to deconstruct productDto from body
+      const { name, description, price, categoryName, tags, ratings, orderId } =
+        productDto;
+
+      const updatedTags = tags.split(' ');
+
+      const category = await this.prisma.category.findFirst({
+        where: {
+          categoryName: categoryName,
+        },
+      });
+
+      if (!category) {
+        const category = await this.prisma.category.create({
+          data: {
+            categoryName: categoryName,
+            description: 'description',
+          },
+        });
+      }
+
+      const tagsList = await this.prisma.tags.findMany({
+        where: {
+          name: {
+            in: updatedTags,
+          },
+        },
+      });
+
+      if (tagsList.length !== updatedTags.length) {
+        const tagList = [];
+        for (const tag of updatedTags) {
+          const tagItem = await this.prisma.tags.create({
+            data: {
+              name: tag,
+            },
+          });
+          tagsList.push(tagItem);
+        }
+      }
+
       const product = await this.prisma.product.update({
         where: {
           id: Number(id),
         },
         data: {
-          ...productDto,
+          name,
+          description,
+          price,
+          categoryId: category.id,
+          ratings,
+          orderId,
         },
       });
+
+      const productTags = await this.prisma.productTags.createMany({
+        data: tagsList.map((tag) => ({
+          productId: product.id,
+          tagId: tag.id,
+        })),
+      });
+
       return product;
     } catch (error) {
       console.log(error);

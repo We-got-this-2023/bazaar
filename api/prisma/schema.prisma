@@ -33,6 +33,7 @@ model Product {
  order Order? @relation(fields: [orderId], references: [id])
  name     String
  description String?
+ ratings  Int[]
  imagesPath String[]
  price     Float
  createdAt DateTime @default(now())
