@@ -84,9 +84,6 @@ export default function Navbar() {
             className="w-16 transition-transform duration-200 hover:scale-110"
           />
         </Link>
-        <Link to="/profile">
-          <DefaultImage className="w-16 transition-transform duration-200 hover:scale-110" />
-        </Link>
       </div>
     </nav>
   );

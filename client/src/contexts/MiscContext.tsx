@@ -116,7 +116,6 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
     if (typeof quantity !== "number") return;
     if (quantity == 0) {
       cartRemoveAllItem(product.id);
-      updateCartInfo(cart);
       return;
     }
     const newCart: Product[] = [];
