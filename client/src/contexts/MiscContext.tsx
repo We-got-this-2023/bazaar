@@ -9,6 +9,8 @@ interface MiscContextI extends Context<{}> {
   cartRemoveItem: (item: Product) => void;
   changeQuantity: (product: Product, number: number) => void;
   checkoutPrice: number;
+  setCart: (cart: Product[]) => void;
+  updateCartInfo: (cart: Product[]) => void;
 }
 
 export type Product = {
@@ -147,6 +149,8 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
     changeQuantity,
     cartNumber,
     checkoutPrice,
+    setCart,
+    updateCartInfo,
   };
 
   return <MiscContext.Provider value={value}>{children}</MiscContext.Provider>;

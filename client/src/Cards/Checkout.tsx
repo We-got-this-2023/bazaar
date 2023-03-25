@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Product, useMisc } from "../contexts/MiscContext";
 
@@ -15,10 +16,11 @@ export interface Order {
 }
 
 export default function CheckoutSummary({ price, className = "" }: Props) {
-  const { cart } = useMisc();
+  const { cart, setCart, updateCartInfo } = useMisc();
   const { user } = useAuth();
   const [total, setTotal] = useState("0.00");
   const [tax, setTax] = useState("1.0825");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const thisTax = (parseFloat(price) * 0.0825).toFixed(2);
@@ -50,6 +52,8 @@ export default function CheckoutSummary({ price, className = "" }: Props) {
   async function submit() {
     try {
       const order = getOrder();
+      if (!order || !order.products || order.products.length === 0)
+        throw new Error("Something went wrong");
       const res = await fetch(import.meta.env.VITE_API + "/order", {
         method: "POST",
         headers: {
@@ -64,9 +68,16 @@ export default function CheckoutSummary({ price, className = "" }: Props) {
         body: JSON.stringify(order),
       });
       if (!res.ok) throw new Error("Something went wrong");
+      setCart([]);
+      localStorage.setItem("cart", JSON.stringify([]));
+      updateCartInfo([]);
+      navigate("/");
       return res.json();
     } catch (err) {
       console.log(err);
+      setCart([]);
+      localStorage.setItem("cart", JSON.stringify([]));
+      updateCartInfo([]);
     }
   }
 
