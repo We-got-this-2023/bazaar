@@ -52,6 +52,7 @@ export default function CheckoutSummary({ price, className = "" }: Props) {
   async function submit() {
     try {
       const order = getOrder();
+      console.log(order.products);
       if (!order || !order.products || order.products.length === 0)
         throw new Error("Something went wrong");
       const res = await fetch(import.meta.env.VITE_API + "/order", {
