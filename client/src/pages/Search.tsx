@@ -98,6 +98,7 @@ function useSearch(cleanQueryString: string) {
         const url = encodeURI(
           `${import.meta.env.VITE_API}/product/params${cleanQueryString}`
         );
+        console.log(url);
         const res = await fetch(url, {
           method: "GET",
           headers: {

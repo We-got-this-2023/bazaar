@@ -14,6 +14,7 @@ interface AuthContextI extends Context<{}> {
   isLoading: boolean;
   error: string;
   setUserInformation: (user: any) => Promise<void>;
+  updateUser: () => Promise<void>;
 }
 
 export interface User {
@@ -87,7 +88,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
             ? errors[res.status]
             : "Something went wrong with the request. Please try again later."
         );
-        console.log(error);
+        throw new Error(error);
       }
     } catch (err: any) {
       console.log(err);
@@ -104,11 +105,10 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   }) => {
     data.email = data.email.toLowerCase().trim();
 
-    const val = await fetchWrapper(`http://localhost:3000/auth/signup`, {
+    const val = await fetchWrapper(`/auth/signup`, {
       method: "POST",
       data,
     });
-    console.log(val);
     return val;
   };
 
@@ -131,9 +131,8 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
         500: "Something went wrong while updating your profile. Please try again later.",
       },
     });
-    console.log("User");
-    console.log(val);
-    // setUser(val);
+    setUser(val.user);
+    navigate("/login");
   }
 
   async function login(data: { email: string; password: string }) {
@@ -143,6 +142,8 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       data,
       credentials: "include",
     });
+    console.log(res);
+    setUser(res);
     navigate("/");
   }
 
@@ -161,6 +162,12 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       },
     });
     return res.user;
+  }
+
+  async function updateUser() {
+    if (!user) throw new Error("No user found");
+    const newUser = await getUser(user.id);
+    setUser(newUser);
   }
 
   useEffect(() => {
@@ -195,6 +202,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     getUser,
     isLoading,
     error,
+    updateUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

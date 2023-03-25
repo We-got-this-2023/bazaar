@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Product } from "../contexts/MiscContext";
 import Form from "../formElements/Form";
@@ -50,13 +50,20 @@ export default function EditProduct() {
         const res = await fetch(import.meta.env.VITE_API + "/product/" + id, {
           method: "PATCH",
           body: formData,
+          headers: {
+            Authorization:
+              "Bearer " +
+              document.cookie
+                .split(";")
+                .filter((item) => item.startsWith("token="))[0]
+                .split("=")[1],
+          },
         });
         const json = await res.json();
-
         if (!res.ok) throw new Error(json.message);
+        navigate("/products");
         return json;
       } else {
-        console.log(formData);
         const res = await fetch(import.meta.env.VITE_API + "/product", {
           method: "POST",
           body: formData,
@@ -69,7 +76,6 @@ export default function EditProduct() {
                 .split("=")[1],
           },
         });
-        console.log(res);
         if (!res.ok) throw new Error(res.statusText);
         navigate("/products");
       }

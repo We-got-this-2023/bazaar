@@ -9,7 +9,7 @@ export class OrderService {
   async getOrders(id: number) {
     const orders = await this.prisma.order.findMany({
       where: {
-        userId: id,
+        userId: Number(id),
       },
       include: {
         products: true,
@@ -19,26 +19,30 @@ export class OrderService {
     return orders;
   }
 
-  async addOrder(productIds: number[], orderDto: OrderDto): Promise<OrderDto> {
+  // Product can't be linked to the order after another order is created.
+  // First product gets linked fine, but the ones after that don't.
+  async addOrder(orderDto: OrderDto) {
+    console.log(orderDto);
     const order = await this.prisma.order.create({
       data: {
-        paymentMethodId: orderDto.paymentMethodId,
+        // paymentMethodId: orderDto.paymentMethodId,
         orderStatus: orderDto.orderStatus,
-        userId: orderDto.userId,
+        userId: Number(orderDto.userId),
       },
     });
 
     const products = await this.prisma.product.updateMany({
       where: {
         id: {
-          in: productIds,
+          in: orderDto.productIds,
         },
       },
       data: {
-        orderId: order.id,
+        orderId: Number(order.id),
       },
     });
 
+    // convert to async promise shit
     return order;
   }
 }

@@ -36,7 +36,7 @@ export default function Navbar() {
 
       <div className="flex h-full w-full items-center gap-6">
         <Link
-          to="/"
+          to="/search"
           className="group flex items-center justify-center font-logo text-4xl transition-transform duration-200 hover:scale-105"
         >
           <Logo />
@@ -83,9 +83,6 @@ export default function Navbar() {
             number={cartNumber}
             className="w-16 transition-transform duration-200 hover:scale-110"
           />
-        </Link>
-        <Link to="/profile">
-          <DefaultImage className="w-16 transition-transform duration-200 hover:scale-110" />
         </Link>
       </div>
     </nav>

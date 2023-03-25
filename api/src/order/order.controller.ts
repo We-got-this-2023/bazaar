@@ -8,11 +8,9 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Post()
-  addOrder(
-    @Body() productIds: number[],
-    orderDto: OrderDto,
-  ): Promise<OrderDto> {
-    return this.orderService.addOrder(productIds, orderDto);
+  addOrder(@Body() orderDto: OrderDto) {
+    // async promise shit here too dude
+    return this.orderService.addOrder(orderDto);
   }
 
   @Get('all/:id')

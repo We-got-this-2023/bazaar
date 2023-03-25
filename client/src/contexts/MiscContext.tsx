@@ -8,6 +8,9 @@ interface MiscContextI extends Context<{}> {
   cartAddItem: (item: Product) => void;
   cartRemoveItem: (item: Product) => void;
   changeQuantity: (product: Product, number: number) => void;
+  checkoutPrice: number;
+  setCart: (cart: Product[]) => void;
+  updateCartInfo: (cart: Product[]) => void;
 }
 
 export type Product = {
@@ -33,6 +36,7 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
   const [searchIsEmpty, setSearchIsEmpty] = useState<boolean>(isEmptySearch());
   const [cartNumber, setCartNumber] = useState<number>(0);
   const [cart, setCart] = useState<Product[]>([]);
+  const [checkoutPrice, setCheckoutPrice] = useState<string>("0.00");
   useEffect(() => {
     setCart(getCart());
   }, []);
@@ -41,6 +45,25 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
     let number = 0;
     for (let i = 0; i < passCart.length; i++) number += passCart[i].quantity;
     setCartNumber(number);
+  }
+
+  function getCheckoutPrice(passCart: Product[]) {
+    let price = 0;
+    for (let i = 0; i < passCart.length; i++) {
+      price += passCart[i].price * passCart[i].quantity;
+    }
+    const split = price.toString().split(".");
+    let dol, cen;
+    if (split.length > 1) cen = split[1];
+    else cen = "00";
+    dol = split[0];
+    const retPrice = dol + "." + cen;
+    setCheckoutPrice(retPrice);
+  }
+
+  function updateCartInfo(passCart: Product[]) {
+    resetCartNumber(passCart);
+    getCheckoutPrice(passCart);
   }
 
   function getCart() {
@@ -53,7 +76,7 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
           typeof item.quantity === "number" && item.quantity > 0
       );
       localStorage.setItem("cart", JSON.stringify(newCart));
-      resetCartNumber(newCart);
+      updateCartInfo(newCart);
       return newCart;
     }
     return [];
@@ -88,14 +111,13 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
     const newCart = cart.filter((item) => item.id !== Number(id));
     setCart(newCart);
     localStorage.setItem("cart", JSON.stringify(newCart));
-    resetCartNumber(newCart);
+    updateCartInfo(newCart);
   }
 
   function changeQuantity(product: Product, quantity: number) {
     if (typeof quantity !== "number") return;
     if (quantity == 0) {
       cartRemoveAllItem(product.id);
-      resetCartNumber(cart);
       return;
     }
     const newCart: Product[] = [];
@@ -108,14 +130,14 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
       }
       setCart([...newCart]);
       localStorage.setItem("cart", JSON.stringify([...newCart]));
-      resetCartNumber([...newCart]);
+      updateCartInfo([...newCart]);
     }
     if (!hasChanged) {
       product.quantity = quantity;
       newCart.push(product);
       setCart([...newCart]);
       localStorage.setItem("cart", JSON.stringify([...newCart]));
-      resetCartNumber([...newCart]);
+      updateCartInfo([...newCart]);
     }
   }
 
@@ -126,6 +148,9 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
     cartRemoveItem,
     changeQuantity,
     cartNumber,
+    checkoutPrice,
+    setCart,
+    updateCartInfo,
   };
 
   return <MiscContext.Provider value={value}>{children}</MiscContext.Provider>;

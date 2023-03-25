@@ -12,10 +12,11 @@ export default function AccountCard({ user }: { user: User }) {
       day: "numeric",
     })
   );
-  const { setUserInformation } = useAuth();
+  const { setUserInformation, updateUser } = useAuth();
 
   const onSubmit = async (data: FormData) => {
     await setUserInformation({ ...user, ...data });
+    await updateUser();
   };
 
   return (
@@ -36,9 +37,40 @@ export default function AccountCard({ user }: { user: User }) {
           <span className="opacity-60">User since {createdAt}</span>
         </div>
         <Form onSubmit={onSubmit} className="flex flex-col justify-around">
-          <Input name="name" type="text" initialValue={user.name} />
-          <Input name="email" type="email" initialValue={user.email} />
-          <button type="submit">Submit</button>
+          <Input
+            name="name"
+            type="text"
+            initialValue={user.name}
+            options={{
+              required: "Please enter a name.",
+              maxLength: {
+                value: 20,
+                message: "Name must be less than 20 characters.",
+              },
+              minLength: {
+                value: 3,
+                message: "Name must be at least 3 characters.",
+              },
+            }}
+          />
+          <Input
+            name="email"
+            type="email"
+            initialValue={user.email}
+            options={{
+              required: "Please enter an email.",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Please enter a valid email.",
+              },
+            }}
+          />
+          <button
+            className="h-fit w-fit self-center rounded-lg bg-silk-blue p-3 text-white transition-all duration-200 hover:brightness-95 "
+            type="submit"
+          >
+            Submit
+          </button>
         </Form>
       </div>
     </div>
