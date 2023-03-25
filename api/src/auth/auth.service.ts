@@ -69,7 +69,7 @@ export class AuthService {
       throw new ForbiddenException('Could not signin');
     }
 
-    res.cookie('token', token, {});
+    res.cookie('token', token, { sameSite: 'strict' });
 
     return res.send({ message: 'Logged in succefully' });
   }
