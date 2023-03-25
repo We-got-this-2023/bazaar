@@ -105,7 +105,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   }) => {
     data.email = data.email.toLowerCase().trim();
 
-    const val = await fetchWrapper(`http://localhost:3000/auth/signup`, {
+    const val = await fetchWrapper(`/auth/signup`, {
       method: "POST",
       data,
     });
@@ -141,7 +141,8 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       data,
       credentials: "include",
     });
-    setUser(res.user);
+    console.log(res);
+    setUser(res);
     navigate("/");
   }
 
