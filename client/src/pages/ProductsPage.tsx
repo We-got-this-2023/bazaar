@@ -27,7 +27,6 @@ export default function ProductsPage() {
       }
     }
   );
-  console.log(products);
   const [openProduct, setOpenProduct] = useState({
     id: "",
     title: "",

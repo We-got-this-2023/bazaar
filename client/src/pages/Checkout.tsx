@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import CheckoutSummary from "../cards/Checkout";
 import ProductPreview from "../cards/Product";
@@ -9,7 +8,7 @@ import { Product, useMisc } from "../contexts/MiscContext";
 export default function Checkout() {
   const { user } = useAuth();
   // Leaving cartAddItem to add mock data for now
-  const { cart: items, cartAddItem, checkoutPrice } = useMisc();
+  const { cart: items, checkoutPrice } = useMisc();
 
   return (
     <div className="flex w-full justify-between px-8">
