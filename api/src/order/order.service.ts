@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { OrderDto } from './dto/order.dto';
+import { AddProductToOrder } from './dto/addProductToOrder.dto';
+import { UpdateProductDto } from './dto/updateProductDto.dto';
 
 @Injectable()
 export class OrderService {
@@ -44,5 +46,63 @@ export class OrderService {
 
     // convert to async promise shit
     return order;
+  }
+
+  async addProductToOrder(userId: number, dto: AddProductToOrder) {
+    try {
+      const order = await this.prisma.order.findUnique({
+        where: {
+          id: Number(dto.orderId),
+        },
+      });
+
+      if (!order) {
+        const order = await this.prisma.order.create({
+          data: {
+            orderStatus: dto.orderStatus || 'pending',
+            userId: Number(userId),
+          },
+        });
+      }
+
+      const product = await this.prisma.product.update({
+        where: {
+          id: Number(dto.productId),
+        },
+        data: {
+          orderId: Number(order.id),
+        },
+      });
+
+      return product;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async updateProduct(dto: UpdateProductDto) {
+    try {
+      const order = await this.prisma.order.update({
+        where: {
+          id: Number(dto.orderId),
+        },
+        data: {
+          orderStatus: dto.orderStatus || 'cancelled',
+        },
+      });
+
+      const product = await this.prisma.product.update({
+        where: {
+          id: Number(dto.productId),
+        },
+        data: {
+          orderId: Number(order.id) || null,
+        },
+      });
+
+      return product;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
