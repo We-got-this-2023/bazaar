@@ -70,6 +70,8 @@ export class AuthService {
     }
 
     res.cookie('token', token, { sameSite: 'strict' });
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
 
     return res.send({ message: 'Logged in succefully' });
   }
