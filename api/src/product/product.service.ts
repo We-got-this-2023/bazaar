@@ -108,42 +108,17 @@ export class ProductService {
     }
   }
 
-  // async getProductWithParams(productParamsDto: ProductParamsDto) {
-  //   const products = await this.prisma.product.findMany({
-  //     skip: Number(productParamsDto.p) - 1,
-  //     take: 10,
-  //     where: {
-  //       AND: [
-  //         {
-  //           name: {
-  //             contains: productParamsDto.q,
-  //             mode: 'insensitive',
-  //           },
-  //         },
-  //         {
-  //           price: {
-  //             gte: Number(productParamsDto.clo),
-  //             lte: Number(productParamsDto.chi),
-  //           },
-  //         },
-  //       ],
-  //     },
-  //   });
+  async getProductWithParams(query: ProductParamsDto) {
+    const productParams = query as ProductParamsDto;
 
-  //   return products;
-  // }
-
-  async getProductWithParams(req: ProductParamsDto) {
-    const productParams = req as ProductParamsDto;
-
-    // we removed ratings from product and user has now ratings      we can change that if needed
-    const query = productParams.q ?? '',
+    const updatedQuery = productParams.q ?? '',
       page = Number(productParams.p ?? 1),
       costLow = Number(productParams.clo ?? 0),
       costHigh = Number(productParams.chi ?? 999999999),
       sortBy = productParams.s ?? 'createdAt',
       order = productParams.o ?? 'asc',
-      timeSince = productParams.t || 999999999,
+      // timeSince = productParams.t || 999999999,
+      timeSince = 999999999,
       ratingLow = Number(productParams.rlo ?? 0),
       ratingHigh = Number(productParams.rhi ?? 999999999),
       someTags = productParams.stags
@@ -153,51 +128,71 @@ export class ProductService {
       notAnyTags = productParams.ntags ? productParams.ntags.split(',') : [];
 
     try {
-      const products = await this.prisma.product.findMany({
-        skip: page - 1,
-        take: 10,
+      const tags = await this.prisma.tags.findMany({
         where: {
-          AND: [
-            {
-              OR: [
-                { name: { contains: query, mode: 'insensitive' } },
-                { description: { contains: query, mode: 'insensitive' } },
-              ],
+          name: {
+            in: updatedQuery ? [updatedQuery] : [],
+          },
+        },
+      });
+
+      if (tags) {
+        const productTags = await this.prisma.productTags.findMany({
+          where: {
+            tagId: {
+              in: tags.map((tag) => tag.id),
             },
-          ],
-          NOT: {
-            price: {
-              gte: costLow,
-              lte: costHigh,
-            },
+          },
+        });
+
+        const productIds = productTags.map(
+          (productTag) => productTag.productId,
+        );
+
+        const products = await this.prisma.product.findMany({
+          skip: page - 1,
+          take: 10,
+          where: {
+            AND: [
+              {
+                id: {
+                  in: productIds,
+                },
+              },
+              {
+                price: {
+                  gte: costLow,
+                  lte: costHigh,
+                },
+                OR: [
+                  {
+                    name: {
+                      contains: updatedQuery,
+                      mode: 'insensitive',
+                    },
+                  },
+                  {
+                    description: {
+                      contains: updatedQuery,
+                      mode: 'insensitive',
+                    },
+                  },
+                ],
+              },
+            ],
             createdAt: {
               gte: new Date(timeSince),
             },
           },
-        },
-        orderBy: {
-          [sortBy]: order,
-        },
-      });
-
-      const productsbyTags = await this.prisma.product.findMany({
-        skip: page - 1,
-        take: 10,
-        where: {
-          name: { contains: query, mode: 'insensitive' },
-          // tags: { has: someTags },
-        },
-      });
-      if (!productsbyTags) {
-        return products;
-      } else {
-        return productsbyTags;
+          // orderBy: {
+          //   [sortBy]: order,
+          // },
+        });
       }
     } catch (error) {
       console.log(error);
     }
   }
-
   async getProductsOffset(id: string) {
     try {
       const products = await this.prisma.product.findMany({

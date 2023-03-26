@@ -59,8 +59,8 @@ export class ProductController {
   }
 
   @Get('params')
-  getProductWithParams(@Body() productParamsDto: ProductParamsDto) {
-    return this.productService.getProductWithParams(productParamsDto);
+  getProductWithParams(@Query() query: ProductParamsDto) {
+    return this.productService.getProductWithParams(query);
   }
 
   @Get('offset')
