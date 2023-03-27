@@ -3,17 +3,57 @@ import { PrismaService } from 'prisma/prisma.service';
 import { ProductDto } from './dto/product.dto';
 import { ProductParamsDto } from './dto/productParams.dto';
 import { addProductDto } from './dto/addProduct.dto';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import { response } from 'express';
+import { StreamableFile } from '@nestjs/common';
 
 @Injectable()
 export class ProductService {
   constructor(private prisma: PrismaService) {}
 
   async findOneProduct(id: string) {
-    return this.prisma.product.findUnique({
+    const product = await this.prisma.product.findUnique({
       where: {
         id: Number(id),
       },
     });
+
+    if (!product) return;
+
+    let imagesPath = product.imagesPath;
+
+    const [one, two, three] = imagesPath;
+
+    const files = [];
+
+    // for (let i = 0; i < imagesPath.length; i++) {
+    //   files.push(
+    //     readFileSync(join(__dirname, '..', '..', '..', imagesPath[i])),
+    //   );
+    // }
+
+    // response.send(files);
+    if (one) {
+      const file1 = readFileSync(join(__dirname, '..', '..', '..', one));
+      new StreamableFile(file1);
+      response.send(file1);
+    } else {
+    }
+    if (two) {
+      const file2 = readFileSync(join(__dirname, '..', '..', '..', two));
+      new StreamableFile(file2);
+      response.send(file2);
+    } else {
+    }
+    if (three) {
+      const file3 = readFileSync(join(__dirname, '..', '..', '..', three));
+      new StreamableFile(file3);
+      response.send(file3);
+    } else {
+    }
+
+    return { product };
   }
 
   async getProducts() {
@@ -126,6 +166,8 @@ export class ProductService {
         : undefined,
       allTags = productParams.atags ? productParams.atags.split(',') : [],
       notAnyTags = productParams.ntags ? productParams.ntags.split(',') : [];
+
+    console.log(updatedQuery);
 
     try {
       const tags = await this.prisma.tags.findMany({
@@ -285,5 +327,31 @@ export class ProductService {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async downloadFile() {
+    console.log(
+      readFileSync(
+        join(
+          __dirname,
+          '..',
+          '..',
+          '..',
+          'uploads',
+          '5c110a2bc80da4255e0ea6cf8a7b1cfe',
+        ),
+      ),
+    );
+
+    return readFileSync(
+      join(
+        __dirname,
+        '..',
+        '..',
+        '..',
+        'uploads',
+        '5c110a2bc80da4255e0ea6cf8a7b1cfe',
+      ),
+    );
   }
 }
