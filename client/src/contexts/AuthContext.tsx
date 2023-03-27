@@ -35,6 +35,10 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   const [error, setError] = useState<string | undefined>();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
   // Helper functions
   const clearUser = (error?: string) => {
     setIsLoading(false);
@@ -107,6 +111,10 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
 
     const val = await fetchWrapper(`/auth/signup`, {
       method: "POST",
+      headers: {
+        "access-control-allow-credentials": "true",
+        "Content-Type": "application/json",
+      },
       data,
     });
     return val;
@@ -139,10 +147,13 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     data.email = data.email.toLowerCase().trim();
     const res = await fetchWrapper(`/auth/signin`, {
       method: "POST",
+      headers: {
+        "access-control-allow-credentials": "true",
+        "Content-Type": "application/json",
+      },
       data,
       credentials: "include",
     });
-    console.log(res);
     setUser(res);
     navigate("/");
   }

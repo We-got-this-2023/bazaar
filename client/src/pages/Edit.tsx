@@ -10,7 +10,7 @@ interface FormDataStruct {
   name: string;
   description: string;
   price: number;
-  tags?: string[];
+  tags?: string;
   category?: string;
   images?: File[];
 }
@@ -44,7 +44,9 @@ export default function EditProduct() {
       formData.append("price", data.price);
       if (data.category) formData.append("category", data.category);
       if (data.tags) formData.append("tags", data.tags);
-      formData.append("userId", user.id.toString());
+      formData.append("userId", user.id?.toString());
+
+      console.log(formData);
 
       if (id) {
         const res = await fetch(import.meta.env.VITE_API + "/product/" + id, {
@@ -89,71 +91,79 @@ export default function EditProduct() {
       <h2 className="flex content-center justify-center pt-12 text-6xl capitalize">
         {id ? "Edit" : "Create"} product
       </h2>
-      <div className="flex h-full w-full content-center justify-center pt-6">
-        <Form onSubmit={onSubmit} className="flex gap-2">
-          <div className="h-full">
-            <Input
-              id="fileInput"
-              name="file"
-              type="file"
-              placementClassName="w-full"
-              className="h-[286px]"
-              initialValue={product?.file}
-            />
-          </div>
-          <div className="w-[480px]">
-            <Input
-              name="name"
-              type="text"
-              options={{
-                required: "Name is required",
-              }}
-              placementClassName="w-full"
-              initialValue={product?.name}
-            />
-            <TextArea
-              className="h-[120px]"
-              name="description"
-              placementClassName="w-full"
-              options={{}}
-              initialValue={product?.description}
-            />
-            <div className="flex gap-2">
+      <div className="mt-[60px] flex content-center items-center justify-center">
+        <div className="flex w-[660px] items-center justify-center gap-6 rounded-md border-[.5px] border-black bg-neutral-200 p-4">
+          <Form onSubmit={onSubmit} className="flex gap-2">
+            <div className="h-[292px] w-[120px] ">
               <Input
-                name="price"
-                type="number"
-                className="h-[44px]"
+                id="fileInput"
+                name="file"
+                type="file"
+                placementClassName="w-full"
+                className="w- h-[292px]"
+                initialValue={product?.file}
+              />
+            </div>
+            <div className="w-[480px]">
+              <Input
+                name="name"
+                type="text"
                 options={{
-                  required: "Price is required",
-                  min: {
-                    value: 0,
-                    message: "Price must be greater than 0",
-                  },
+                  required: "Name is required",
                 }}
                 placementClassName="w-full"
-                initialValue={product?.price?.toString()}
+                initialValue={product?.name}
               />
+              <TextArea
+                className="h-[120px]"
+                name="description"
+                placementClassName="w-full"
+                options={{}}
+                initialValue={product?.description}
+              />
+              <div className="flex gap-2">
+                <Input
+                  name="price"
+                  type="number"
+                  className="h-[44px]"
+                  options={{
+                    required: "Price is required",
+                    min: {
+                      value: 0,
+                      message: "Price must be greater than 0",
+                    },
+                  }}
+                  placementClassName="w-full"
+                  initialValue={product?.price?.toString()}
+                />
+                <Input
+                  className="h-[44px]"
+                  name="categoryName"
+                  type="text"
+                  placementClassName="w-full"
+                  options={{}}
+                  initialValue={product?.category}
+                />
+              </div>
               <Input
-                className="h-[44px]"
-                name="categoryName"
+                name="tags"
                 type="text"
                 placementClassName="w-full"
                 options={{}}
-                initialValue={product?.category}
+                initialValue={product?.tags}
               />
             </div>
-            <Input
-              name="tags"
-              type="text"
-              placementClassName="w-full"
-              options={{}}
-              // initialValue={product?.tags}
-              // have to update this when we figure out how to handle multiple tags
-            />
-          </div>
 
-          <button type="submit">Submit</button>
-        </Form>
+            <button
+              className=" absolute left-[48%] bottom-[220px] w-[100px] rounded-md border-[.5px] border-black bg-neutral-200 p-2
+               hover:shadow-[0_0_8px_2px_#00000070] dark:border-white dark:bg-neutral-900 dark:shadow-[-1_0_5px_1px_#ffffff80]
+               dark:hover:shadow-[0_0_10px_2px_#ffffff90]"
+              type="submit"
+            >
+              Submit
+            </button>
+          </Form>
+        </div>
       </div>
     </div>
   );

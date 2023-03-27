@@ -3,17 +3,57 @@ import { PrismaService } from 'prisma/prisma.service';
 import { ProductDto } from './dto/product.dto';
 import { ProductParamsDto } from './dto/productParams.dto';
 import { addProductDto } from './dto/addProduct.dto';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import { response } from 'express';
+import { StreamableFile } from '@nestjs/common';
 
 @Injectable()
 export class ProductService {
   constructor(private prisma: PrismaService) {}
 
   async findOneProduct(id: string) {
-    return this.prisma.product.findUnique({
+    const product = await this.prisma.product.findUnique({
       where: {
         id: Number(id),
       },
     });
+
+    if (!product) return;
+
+    let imagesPath = product.imagesPath;
+
+    const [one, two, three] = imagesPath;
+
+    const files = [];
+
+    // for (let i = 0; i < imagesPath.length; i++) {
+    //   files.push(
+    //     readFileSync(join(__dirname, '..', '..', '..', imagesPath[i])),
+    //   );
+    // }
+
+    // response.send(files);
+    if (one) {
+      const file1 = readFileSync(join(__dirname, '..', '..', '..', one));
+      new StreamableFile(file1);
+      response.send(file1);
+    } else {
+    }
+    if (two) {
+      const file2 = readFileSync(join(__dirname, '..', '..', '..', two));
+      new StreamableFile(file2);
+      response.send(file2);
+    } else {
+    }
+    if (three) {
+      const file3 = readFileSync(join(__dirname, '..', '..', '..', three));
+      new StreamableFile(file3);
+      response.send(file3);
+    } else {
+    }
+
+    return { product };
   }
 
   async getProducts() {
@@ -108,42 +148,17 @@ export class ProductService {
     }
   }
 
-  // async getProductWithParams(productParamsDto: ProductParamsDto) {
-  //   const products = await this.prisma.product.findMany({
-  //     skip: Number(productParamsDto.p) - 1,
-  //     take: 10,
-  //     where: {
-  //       AND: [
-  //         {
-  //           name: {
-  //             contains: productParamsDto.q,
-  //             mode: 'insensitive',
-  //           },
-  //         },
-  //         {
-  //           price: {
-  //             gte: Number(productParamsDto.clo),
-  //             lte: Number(productParamsDto.chi),
-  //           },
-  //         },
-  //       ],
-  //     },
-  //   });
+  async getProductWithParams(query: ProductParamsDto) {
+    const productParams = query as ProductParamsDto;
 
-  //   return products;
-  // }
-
-  async getProductWithParams(req: ProductParamsDto) {
-    const productParams = req as ProductParamsDto;
-
-    // we removed ratings from product and user has now ratings      we can change that if needed
-    const query = productParams.q ?? '',
+    const updatedQuery = productParams.q ?? '',
       page = Number(productParams.p ?? 1),
       costLow = Number(productParams.clo ?? 0),
       costHigh = Number(productParams.chi ?? 999999999),
       sortBy = productParams.s ?? 'createdAt',
       order = productParams.o ?? 'asc',
-      timeSince = productParams.t || 999999999,
+      // timeSince = productParams.t || 999999999,
+      timeSince = 999999999,
       ratingLow = Number(productParams.rlo ?? 0),
       ratingHigh = Number(productParams.rhi ?? 999999999),
       someTags = productParams.stags
@@ -152,52 +167,74 @@ export class ProductService {
       allTags = productParams.atags ? productParams.atags.split(',') : [],
       notAnyTags = productParams.ntags ? productParams.ntags.split(',') : [];
 
+    console.log(updatedQuery);
+
     try {
-      const products = await this.prisma.product.findMany({
-        skip: page - 1,
-        take: 10,
+      const tags = await this.prisma.tags.findMany({
         where: {
-          AND: [
-            {
-              OR: [
-                { name: { contains: query, mode: 'insensitive' } },
-                { description: { contains: query, mode: 'insensitive' } },
-              ],
+          name: {
+            in: updatedQuery ? [updatedQuery] : [],
+          },
+        },
+      });
+
+      if (tags) {
+        const productTags = await this.prisma.productTags.findMany({
+          where: {
+            tagId: {
+              in: tags.map((tag) => tag.id),
             },
-          ],
-          NOT: {
-            price: {
-              gte: costLow,
-              lte: costHigh,
-            },
+          },
+        });
+
+        const productIds = productTags.map(
+          (productTag) => productTag.productId,
+        );
+
+        const products = await this.prisma.product.findMany({
+          skip: page - 1,
+          take: 10,
+          where: {
+            AND: [
+              {
+                id: {
+                  in: productIds,
+                },
+              },
+              {
+                price: {
+                  gte: costLow,
+                  lte: costHigh,
+                },
+                OR: [
+                  {
+                    name: {
+                      contains: updatedQuery,
+                      mode: 'insensitive',
+                    },
+                  },
+                  {
+                    description: {
+                      contains: updatedQuery,
+                      mode: 'insensitive',
+                    },
+                  },
+                ],
+              },
+            ],
             createdAt: {
               gte: new Date(timeSince),
             },
           },
-        },
-        orderBy: {
-          [sortBy]: order,
-        },
-      });
-
-      const productsbyTags = await this.prisma.product.findMany({
-        skip: page - 1,
-        take: 10,
-        where: {
-          name: { contains: query, mode: 'insensitive' },
-          // tags: { has: someTags },
-        },
-      });
-      if (!productsbyTags) {
-        return products;
-      } else {
-        return productsbyTags;
+          // orderBy: {
+          //   [sortBy]: order,
+          // },
+        });
       }
     } catch (error) {
       console.log(error);
     }
   }
-
   async getProductsOffset(id: string) {
     try {
       const products = await this.prisma.product.findMany({
@@ -290,5 +327,31 @@ export class ProductService {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async downloadFile() {
+    console.log(
+      readFileSync(
+        join(
+          __dirname,
+          '..',
+          '..',
+          '..',
+          'uploads',
+          '5c110a2bc80da4255e0ea6cf8a7b1cfe',
+        ),
+      ),
+    );
+
+    return readFileSync(
+      join(
+        __dirname,
+        '..',
+        '..',
+        '..',
+        'uploads',
+        '5c110a2bc80da4255e0ea6cf8a7b1cfe',
+      ),
+    );
   }
 }

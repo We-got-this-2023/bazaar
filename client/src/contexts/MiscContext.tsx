@@ -20,7 +20,7 @@ export type Product = {
   quantity: number;
   description: string;
   images: string[];
-  tags: string[];
+  tags: string; //changes from array to string
   userId: number;
   createdAt: string;
   file?: File;
