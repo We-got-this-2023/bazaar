@@ -13,51 +13,32 @@ export class ProductService {
   constructor(private prisma: PrismaService) {}
 
   async findOneProduct(id: string) {
+    const updatedId = +`${id}`;
+
     const product = await this.prisma.product.findUnique({
       where: {
-        id: Number(id),
+        id: Number(updatedId),
       },
     });
 
     if (!product) return;
 
-    let imagesPath = product.imagesPath;
+    const imagePath = product.imagesPath;
 
-    const [one, two, three] = imagesPath;
+    const image = readFileSync(join(__dirname, '..', '..', '..', imagePath));
 
-    const files = [];
-
-    // for (let i = 0; i < imagesPath.length; i++) {
-    //   files.push(
-    //     readFileSync(join(__dirname, '..', '..', '..', imagesPath[i])),
-    //   );
-    // }
-
-    // response.send(files);
-    if (one) {
-      const file1 = readFileSync(join(__dirname, '..', '..', '..', one));
-      new StreamableFile(file1);
-      response.send(file1);
-    } else {
-    }
-    if (two) {
-      const file2 = readFileSync(join(__dirname, '..', '..', '..', two));
-      new StreamableFile(file2);
-      response.send(file2);
-    } else {
-    }
-    if (three) {
-      const file3 = readFileSync(join(__dirname, '..', '..', '..', three));
-      new StreamableFile(file3);
-      response.send(file3);
-    } else {
-    }
-
-    return { product };
+    return { product, image };
   }
 
-  async getProducts() {
-    return this.prisma.product.findMany();
+  async getProducts(id: any) {
+    console.log(Number(id));
+    const ownProducts = await this.prisma.product.findMany({
+      where: {
+        userId: Number(id.userId),
+      },
+    });
+    console.log(ownProducts);
+    return ownProducts;
   }
 
   async getProductsCursor({ take, cursor }) {
@@ -77,7 +58,9 @@ export class ProductService {
         price,
         tags,
       } = addProductDto;
-      const imagePath = file.path;
+
+      const updatesPath = file.path || null;
+
       const updatedTags = tags?.split(' ');
 
       let category;
@@ -126,7 +109,7 @@ export class ProductService {
           name,
           categoryId: categoryName ? Number(category.id) : undefined,
           description,
-          imagesPath: imagePath,
+          imagesPath: updatesPath,
           price: Number(price),
         },
       });
@@ -167,13 +150,11 @@ export class ProductService {
       allTags = productParams.atags ? productParams.atags.split(',') : [],
       notAnyTags = productParams.ntags ? productParams.ntags.split(',') : [];
 
-    console.log(updatedQuery);
-
     try {
       const tags = await this.prisma.tags.findMany({
         where: {
           name: {
-            in: updatedQuery ? [updatedQuery] : [],
+            in: updatedQuery,
           },
         },
       });
@@ -191,50 +172,102 @@ export class ProductService {
           (productTag) => productTag.productId,
         );
 
-        const products = await this.prisma.product.findMany({
+        console.log(productIds);
+
+        // const products = await this.prisma.product.findMany({
+        //   skip: page - 1,
+        //   take: 10,
+        //   where: {
+        //     AND: [
+        //       {
+        //         id: {
+        //           in: productIds,
+        //         },
+        //       },
+        //       {
+        //         price: {
+        //           gte: costLow,
+        //           lte: costHigh,
+        //         },
+        //         OR: [
+        //           {
+        //             name: {
+        //               contains: updatedQuery,
+        //               mode: 'insensitive',
+        //             },
+        //           },
+        //           {
+        //             description: {
+        //               contains: updatedQuery,
+        //               mode: 'insensitive',
+        //             },
+        //           },
+        //         ],
+        //       },
+        //     ],
+        //     createdAt: {
+        //       gte: new Date(timeSince),
+        //     },
+        //   },
+        // orderBy: {
+        //   [sortBy]: order,
+        // },
+        // });
+
+        const newProducts = await this.prisma.product.findMany({
           skip: page - 1,
           take: 10,
           where: {
-            AND: [
+            OR: [
               {
-                id: {
-                  in: productIds,
-                },
-              },
-              {
-                price: {
-                  gte: costLow,
-                  lte: costHigh,
-                },
-                OR: [
+                AND: [
                   {
-                    name: {
-                      contains: updatedQuery,
-                      mode: 'insensitive',
+                    id: {
+                      in: productIds,
                     },
                   },
                   {
-                    description: {
-                      contains: updatedQuery,
-                      mode: 'insensitive',
+                    price: {
+                      gte: costLow,
+                      lte: costHigh,
                     },
                   },
                 ],
               },
+              {
+                name: {
+                  contains: updatedQuery,
+                  mode: 'insensitive',
+                },
+                //we could make new query for other params if this one is empty
+              },
             ],
-            createdAt: {
-              gte: new Date(timeSince),
-            },
+            // createdAt: {
+            //   gte: new Date(timeSince),
+            // },
           },
           // orderBy: {
           //   [sortBy]: order,
           // },
         });
+
+        console.log(newProducts);
+        // console.log(products);
+        // console.log(`products: ${newProducts}`);    !!!why does this give back [object Object]????!!!
+
+        const files = newProducts.map((product) => {
+          const imagePath = product.imagesPath;
+          const image = readFileSync(
+            join(__dirname, '..', '..', '..', imagePath),
+          );
+        });
+        // return { products, files };
       }
     } catch (error) {
       console.log(error);
     }
   }
+
   async getProductsOffset(id: string) {
     try {
       const products = await this.prisma.product.findMany({
