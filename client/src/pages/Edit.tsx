@@ -66,7 +66,7 @@ export default function EditProduct() {
         navigate("/products");
         return json;
       } else {
-        const res = await fetch(import.meta.env.VITE_API + "/product", {
+        const res = await fetch(import.meta.env.VITE_API + "/product/" + id, {
           method: "POST",
           body: formData,
           headers: {

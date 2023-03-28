@@ -1,7 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
 
 export class addProductDto {
-  id: number;
+  id?: number;
 
   @IsNotEmpty()
   userId: number;
@@ -16,7 +16,7 @@ export class addProductDto {
   @IsNotEmpty()
   price: number;
 
-  imagesPath?: string[];
+  imagesPath?: string;
 
   tags?: string;
 

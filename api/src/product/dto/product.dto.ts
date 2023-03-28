@@ -1,5 +1,3 @@
-import { IsNotEmpty } from 'class-validator';
-
 export class ProductDto {
   id: number;
 
@@ -13,7 +11,7 @@ export class ProductDto {
 
   price: number;
 
-  imagesPath?: string[];
+  imagesPath?: string;
 
   tags?: string;
 

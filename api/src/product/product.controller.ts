@@ -22,6 +22,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { addProductDto } from './dto/addProduct.dto';
 import { Response } from 'express';
 
+// need to change order of controllers to make this work
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
@@ -33,6 +34,12 @@ export class ProductController {
     return new StreamableFile(file);
   }
 
+  @Get('params')
+  getProductWithParams(@Query() query: ProductParamsDto) {
+    console.log(query);
+    return this.productService.getProductWithParams(query);
+  }
+
   @Get(':id')
   findOne(
     @Param('id') id: string,
@@ -41,7 +48,7 @@ export class ProductController {
     return this.productService.findOneProduct(id);
   }
 
-  @Post()
+  @Post(':id')
   @UseInterceptors(FileInterceptor('file', { dest: './uploads' }))
   addProduct(
     @UploadedFile(
@@ -56,13 +63,12 @@ export class ProductController {
     file: Express.Multer.File,
     @Body() addProductDto: addProductDto,
   ) {
-    console.log(addProductDto);
     return this.productService.addProduct(file, addProductDto);
   }
 
-  @Get('all')
-  getProducts(): Promise<ProductDto[]> {
-    return this.productService.getProducts();
+  @Get('all/:id')
+  getProducts(@Query() id: any): Promise<ProductDto[]> {
+    return this.productService.getProducts(id);
   }
 
   @Get('cursor')
@@ -74,11 +80,6 @@ export class ProductController {
       take,
       cursor,
     });
-  }
-
-  @Get('params')
-  getProductWithParams(@Query() query: ProductParamsDto) {
-    return this.productService.getProductWithParams(query);
   }
 
   @Get('offset')
