@@ -1,13 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import ReactDOM from "react-dom";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ProductPreview from "../cards/Product";
 import { useAuth } from "../contexts/AuthContext";
 import { Product } from "../contexts/MiscContext";
 
 export default function ProductsPage() {
   const { user } = useAuth();
+
+  const userId = user?.id;
   const {
     data: products,
     isLoading,
@@ -16,7 +18,7 @@ export default function ProductsPage() {
     ["products"],
     async () => {
       const res = await fetch(
-        import.meta.env.VITE_API + "/product/params?userId=" + user.id
+        import.meta.env.VITE_API + "/product/all/params?userId=" + userId
       );
       if (res.ok) {
         const data = await res.json();
