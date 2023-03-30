@@ -23,6 +23,7 @@ export class OrderService {
 
   // Product can't be linked to the order after another order is created.
   // First product gets linked fine, but the ones after that don't.
+  // !!!thought we only havge 1 of each product and if its already in a order, we cant add have it in a other order
   async addOrder(orderDto: OrderDto) {
     console.log(orderDto);
     const order = await this.prisma.order.create({

@@ -30,7 +30,7 @@ export default function Search() {
   const { data, isLoading } = useSearch(cleanQueryString);
 
   useEffect(() => {
-    if (data) setResults(data);
+    if (data) setResults(data.products); // need to set image and display it
   }, [data]);
 
   async function setSessionParams(data: FormData) {
