@@ -59,7 +59,7 @@ export class ProductService {
         tags,
       } = addProductDto;
 
-      const updatesPath = file.path || null;
+      const updatedPath = file?.path || 'undefined';
 
       const updatedTags = tags?.split(' ');
 
@@ -109,7 +109,7 @@ export class ProductService {
           name,
           categoryId: categoryName ? Number(category.id) : undefined,
           description,
-          imagesPath: updatesPath,
+          imagesPath: updatedPath,
           price: Number(price),
         },
       });
@@ -151,117 +151,129 @@ export class ProductService {
       notAnyTags = productParams.ntags ? productParams.ntags.split(',') : [];
 
     try {
-      const tags = await this.prisma.tags.findMany({
-        where: {
-          name: {
-            in: updatedQuery,
-          },
-        },
-      });
-
-      if (tags) {
-        const productTags = await this.prisma.productTags.findMany({
+      if (updatedQuery === '') {
+        const products = await this.prisma.product.findMany({
+          skip: page - 1,
+          take: 10,
+        });
+        return { products };
+      } else {
+        const tags = await this.prisma.tags.findMany({
           where: {
-            tagId: {
-              in: tags.map((tag) => tag.id),
+            name: {
+              in: updatedQuery,
             },
           },
         });
 
-        const productIds = productTags.map(
-          (productTag) => productTag.productId,
-        );
-
-        console.log(productIds);
-
-        // const products = await this.prisma.product.findMany({
-        //   skip: page - 1,
-        //   take: 10,
-        //   where: {
-        //     AND: [
-        //       {
-        //         id: {
-        //           in: productIds,
-        //         },
-        //       },
-        //       {
-        //         price: {
-        //           gte: costLow,
-        //           lte: costHigh,
-        //         },
-        //         OR: [
-        //           {
-        //             name: {
-        //               contains: updatedQuery,
-        //               mode: 'insensitive',
-        //             },
-        //           },
-        //           {
-        //             description: {
-        //               contains: updatedQuery,
-        //               mode: 'insensitive',
-        //             },
-        //           },
-        //         ],
-        //       },
-        //     ],
-        //     createdAt: {
-        //       gte: new Date(timeSince),
-        //     },
-        //   },
-        // orderBy: {
-        //   [sortBy]: order,
-        // },
-        // });
-
-        const newProducts = await this.prisma.product.findMany({
-          skip: page - 1,
-          take: 10,
-          where: {
-            OR: [
-              {
-                AND: [
-                  {
-                    id: {
-                      in: productIds,
-                    },
-                  },
-                  {
-                    price: {
-                      gte: costLow,
-                      lte: costHigh,
-                    },
-                  },
-                ],
+        if (tags) {
+          const productTags = await this.prisma.productTags.findMany({
+            where: {
+              tagId: {
+                in: tags.map((tag) => tag.id),
               },
-              {
-                name: {
-                  contains: updatedQuery,
-                  mode: 'insensitive',
-                },
-                //we could make new query for other params if this one is empty
-              },
-            ],
-            // createdAt: {
-            //   gte: new Date(timeSince),
-            // },
-          },
+            },
+          });
+
+          const productIds = productTags.map(
+            (productTag) => productTag.productId,
+          );
+
+          console.log(productIds);
+
+          // const products = await this.prisma.product.findMany({
+          //   skip: page - 1,
+          //   take: 10,
+          //   where: {
+          //     AND: [
+          //       {
+          //         id: {
+          //           in: productIds,
+          //         },
+          //       },
+          //       {
+          //         price: {
+          //           gte: costLow,
+          //           lte: costHigh,
+          //         },
+          //         OR: [
+          //           {
+          //             name: {
+          //               contains: updatedQuery,
+          //               mode: 'insensitive',
+          //             },
+          //           },
+          //           {
+          //             description: {
+          //               contains: updatedQuery,
+          //               mode: 'insensitive',
+          //             },
+          //           },
+          //         ],
+          //       },
+          //     ],
+          //     createdAt: {
+          //       gte: new Date(timeSince),
+          //     },
+          //   },
           // orderBy: {
           //   [sortBy]: order,
           // },
-        });
+          // });
 
-        console.log(newProducts);
-        // console.log(products);
-        // console.log(`products: ${newProducts}`);    !!!why does this give back [object Object]????!!!
+          const products = await this.prisma.product.findMany({
+            skip: page - 1,
+            take: 10,
+            where: {
+              OR: [
+                {
+                  AND: [
+                    {
+                      id: {
+                        in: productIds,
+                      },
+                    },
+                    {
+                      price: {
+                        gte: costLow,
+                        lte: costHigh,
+                      },
+                    },
+                  ],
+                },
+                {
+                  name: {
+                    contains: updatedQuery,
+                    mode: 'insensitive',
+                  },
+                  //we could make new query for other params if this one is empty
+                },
+              ],
+              // createdAt: {
+              //   gte: new Date(timeSince),
+              // },
+            },
+            // orderBy: {
+            //   [sortBy]: order,
+            // },
+          });
 
-        const files = newProducts.map((product) => {
-          const imagePath = product.imagesPath;
-          const image = readFileSync(
-            join(__dirname, '..', '..', '..', imagePath),
-          );
-        });
-        // return { products, files };
+          console.log(products);
+          // console.log(products);
+
+          // console.log(`products: ${newProducts}`);    !!!why does this give back [object Object]????!!!
+
+          let images = [];
+          const files = products.map((product) => {
+            const imagePath = product.imagesPath;
+            const image = readFileSync(
+              join(__dirname, '..', '..', '..', imagePath),
+            );
+            images.push(image);
+          });
+
+          return { products, images };
+        }
       }
     } catch (error) {
       console.log(error);
