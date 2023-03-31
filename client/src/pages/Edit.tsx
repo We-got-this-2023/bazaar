@@ -92,7 +92,10 @@ export default function EditProduct() {
         {id ? "Edit" : "Create"} product
       </h2>
       <div className="mt-[60px] flex content-center items-center justify-center">
-        <div className="flex w-[660px] items-center justify-center gap-6 rounded-md border-[.5px] border-black bg-neutral-200 p-4">
+        <div
+          className="flex w-[660px] items-center justify-center gap-6 rounded-md border-[.5px] border-black bg-neutral-200 p-4 dark:border-white dark:bg-neutral-900 dark:shadow-[-1_0_5px_1px_#ffffff80]
+               dark:hover:shadow-[0_0_10px_2px_#ffffff90]"
+        >
           <Form onSubmit={onSubmit} className="flex gap-2">
             <div className="h-[292px] w-[120px] ">
               <Input
