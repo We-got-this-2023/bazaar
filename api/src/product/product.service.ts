@@ -152,10 +152,23 @@ export class ProductService {
 
     try {
       if (updatedQuery === '') {
-        const products = await this.prisma.product.findMany({
+        let products = await this.prisma.product.findMany({
           skip: page - 1,
           take: 10,
         });
+
+        // check if product has been ordered
+        let tempProducts = [];
+        products.map((product) => {
+          if (product.orderId) {
+            return;
+          } else {
+            tempProducts.push(product);
+          }
+        });
+
+        products = tempProducts;
+
         return { products };
       } else {
         const tags = await this.prisma.tags.findMany({
@@ -221,7 +234,7 @@ export class ProductService {
           // },
           // });
 
-          const products = await this.prisma.product.findMany({
+          let products = await this.prisma.product.findMany({
             skip: page - 1,
             take: 10,
             where: {
@@ -257,6 +270,18 @@ export class ProductService {
             //   [sortBy]: order,
             // },
           });
+
+          // check if product has been ordered
+          let tempProducts = [];
+          products.map((product) => {
+            if (product.orderId) {
+              return;
+            } else {
+              tempProducts.push(product);
+            }
+          });
+
+          products = tempProducts;
 
           console.log(products);
           // console.log(products);
