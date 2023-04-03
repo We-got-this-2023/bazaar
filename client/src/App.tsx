@@ -1,4 +1,5 @@
 import { Outlet, Route, Routes } from "react-router-dom";
+import AntiProtectedRoute from "./components/AntiProtectedRoute";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Sidebar from "./components/Sidebar";
@@ -66,7 +67,10 @@ export default function App() {
             element={<ProtectedRoute element={<EditProduct />} />}
           />
         </Route>
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={<AntiProtectedRoute element={<Login />} />}
+        />
         <Route path="/signup" element={<Signup />} />
       </Routes>
     </>

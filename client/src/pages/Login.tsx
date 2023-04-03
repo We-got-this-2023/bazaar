@@ -10,12 +10,7 @@ type FormData = {
 };
 
 export default function Login() {
-  const { userLoggedIn, login } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (userLoggedIn) navigate("/");
-  }, [userLoggedIn]);
+  const { login } = useAuth();
 
   const onSubmit = async (data: FormData) => {
     return await login(data);

@@ -15,6 +15,7 @@ interface AuthContextI extends Context<{}> {
   error: string;
   setUserInformation: (user: any) => Promise<void>;
   updateUser: () => Promise<void>;
+  signout: () => Promise<void>;
 }
 
 export interface User {
@@ -52,6 +53,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     setUser(user);
     setUserLoggedIn(false);
     setError(undefined);
+    setIsLoading(false);
   };
 
   const fetchWrapper = async (
@@ -76,6 +78,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   ) => {
     try {
       setIsLoading(true);
+      console.log("try");
       const res = await fetch(import.meta.env.VITE_API + url, {
         method,
         headers: headers ?? { "Content-Type": "application/json" },
@@ -85,7 +88,9 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       });
 
       if (res.ok) {
-        return await res.json();
+        const json = await res.json();
+        console.log(json);
+        return json;
       } else {
         setError(
           errors
@@ -95,10 +100,12 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
         throw new Error(error);
       }
     } catch (err: any) {
+      console.log("catch");
       console.log(err);
       setError(err);
     } finally {
       setIsLoading(false);
+      console.log("finally");
     }
   };
 
@@ -117,6 +124,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       },
       data,
     });
+    navigate("/");
     return val;
   };
 
@@ -145,7 +153,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
 
   async function login(data: { email: string; password: string }) {
     data.email = data.email.toLowerCase().trim();
-    const res = await fetchWrapper(`/auth/signin`, {
+    await fetchWrapper(`/auth/signin`, {
       method: "POST",
       headers: {
         "access-control-allow-credentials": "true",
@@ -154,7 +162,6 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       data,
       credentials: "include",
     });
-    setUser(res);
     navigate("/");
   }
 
@@ -195,8 +202,13 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   }
 
   useEffect(() => {
+    console.log("isLoading", isLoading);
+  }, [isLoading]);
+
+  useEffect(() => {
     (async () => {
       try {
+        setIsLoading(true);
         // Parse the token from the cookies
         const token = document.cookie
           .split("; ")
@@ -213,7 +225,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
         setIsLoading(false);
       }
     })();
-  }, []);
+  }, [document.cookie]);
 
   let value = {
     user,
