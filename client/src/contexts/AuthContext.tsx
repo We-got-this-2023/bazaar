@@ -158,6 +158,19 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     navigate("/");
   }
 
+  async function signout() {
+    const res = await fetchWrapper(`/auth/signout`, {
+      method: "POST",
+      headers: {
+        "access-control-allow-credentials": "true",
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    setUser(undefined);
+    navigate("/");
+  }
+
   // Function to get the current user from the server
   async function getUser(id: number) {
     const res = await fetchWrapper(`/users/me/${id}`, {
@@ -207,6 +220,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     userLoggedIn,
     login,
     signup,
+    signout,
     clearUser,
     addUser,
     setUserInformation,

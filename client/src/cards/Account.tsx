@@ -12,7 +12,7 @@ export default function AccountCard({ user }: { user: User }) {
       day: "numeric",
     })
   );
-  const { setUserInformation, updateUser } = useAuth();
+  const { setUserInformation, updateUser, signout } = useAuth();
 
   const onSubmit = async (data: FormData) => {
     await setUserInformation({ ...user, ...data });
@@ -22,8 +22,8 @@ export default function AccountCard({ user }: { user: User }) {
   return (
     <div
       className="
-      flex flex-col items-center justify-center gap-6 rounded-3xl 
-      border-[.5px] border-black bg-neutral-200 p-12 
+      relative flex flex-col items-center justify-center gap-6 
+      rounded-3xl border-[.5px] border-black bg-neutral-200 p-12
       shadow-[0_0_5px_1px_#00000050] transition-all duration-200 
       hover:shadow-[0_0_8px_2px_#00000070] 
       dark:border-white dark:bg-neutral-900 dark:shadow-[0_0_5px_1px_#ffffff80] 
@@ -31,6 +31,12 @@ export default function AccountCard({ user }: { user: User }) {
     "
     >
       <h1 className="text-2xl font-bold">My Profile</h1>
+      <span
+        onClick={signout}
+        className="absolute top-6 right-8 cursor-pointer text-blue-400 hover:underline"
+      >
+        Sign Out
+      </span>
       <div className="flex gap-16">
         <div className="flex flex-col">
           <UserImage user={user} className="w-44" />
