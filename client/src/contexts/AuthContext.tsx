@@ -166,7 +166,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   }
 
   async function signout() {
-    const res = await fetchWrapper(`/auth/signout`, {
+    await fetchWrapper(`/auth/signout`, {
       method: "POST",
       headers: {
         "access-control-allow-credentials": "true",
@@ -175,6 +175,10 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       credentials: "include",
     });
     setUser(undefined);
+    document.cookie = document.cookie
+      .split(";")
+      .filter((val) => !val.startsWith("token="))
+      .join(";");
     navigate("/");
   }
 
@@ -200,10 +204,6 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     const newUser = await getUser(user.id);
     setUser(newUser);
   }
-
-  useEffect(() => {
-    console.log("isLoading", isLoading);
-  }, [isLoading]);
 
   useEffect(() => {
     (async () => {
