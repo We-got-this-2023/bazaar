@@ -41,7 +41,7 @@ export class ProductService {
         tags,
       } = addProductDto;
 
-      const updatedPath = file?.path || undefined;
+      const updatedPath = file?.path || null;
 
       const updatedTags = tags?.split(' ');
 
@@ -297,11 +297,12 @@ export class ProductService {
 
     if (!product) return;
 
-    const imagePath = product.imagesPath;
+    const imagePath =
+      product.imagesPath !== 'undefined' ? product.imagesPath : null;
 
     const image = imagePath
       ? readFileSync(join(__dirname, '..', '..', '..', imagePath))
-      : undefined;
+      : null;
 
     return { product, image };
   }
