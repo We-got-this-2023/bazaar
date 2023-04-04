@@ -23,12 +23,21 @@ export default function EditProduct() {
   const navigate = useNavigate();
   useEffect(() => {
     (async () => {
-      if (id) {
-        const res = await fetch(`${import.meta.env.VITE_API}/product/${id}`);
-        const data = await res.json();
-        setProduct(data);
+      try {
+        setIsLoading(true);
+        if (id) {
+          const res = await fetch(`${import.meta.env.VITE_API}/product/${id}`);
+          if (!res.ok) navigate("/404", { replace: true });
+          else {
+            const data = await res.json();
+            setProduct(data);
+          }
+        }
+      } catch (err) {
+        navigate("/404", { replace: true });
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     })();
   }, []);
 
@@ -162,8 +171,8 @@ export default function EditProduct() {
               <button
                 className="
                 w-[100px] rounded-md bg-silk-blue 
-                p-2 transition-all duration-200
-                hover:brightness-95
+                p-2 text-white transition-all
+                duration-200 hover:brightness-95
                 "
                 type="submit"
               >
