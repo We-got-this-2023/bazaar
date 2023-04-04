@@ -20,6 +20,34 @@ interface FormData {
 export default function Search() {
   const [results, setResults] = useState([]);
 
+  function useSearch(cleanQueryString: string) {
+    const query = useQuery(["search"], {
+      queryFn: async () => {
+        try {
+          const url = encodeURI(
+            `${
+              import.meta.env.VITE_API
+              //need to update page number on pagination
+            }/product/params?.p=${page}${cleanQueryString}`
+          );
+          console.log(url);
+          console.log(cleanQueryString);
+          const res = await fetch(url, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const json = await res.json();
+          return json;
+        } catch (err) {
+          console.error(err);
+          return [];
+        }
+      },
+    });
+    return query;
+  }
   const sessionParams: FormData = JSON.parse(
     sessionStorage.getItem("searchParams") || "{}"
   );
@@ -27,11 +55,17 @@ export default function Search() {
   const queryString = buildQuery(searchParams, sessionParams);
   const cleanQueryString = cleanQuery(queryString);
 
+  const [page, setPage] = useState(1);
+
   const { data, isLoading } = useSearch(cleanQueryString);
 
   useEffect(() => {
     if (data) setResults(data.products); // need to set image and display it
   }, [data]);
+
+  // useEffect(() => {
+  //   useSearch(cleanQueryString);
+  // }, [page]);
 
   async function setSessionParams(data: FormData) {
     sessionStorage.setItem("searchParams", JSON.stringify(data));
@@ -43,7 +77,20 @@ export default function Search() {
       {searchParams.entries() && (
         <>
           {isLoading && <div>Loading...</div>}
-          {results && <SearchResults data={results} />}
+          {results && (
+            <>
+              {" "}
+              <SearchResults data={results} />
+              <div className="absolute left-[48%] bottom-[-280px] flex flex-row">
+                {/* updating page number for pagination */}
+                <button className="" onClick={() => setPage(page - 1)}>
+                  -
+                </button>
+                <div className="">{page}</div>
+                <button onClick={() => setPage(page + 1)}> + </button>
+              </div>
+            </>
+          )}
         </>
       )}
     </div>
@@ -89,29 +136,4 @@ function cleanQuery(query: string) {
   for (const [from, to] of replacements)
     cleanQuery = cleanQuery.replaceAll(from, to);
   return cleanQuery;
-}
-
-function useSearch(cleanQueryString: string) {
-  const query = useQuery(["search"], {
-    queryFn: async () => {
-      try {
-        const url = encodeURI(
-          `${import.meta.env.VITE_API}/product/params${cleanQueryString}`
-        );
-        console.log(url);
-        const res = await fetch(url, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const json = await res.json();
-        return json;
-      } catch (err) {
-        console.error(err);
-        return [];
-      }
-    },
-  });
-  return query;
 }
