@@ -78,13 +78,13 @@ export default function FancyInput({
     <div className="relative flex flex-col items-center gap-2">
       <button
         type="button"
-        className="
+        className={`
           h-fit w-fit rounded-md bg-white-bright p-2 font-display capitalize shadow-blue-200 transition-all
           duration-200 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px]
           hover:shadow-[0_0_10px_2px_#bfdbfe] focus:shadow-[0_0_10px_2px_#bfdbfe] focus:outline-none focus:ring-2
           dark:bg-neutral-800 dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1
           dark:hover:shadow-[0_0_10px_0px_#bfdbfe] dark:focus:shadow
-        "
+        ${cOverrides || ""}`}
         onClick={() => inputRef.current?.click()}
       >
         {name}

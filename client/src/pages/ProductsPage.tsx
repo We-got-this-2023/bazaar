@@ -42,14 +42,19 @@ export default function ProductsPage() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <Link
-        to="/edit"
-        className="absolute top-24 left-12 rounded-lg bg-silk-blue p-2 text-white transition-all duration-200 hover:brightness-95"
-      >
-        Add a product
-      </Link>
-      <h1 className="text-2xl font-bold">Products</h1>
-      <div className="flex w-[40rem] flex-col">
+      {!isLoading && user && (
+        <Link
+          to="/edit"
+          className="absolute top-24 left-12 rounded-lg bg-silk-blue p-2 text-white transition-all duration-200 hover:brightness-95"
+        >
+          Add a product
+        </Link>
+      )}
+      <h1 className="text-2xl font-bold">
+        {!isLoading && user && "Your "}
+        Products
+      </h1>
+      <div className="flex w-[40rem] flex-col gap-4">
         {isLoading ? (
           <div>Loading...</div>
         ) : error ? (

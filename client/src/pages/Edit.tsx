@@ -16,6 +16,7 @@ interface FormDataStruct {
 }
 export default function EditProduct() {
   const { id } = useParams();
+  const [fileOutlet, setFileOutlet] = useState<string>();
   const { user, isLoading: userIsLoading } = useAuth();
   const [product, setProduct] = useState<Product>();
   const [isLoading, setIsLoading] = useState(true);
@@ -87,86 +88,90 @@ export default function EditProduct() {
   };
 
   return (
-    <div>
-      <h2 className="flex content-center justify-center pt-12 text-6xl capitalize">
-        {id ? "Edit" : "Create"} product
-      </h2>
-      <div className="mt-[60px] flex content-center items-center justify-center">
-        <div
-          className="flex w-[660px] items-center justify-center gap-6 rounded-md border-[.5px] border-black bg-neutral-200 p-4 dark:border-white dark:bg-neutral-900 dark:shadow-[-1_0_5px_1px_#ffffff80]
-               dark:hover:shadow-[0_0_10px_2px_#ffffff90]"
-        >
-          <Form onSubmit={onSubmit} className="flex gap-2">
-            <div className="h-[292px] w-[120px] ">
+    <div className="flex flex-col items-center justify-center gap-8 p-12">
+      <h2 className="text-3xl capitalize">{id ? "Edit" : "Create"} product</h2>
+      <div
+        className="
+          flex items-center justify-center gap-6 rounded-3xl border-[.5px] 
+          border-black bg-neutral-200 p-12 transition-all 
+          duration-200 dark:border-white
+          dark:bg-neutral-900 dark:shadow-[-1_0_5px_1px_#ffffff80] 
+          dark:hover:shadow-[0_0_10px_2px_#ffffff90]"
+      >
+        <Form onSubmit={onSubmit} className="flex gap-2">
+          <div>
+            <Input
+              name="name"
+              type="text"
+              options={{
+                required: "Name is required",
+              }}
+              placementClassName="w-full"
+              initialValue={product?.name}
+            />
+            <TextArea
+              className="h-[120px]"
+              name="description"
+              placementClassName="w-full"
+              options={{}}
+              initialValue={product?.description}
+            />
+            <div className="flex gap-2">
               <Input
-                id="fileInput"
-                name="file"
-                type="file"
-                placementClassName="w-full"
-                className="w- h-[292px]"
-                initialValue={product?.file}
-              />
-            </div>
-            <div className="w-[480px]">
-              <Input
-                name="name"
-                type="text"
+                name="price"
+                type="number"
+                className="h-[44px]"
                 options={{
-                  required: "Name is required",
+                  required: "Price is required",
+                  min: {
+                    value: 0,
+                    message: "Price must be greater than 0",
+                  },
                 }}
                 placementClassName="w-full"
-                initialValue={product?.name}
+                initialValue={product?.price?.toString()}
               />
-              <TextArea
-                className="h-[120px]"
-                name="description"
-                placementClassName="w-full"
-                options={{}}
-                initialValue={product?.description}
-              />
-              <div className="flex gap-2">
-                <Input
-                  name="price"
-                  type="number"
-                  className="h-[44px]"
-                  options={{
-                    required: "Price is required",
-                    min: {
-                      value: 0,
-                      message: "Price must be greater than 0",
-                    },
-                  }}
-                  placementClassName="w-full"
-                  initialValue={product?.price?.toString()}
-                />
-                <Input
-                  className="h-[44px]"
-                  name="categoryName"
-                  type="text"
-                  placementClassName="w-full"
-                  options={{}}
-                  initialValue={product?.category}
-                />
-              </div>
               <Input
-                name="tags"
+                className="h-[44px]"
+                name="categoryName"
+                placeholder="Category"
                 type="text"
                 placementClassName="w-full"
                 options={{}}
-                initialValue={product?.tags}
+                initialValue={product?.category}
               />
             </div>
-
-            <button
-              className=" absolute left-[48%] bottom-[220px] w-[100px] rounded-md border-[.5px] border-black bg-neutral-200 p-2
-               hover:shadow-[0_0_8px_2px_#00000070] dark:border-white dark:bg-neutral-900 dark:shadow-[-1_0_5px_1px_#ffffff80]
-               dark:hover:shadow-[0_0_10px_2px_#ffffff90]"
-              type="submit"
-            >
-              Submit
-            </button>
-          </Form>
-        </div>
+            <Input
+              name="tags"
+              type="text"
+              placementClassName="w-full"
+              options={{}}
+              initialValue={product?.tags}
+            />
+            <Input
+              id="fileInput"
+              name="file"
+              type="file"
+              placementClassName="w-full"
+              className="w-20"
+              initialValue={product?.file}
+              setFileNamesOutlet={setFileOutlet}
+            />
+            <p className="m-4 flex justify-center">{fileOutlet || ""}</p>
+            <div className="flex w-full justify-center">
+              <button
+                className="
+                w-[100px] rounded-md bg-silk-blue 
+                p-2 transition-all duration-200
+                hover:brightness-95
+                "
+                type="submit"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </Form>
       </div>
     </div>
   );
