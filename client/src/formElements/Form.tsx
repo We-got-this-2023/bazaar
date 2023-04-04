@@ -5,7 +5,8 @@ import Warning from "../assets/WarningIcon";
 interface FormProps {
   defaultValues?: any;
   children: JSX.Element[] | JSX.Element;
-  onSubmit: (data: any) => Promise<void>;
+  onSubmit?: (data: any) => Promise<void>;
+  onChange?: (data: any) => Promise<void>;
   className?: string;
 }
 
@@ -13,25 +14,50 @@ export default function Form({
   defaultValues,
   children,
   onSubmit,
+  onChange,
   className,
 }: FormProps) {
   if (!children) return null;
+  if (onChange && onSubmit)
+    throw new Error("Form.tsx:21 Cannot have both onChange and onSubmit");
+  if (!onChange && !onSubmit)
+    throw new Error("Form.tsx:22 Must have either onChange or onSubmit");
+  const submitFunc = onSubmit
+    ? onSubmit
+    : (onChange as (data: any) => Promise<void>);
 
   const methods = useForm({ defaultValues });
   const { handleSubmit } = methods;
   const [formError, setMainError] = useState<string | undefined>();
 
-  const submit = async (data: any) => {
-    try {
-      await onSubmit(data);
-      setMainError(undefined);
-    } catch (error: any) {
-      setMainError(error.message);
-    }
-  };
+  const submit = onSubmit
+    ? async (data: any) => {
+        try {
+          await submitFunc(data);
+          setMainError(undefined);
+        } catch (error: any) {
+          setMainError(error.message);
+        }
+      }
+    : undefined;
+
+  const change = onChange
+    ? async (data: any) => {
+        try {
+          await onChange(data);
+          setMainError(undefined);
+        } catch (error: any) {
+          setMainError(error.message);
+        }
+      }
+    : undefined;
 
   return (
-    <form className={className} onSubmit={handleSubmit(submit)}>
+    <form
+      className={className}
+      onSubmit={submit ? handleSubmit(submit) : undefined}
+      onChange={change ? handleSubmit(change) : undefined}
+    >
       {formError && (
         <div className="flex gap-2">
           <Warning className="h-5 w-5" />
