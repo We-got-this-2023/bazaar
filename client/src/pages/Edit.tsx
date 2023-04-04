@@ -29,8 +29,8 @@ export default function EditProduct() {
           const res = await fetch(`${import.meta.env.VITE_API}/product/${id}`);
           if (!res.ok) navigate("/404", { replace: true });
           else {
-            const data = await res.json();
-            setProduct(data);
+            const { product } = await res.json();
+            setProduct(product);
           }
         }
       } catch (err) {
