@@ -18,7 +18,7 @@ interface FancyInputProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   placeholder?: string;
 }
 
-export default function FancyInput({
+export default function TextArea({
   name,
   options,
   className: cOverrides,
@@ -76,7 +76,6 @@ export default function FancyInput({
               `}
         >
           <textarea
-            cols={30}
             rows={1}
             {...rest}
             {...(ref ? regRest : {})}
@@ -91,7 +90,7 @@ export default function FancyInput({
             onFocus={() => handleFocus(true)}
             onBlur={() => handleFocus(false)}
             className={
-              "relative top-2 left-2 resize-none bg-transparent outline-none"
+              "relative h-full w-full resize-none bg-transparent p-2 outline-none"
             }
             placeholder=""
             aria-placeholder={placeholder ?? ""}
