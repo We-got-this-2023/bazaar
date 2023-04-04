@@ -115,7 +115,7 @@ export default function FilterForm({
               <option value="Descending" />
               <option value="Ascending" />
             </Select>
-            <label htmlFor="tags">Tags</label>
+            {/* <label htmlFor="tags">Tags</label> */}
           </Form>
         </div>
       </div>
