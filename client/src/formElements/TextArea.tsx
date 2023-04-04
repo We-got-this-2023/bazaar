@@ -1,11 +1,5 @@
 import { ErrorMessage } from "@hookform/error-message";
-import {
-  InputHTMLAttributes,
-  TextareaHTMLAttributes,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { TextareaHTMLAttributes, useEffect, useRef, useState } from "react";
 import { FieldErrors, RegisterOptions, useFormContext } from "react-hook-form";
 import Warning from "../assets/WarningIcon";
 
@@ -57,6 +51,7 @@ export default function TextArea({
       }
     }
   }, []);
+
   return (
     <div className={`mb-2 flex flex-col ${placementClassName}`}>
       <div className="relative flex flex-col gap-2">
@@ -94,6 +89,7 @@ export default function TextArea({
             }
             placeholder=""
             aria-placeholder={placeholder ?? ""}
+            defaultValue={initialValue}
           />
         </div>
         <label

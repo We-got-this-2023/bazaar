@@ -19,7 +19,7 @@ export default function EditProduct() {
   const [fileOutlet, setFileOutlet] = useState<string>();
   const { user, isLoading: userIsLoading } = useAuth();
   const [product, setProduct] = useState<Product>();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     (async () => {
@@ -27,20 +27,21 @@ export default function EditProduct() {
         const res = await fetch(`${import.meta.env.VITE_API}/single/${id}`);
         const data = await res.json();
         setProduct(data);
-      try {
-        setIsLoading(true);
-        if (id) {
-          const res = await fetch(`${import.meta.env.VITE_API}/product/${id}`);
-          if (!res.ok) navigate("/404", { replace: true });
-          else {
-            const { product } = await res.json();
-            setProduct(product);
+        try {
+          setIsLoading(true);
+          if (id) {
+            const res = await fetch(`${import.meta.env.VITE_API}/single/${id}`);
+            if (!res.ok) navigate("/404", { replace: true });
+            else {
+              const { product } = await res.json();
+              setProduct(product);
+            }
           }
+        } catch (err) {
+          navigate("/404", { replace: true });
+        } finally {
+          setIsLoading(false);
         }
-      } catch (err) {
-        navigate("/404", { replace: true });
-      } finally {
-        setIsLoading(false);
       }
     })();
   }, []);
@@ -75,10 +76,8 @@ export default function EditProduct() {
                 .split("=")[1],
           },
         });
-        const json = await res.json();
-        if (!res.ok) throw new Error(json.message);
+        if (!res.ok) throw new Error(res.statusText);
         navigate("/products");
-        return json;
       } else {
         const res = await fetch(import.meta.env.VITE_API + "/single/" + id, {
           method: "POST",

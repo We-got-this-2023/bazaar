@@ -41,7 +41,7 @@ export class ProductService {
         tags,
       } = addProductDto;
 
-      const updatedPath = file?.path || 'undefined';
+      const updatedPath = file?.path || undefined;
 
       const updatedTags = tags?.split(' ');
 
@@ -85,6 +85,7 @@ export class ProductService {
         }
       }
 
+      console.log('images path bitch', updatedPath);
       const product = await this.prisma.product.create({
         data: {
           userId: Number(userId),
@@ -298,7 +299,9 @@ export class ProductService {
 
     const imagePath = product.imagesPath;
 
-    const image = readFileSync(join(__dirname, '..', '..', '..', imagePath));
+    const image = imagePath
+      ? readFileSync(join(__dirname, '..', '..', '..', imagePath))
+      : undefined;
 
     return { product, image };
   }
@@ -320,18 +323,18 @@ export class ProductService {
       const { name, description, price, categoryName, tags, ratings, orderId } =
         productDto;
 
-      const updatedTags = tags.split(' ');
+      const updatedTags = tags ? tags.split(' ') : [];
 
       const category = await this.prisma.category.findFirst({
         where: {
-          categoryName: categoryName,
+          categoryName: categoryName || 'default',
         },
       });
 
       if (!category) {
         const category = await this.prisma.category.create({
           data: {
-            categoryName: categoryName,
+            categoryName: categoryName || 'default',
             description: 'description',
           },
         });
