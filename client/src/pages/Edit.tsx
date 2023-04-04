@@ -107,7 +107,7 @@ export default function EditProduct() {
           dark:bg-neutral-900 dark:shadow-[-1_0_5px_1px_#ffffff80] 
           dark:hover:shadow-[0_0_10px_2px_#ffffff90]"
       >
-        <Form onSubmit={onSubmit} className="flex gap-2">
+        <Form onSubmit={onSubmit} className="flex flex-col items-center gap-3">
           <div>
             <Input
               name="name"
