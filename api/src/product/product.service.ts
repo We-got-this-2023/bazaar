@@ -12,24 +12,6 @@ import { StreamableFile } from '@nestjs/common';
 export class ProductService {
   constructor(private prisma: PrismaService) {}
 
-  async findOneProduct(id: string) {
-    const updatedId = +`${id}`;
-
-    const product = await this.prisma.product.findUnique({
-      where: {
-        id: Number(updatedId),
-      },
-    });
-
-    if (!product) return;
-
-    const imagePath = product.imagesPath;
-
-    const image = readFileSync(join(__dirname, '..', '..', '..', imagePath));
-
-    return { product, image };
-  }
-
   async getProducts(id: any) {
     console.log(Number(id));
     const ownProducts = await this.prisma.product.findMany({
@@ -303,6 +285,22 @@ export class ProductService {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async findOneProduct(id: string) {
+    const product = await this.prisma.product.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    if (!product) return;
+
+    const imagePath = product.imagesPath;
+
+    const image = readFileSync(join(__dirname, '..', '..', '..', imagePath));
+
+    return { product, image };
   }
 
   async getProductsOffset(id: string) {
