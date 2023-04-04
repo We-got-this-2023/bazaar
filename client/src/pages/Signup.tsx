@@ -100,10 +100,10 @@ export default function Signup() {
             placementClassName="w-full"
           />
           <Link
-            to="/signup"
+            to="/signin"
             className="self-start text-sm text-sky-500 hover:underline"
           >
-            Need an account?
+            Already have an account?
           </Link>
           <button
             type="submit"

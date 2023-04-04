@@ -3,7 +3,7 @@ import { redirect, useNavigate } from "react-router-dom";
 
 interface AuthContextI extends Context<{}> {
   userLoggedIn: boolean;
-  login: (values: { email: string; password: string }) => Promise<void>;
+  signin: (values: { email: string; password: string }) => Promise<void>;
   signup: (values: {
     email: string;
     username: string;
@@ -124,7 +124,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       },
       data,
     });
-    navigate("/");
+    navigate("/signin");
     return val;
   };
 
@@ -148,10 +148,10 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       },
     });
     setUser(val.user);
-    navigate("/login");
+    navigate("/signin");
   }
 
-  async function login(data: { email: string; password: string }) {
+  async function signin(data: { email: string; password: string }) {
     data.email = data.email.toLowerCase().trim();
     await fetchWrapper(`/auth/signin`, {
       method: "POST",
@@ -230,7 +230,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   let value = {
     user,
     userLoggedIn,
-    login,
+    signin,
     signup,
     signout,
     clearUser,

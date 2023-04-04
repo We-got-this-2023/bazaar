@@ -9,11 +9,11 @@ type FormData = {
   password: string;
 };
 
-export default function Login() {
-  const { login } = useAuth();
+export default function Signin() {
+  const { signin } = useAuth();
 
   const onSubmit = async (data: FormData) => {
-    return await login(data);
+    return await signin(data);
   };
 
   return (
@@ -27,7 +27,7 @@ export default function Login() {
       dark:shadow-[0_0_5px_1px_#ffffff80] dark:hover:shadow-[0_0_10px_2px_#ffffff90]
       "
       >
-        <h1 className="mt-4 mb-8 text-2xl font-bold">Login</h1>
+        <h1 className="mt-4 mb-8 text-2xl font-bold">Sign In</h1>
         <Form
           onSubmit={onSubmit}
           className="flex w-4/5 flex-col items-center justify-center gap-4"
