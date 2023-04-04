@@ -32,6 +32,7 @@ export default function FancyInput({
         name={name}
         options={options}
         initialValue={initialValue}
+        className={cOverrides}
         setFileNamesOutlet={setFileNamesOutlet}
         {...rest}
       />
@@ -100,7 +101,15 @@ export default function FancyInput({
             }
             ${cOverrides ?? ""}
           `}
-          placeholder={isNumber ? placeholder ?? name : ""}
+          placeholder={
+            isNumber
+              ? placeholder ??
+                name
+                  ?.split("")
+                  .map((val, i) => (i == 0 ? val.toUpperCase() : val))
+                  .join("")
+              : ""
+          }
           aria-placeholder={placeholder ?? ""}
           defaultValue={initialValue ?? ""}
         />

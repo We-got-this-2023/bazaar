@@ -5,6 +5,7 @@ import CartIcon from "../assets/CartIcon";
 import DefaultImage from "../assets/DefaultImage";
 import Logo from "../assets/Logo";
 import SearchIcon from "../assets/SearchIcon";
+import { useAuth } from "../contexts/AuthContext";
 import { useMisc } from "../contexts/MiscContext";
 import { toggleTheme } from "../utils/settings";
 
@@ -14,6 +15,7 @@ export default function Navbar() {
   const searchRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { user, isLoading } = useAuth();
 
   const handleSearch = () => {
     if (location.pathname.includes("/search")) {
@@ -68,6 +70,14 @@ export default function Navbar() {
       </div>
 
       <div className="flex h-full items-center gap-6">
+        {!isLoading && !user && (
+          <Link
+            to="/login"
+            className="w-14 cursor-pointer hover:text-blue-400 hover:underline"
+          >
+            Sign In?
+          </Link>
+        )}
         <button
           className="rounded-md border-[2.5px] border-black bg-black p-2 
           font-display font-medium text-white transition-all duration-150 

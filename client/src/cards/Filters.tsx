@@ -32,7 +32,7 @@ export default function FilterForm({
       <div className="flex justify-between gap-20 p-3">
         <div className="flex gap-2">
           <Form
-            onSubmit={onSubmit}
+            onChange={onSubmit}
             className="flex h-full flex-col items-center gap-2"
           >
             <label htmlFor="t">Results from..</label>
@@ -115,18 +115,7 @@ export default function FilterForm({
               <option value="Descending" />
               <option value="Ascending" />
             </Select>
-            <label htmlFor="tags">Tags</label>
-            <button
-              className="
-              mt-6 rounded-lg bg-green-600 p-2 
-              text-white shadow-lg transition-all duration-200 
-              hover:scale-105 hover:bg-green-800 hover:shadow-[0_0_10px_1px_#33aa3350] 
-              dark:bg-green-400 dark:text-black dark:hover:bg-green-500
-              "
-              type="submit"
-            >
-              Save Changes
-            </button>
+            {/* <label htmlFor="tags">Tags</label> */}
           </Form>
         </div>
       </div>

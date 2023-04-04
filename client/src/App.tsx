@@ -1,4 +1,5 @@
 import { Outlet, Route, Routes } from "react-router-dom";
+import AntiProtectedRoute from "./components/AntiProtectedRoute";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Sidebar from "./components/Sidebar";
@@ -6,12 +7,12 @@ import About from "./pages/About";
 import Checkout from "./pages/Checkout";
 import EditProduct from "./pages/Edit";
 import LandingPage from "./pages/Landing";
-import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Orders from "./pages/OrderHistory";
 import ProductsPage from "./pages/ProductsPage";
 import Profile from "./pages/Profile";
 import Search from "./pages/Search";
+import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 
 function LayoutWithNavbar() {
@@ -66,7 +67,10 @@ export default function App() {
             element={<ProtectedRoute element={<EditProduct />} />}
           />
         </Route>
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/signin"
+          element={<AntiProtectedRoute element={<Signin />} />}
+        />
         <Route path="/signup" element={<Signup />} />
       </Routes>
     </>

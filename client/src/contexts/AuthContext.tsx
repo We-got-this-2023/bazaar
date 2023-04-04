@@ -3,7 +3,7 @@ import { redirect, useNavigate } from "react-router-dom";
 
 interface AuthContextI extends Context<{}> {
   userLoggedIn: boolean;
-  login: (values: { email: string; password: string }) => Promise<void>;
+  signin: (values: { email: string; password: string }) => Promise<void>;
   signup: (values: {
     email: string;
     username: string;
@@ -15,6 +15,7 @@ interface AuthContextI extends Context<{}> {
   error: string;
   setUserInformation: (user: any) => Promise<void>;
   updateUser: () => Promise<void>;
+  signout: () => Promise<void>;
 }
 
 export interface User {
@@ -52,6 +53,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     setUser(user);
     setUserLoggedIn(false);
     setError(undefined);
+    setIsLoading(false);
   };
 
   const fetchWrapper = async (
@@ -76,6 +78,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   ) => {
     try {
       setIsLoading(true);
+      console.log("try");
       const res = await fetch(import.meta.env.VITE_API + url, {
         method,
         headers: headers ?? { "Content-Type": "application/json" },
@@ -85,7 +88,9 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       });
 
       if (res.ok) {
-        return await res.json();
+        const json = await res.json();
+        console.log(json);
+        return json;
       } else {
         setError(
           errors
@@ -95,10 +100,12 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
         throw new Error(error);
       }
     } catch (err: any) {
+      console.log("catch");
       console.log(err);
       setError(err);
     } finally {
       setIsLoading(false);
+      console.log("finally");
     }
   };
 
@@ -117,6 +124,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       },
       data,
     });
+    navigate("/signin");
     return val;
   };
 
@@ -140,12 +148,12 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       },
     });
     setUser(val.user);
-    navigate("/login");
+    navigate("/signin");
   }
 
-  async function login(data: { email: string; password: string }) {
+  async function signin(data: { email: string; password: string }) {
     data.email = data.email.toLowerCase().trim();
-    const res = await fetchWrapper(`/auth/signin`, {
+    await fetchWrapper(`/auth/signin`, {
       method: "POST",
       headers: {
         "access-control-allow-credentials": "true",
@@ -154,7 +162,23 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       data,
       credentials: "include",
     });
-    setUser(res);
+    navigate("/");
+  }
+
+  async function signout() {
+    await fetchWrapper(`/auth/signout`, {
+      method: "POST",
+      headers: {
+        "access-control-allow-credentials": "true",
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    setUser(undefined);
+    document.cookie = document.cookie
+      .split(";")
+      .filter((val) => !val.startsWith("token="))
+      .join(";");
     navigate("/");
   }
 
@@ -184,6 +208,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   useEffect(() => {
     (async () => {
       try {
+        setIsLoading(true);
         // Parse the token from the cookies
         const token = document.cookie
           .split("; ")
@@ -200,13 +225,14 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
         setIsLoading(false);
       }
     })();
-  }, []);
+  }, [document.cookie]);
 
   let value = {
     user,
     userLoggedIn,
-    login,
+    signin,
     signup,
+    signout,
     clearUser,
     addUser,
     setUserInformation,
