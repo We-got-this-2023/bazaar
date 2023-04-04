@@ -23,6 +23,10 @@ export default function EditProduct() {
   const navigate = useNavigate();
   useEffect(() => {
     (async () => {
+      if (id) {
+        const res = await fetch(`${import.meta.env.VITE_API}/single/${id}`);
+        const data = await res.json();
+        setProduct(data);
       try {
         setIsLoading(true);
         if (id) {
@@ -59,7 +63,7 @@ export default function EditProduct() {
       console.log(formData);
 
       if (id) {
-        const res = await fetch(import.meta.env.VITE_API + "/product/" + id, {
+        const res = await fetch(import.meta.env.VITE_API + "/single/" + id, {
           method: "PATCH",
           body: formData,
           headers: {
@@ -76,7 +80,7 @@ export default function EditProduct() {
         navigate("/products");
         return json;
       } else {
-        const res = await fetch(import.meta.env.VITE_API + "/product/" + id, {
+        const res = await fetch(import.meta.env.VITE_API + "/single/" + id, {
           method: "POST",
           body: formData,
           headers: {
