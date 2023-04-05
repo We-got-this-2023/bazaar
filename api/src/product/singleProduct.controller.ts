@@ -23,9 +23,9 @@ import { ProductDto } from './dto/product.dto';
 export class SingleProductController {
   constructor(private readonly productService: ProductService) {}
 
-  @Get('product/find/:id')
+  @Get(':id')
   findOne(
-    @Query('id') id: string,
+    @Param('id') id: string,
     @Res({ passthrough: true }) response: Response,
   ) {
     return this.productService.findOneProduct(id);

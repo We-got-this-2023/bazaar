@@ -1,4 +1,5 @@
 import { Context, createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import isEmptySearch from "../utils/isEmptySearch";
 
 interface MiscContextI extends Context<{}> {
@@ -11,6 +12,7 @@ interface MiscContextI extends Context<{}> {
   checkoutPrice: number;
   setCart: (cart: Product[]) => void;
   updateCartInfo: (cart: Product[]) => void;
+  trashCart: () => void;
 }
 
 export type Product = {
@@ -37,6 +39,7 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
   const [cartNumber, setCartNumber] = useState<number>(0);
   const [cart, setCart] = useState<Product[]>([]);
   const [checkoutPrice, setCheckoutPrice] = useState<string>("0.00");
+  const navigate = useNavigate();
   useEffect(() => {
     setCart(getCart());
   }, []);
@@ -141,6 +144,13 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
     }
   }
 
+  function trashCart() {
+    setCart([]);
+    localStorage.setItem("cart", JSON.stringify([]));
+    updateCartInfo([]);
+    navigate("/search");
+  }
+
   const value = {
     searchIsEmpty,
     cart,
@@ -151,6 +161,7 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
     checkoutPrice,
     setCart,
     updateCartInfo,
+    trashCart,
   };
 
   return <MiscContext.Provider value={value}>{children}</MiscContext.Provider>;

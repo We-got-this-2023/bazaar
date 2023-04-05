@@ -22,9 +22,6 @@ export default function Form({
     throw new Error("Form.tsx:21 Cannot have both onChange and onSubmit");
   if (!onChange && !onSubmit)
     throw new Error("Form.tsx:22 Must have either onChange or onSubmit");
-  const submitFunc = onSubmit
-    ? onSubmit
-    : (onChange as (data: any) => Promise<void>);
 
   const methods = useForm({ defaultValues });
   const { handleSubmit } = methods;
@@ -33,7 +30,7 @@ export default function Form({
   const submit = onSubmit
     ? async (data: any) => {
         try {
-          await submitFunc(data);
+          await onSubmit(data);
           setMainError(undefined);
         } catch (error: any) {
           setMainError(error.message);

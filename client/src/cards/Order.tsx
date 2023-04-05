@@ -14,8 +14,12 @@ export default function OrderCard({
   return (
     <div className="flex h-[10rem] w-[28rem] justify-between rounded-3xl bg-neutral-200 px-12 py-6 shadow-lg transition-all duration-200 dark:bg-neutral-900">
       <div className="flex flex-col justify-between gap-4 font-display">
-        <h2 className="text-xl font-bold">
-          {products.map(({ name }) => name).join(", ")}
+        <h2 className="text-lg font-bold">
+          {(() => {
+            const title = products.map(({ name }) => name).join(", ");
+            if (title.length > 20) return title.slice(0, 20) + "...";
+            return title;
+          })()}
         </h2>
         <span className="w-full opacity-50">{time}</span>
         <span className="w-full capitalize opacity-50">{orderStatus}</span>
