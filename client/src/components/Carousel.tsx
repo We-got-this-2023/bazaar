@@ -1,9 +1,10 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { A11y, Autoplay, Keyboard, Navigation, Pagination } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { useMisc } from "../contexts/MiscContext";
 
 interface CarouselProps {
   images: string[];
@@ -13,13 +14,23 @@ interface CarouselProps {
 export default function Carousel({ images, className }: CarouselProps) {
   const [slidesPerView, setSlidesPerView] = useState(2.75);
   const slideRef = useRef<HTMLImageElement>(null);
+  const { isSm } = useMisc();
 
-  onresize = () => {
-    let amount = 2.75;
-    if (window.innerWidth < 768) amount = 1.15;
-    setSlidesPerView(amount);
-    console.log(amount);
-  };
+  useEffect(() => {
+    if (isSm) {
+      if (window.innerWidth < 640) setSlidesPerView(1.5);
+      else setSlidesPerView(2.25);
+    } else {
+      setSlidesPerView(2.75);
+    }
+    window.addEventListener("resize", () => {
+      const isSm = window.innerWidth < 1000;
+      if (isSm)
+        if (window.innerWidth < 640) setSlidesPerView(1.5);
+        else setSlidesPerView(2);
+      else setSlidesPerView(2.75);
+    });
+  }, []);
 
   if (images.length <= 3) images = [...images, ...images];
 

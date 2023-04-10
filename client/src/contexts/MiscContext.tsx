@@ -33,7 +33,7 @@ export type Product = {
 const MiscContext = createContext({}) as MiscContextI;
 
 export function MiscProvider({ children }: { children: JSX.Element }) {
-  const [sm, setSm] = useState<boolean>(false);
+  const [sm, setSm] = useState<boolean>(window.innerWidth < 1000);
   const [cartNumber, setCartNumber] = useState<number>(0);
   const [cart, setCart] = useState<Product[]>([]);
   const [checkoutPrice, setCheckoutPrice] = useState<string>("0.00");
