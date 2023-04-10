@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { Product } from "../contexts/MiscContext";
+import { Product, useMisc } from "../contexts/MiscContext";
 import Form from "../formElements/Form";
 import Input from "../formElements/Input";
 import TextArea from "../formElements/TextArea";
@@ -15,6 +15,7 @@ interface FormDataStruct {
   images?: File[];
 }
 export default function EditProduct() {
+  const { isSm } = useMisc();
   const { id } = useParams();
   const [fileOutlet, setFileOutlet] = useState<string>();
   const { user, isLoading: userIsLoading } = useAuth();
@@ -101,7 +102,9 @@ export default function EditProduct() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-8 p-12">
-      <h2 className="text-3xl capitalize">{id ? "Edit" : "Create"} product</h2>
+      <h2 className={`capitalize ${isSm ? "text-lg" : "text-2xl"}`}>
+        {id ? "Edit" : "Create"} product
+      </h2>
       <div
         className="
           flex items-center justify-center gap-6 rounded-3xl border-[.5px] 
