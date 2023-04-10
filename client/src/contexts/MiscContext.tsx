@@ -13,6 +13,7 @@ interface MiscContextI extends Context<{}> {
   setCart: (cart: Product[]) => void;
   updateCartInfo: (cart: Product[]) => void;
   trashCart: () => void;
+  isSm: boolean;
 }
 
 export type Product = {
@@ -33,6 +34,7 @@ export type Product = {
 const MiscContext = createContext({}) as MiscContextI;
 
 export function MiscProvider({ children }: { children: JSX.Element }) {
+  const [sm, setSm] = useState<boolean>(false);
   // leaving this unused function for now
   // This is because I haven't set up the search for no results yet
   const [searchIsEmpty, setSearchIsEmpty] = useState<boolean>(isEmptySearch());
@@ -151,6 +153,10 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
     navigate("/search");
   }
 
+  useEffect(() => {
+    setSm(window.innerWidth < 1000);
+  }, [window.innerWidth]);
+
   const value = {
     searchIsEmpty,
     cart,
@@ -162,6 +168,7 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
     setCart,
     updateCartInfo,
     trashCart,
+    isSm: sm,
   };
 
   return <MiscContext.Provider value={value}>{children}</MiscContext.Provider>;
