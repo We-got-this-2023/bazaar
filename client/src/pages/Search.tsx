@@ -28,18 +28,17 @@ export default function Search() {
             `${
               import.meta.env.VITE_API
               //need to update page number on pagination
-            }/product/params?.p=${page}${cleanQueryString}`
+            }/product/params?p=${page}${cleanQueryString}`
           );
-          console.log(url);
-          console.log(cleanQueryString);
           const res = await fetch(url, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
             },
           });
-          const json = await res.json();
-          return json;
+          console.log(res);
+
+          if (res.json) return await res.json();
         } catch (err) {
           console.error(err);
           return [];
@@ -51,6 +50,7 @@ export default function Search() {
   const sessionParams: FormData = JSON.parse(
     sessionStorage.getItem("searchParams") || "{}"
   );
+
   const [searchParams] = useSearchParams();
   const queryString = buildQuery(searchParams, sessionParams);
   const cleanQueryString = cleanQuery(queryString);
@@ -68,7 +68,8 @@ export default function Search() {
   // }, [page]);
 
   async function setSessionParams(data: FormData) {
-    sessionStorage.setItem("searchParams", JSON.stringify(data));
+    console.log(data);
+    sessionStorage.setItem("searchParams", JSON.stringify(data || {}));
   }
 
   return (
@@ -79,7 +80,6 @@ export default function Search() {
           {isLoading && <div>Loading...</div>}
           {results && (
             <>
-              {" "}
               <SearchResults data={results} />
               <div className="absolute left-[48%] bottom-[-280px] flex flex-row">
                 {/* updating page number for pagination */}
