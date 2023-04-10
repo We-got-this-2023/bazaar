@@ -85,7 +85,7 @@ export default function CheckoutSummary({ price, className = "" }: Props) {
   return (
     <div
       className={`
-        flex h-fit flex-col items-center justify-center
+        flex h-fit w-fit flex-col items-center justify-center
         rounded-xl bg-neutral-200 shadow-[0_0_5px_1px_#00000050] 
         transition-all duration-200 hover:shadow-[0_0_8px_2px_#00000070] 
         dark:bg-neutral-900 dark:shadow-[0_0_5px_1px_#ffffff30] 
@@ -124,7 +124,11 @@ export default function CheckoutSummary({ price, className = "" }: Props) {
         >
           Pay Now
         </button>
-        <p className={`text-center opacity-50 ${isSm ? "text-xs" : "text-sm"}`}>
+        <p
+          className={`w-[30ch] text-center opacity-50 ${
+            isSm ? "text-xs" : "text-sm"
+          }`}
+        >
           At the moment, we only accept payment through PayPal. We apologize for
           any inconvenience.
         </p>

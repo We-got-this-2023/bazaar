@@ -14,9 +14,11 @@ export default function Checkout() {
     <div className="flex w-full justify-between px-8">
       {items.length ? (
         <div className="flex w-full flex-col items-center p-2">
-          <div className="flex w-full">
+          <div
+            className={"flex w-full items-center " + (isSm ? "flex-col" : "")}
+          >
             <div className="m-4 flex w-full max-w-3xl flex-col gap-8">
-              <div className="flex flex-col">
+              <div className="flex flex-col items-center">
                 <h1
                   className={
                     "self-center font-bold " +
@@ -42,13 +44,10 @@ export default function Checkout() {
               <DeliveryForm
                 title="Shipping"
                 user={user}
-                className="w-fit self-center"
+                className="self-center"
               />
             </div>
-            <CheckoutSummary
-              className="w-[25rem]"
-              price={checkoutPrice.toString()}
-            />
+            <CheckoutSummary price={checkoutPrice.toString()} />
           </div>
           <button
             onClick={trashCart}

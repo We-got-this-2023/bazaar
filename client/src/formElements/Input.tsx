@@ -128,7 +128,7 @@ export default function FancyInput({
                 labelSmall
                   ? (isSm ? "text-[.5rem]" : "text-xs") +
                     " top-2 pl-2 opacity-80"
-                  : (isSm ? "text-xs" : "text-base") + " top-2 pl-2 opacity-90"
+                  : (isSm ? "text-xs" : "text-base") + " top-6 pl-2 opacity-60"
               }
               `}
             htmlFor={placeholder ?? name}

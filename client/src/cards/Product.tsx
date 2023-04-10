@@ -44,7 +44,7 @@ export default function ProductPreview({
   })();
 
   return (
-    <div className="flex h-fit gap-2">
+    <div className="flex h-fit w-[30rem] max-w-full gap-2">
       {/* Images path not functional at the moment */}
       {/* {product?.imagesPath?.length && (
         <img
@@ -56,7 +56,7 @@ export default function ProductPreview({
       )} */}
       <div
         className={`
-      ${checkout} relative flex w-full bg-neutral-200
+      ${checkout} relative flex w-[40rem] max-w-full bg-neutral-200
       shadow-[3px_3px_10px_1px_#00000060] transition-all duration-200 
       hover:shadow-[0_0_12px_2px_#00000060] hover:brightness-105 
       dark:bg-neutral-900 dark:hover:brightness-110

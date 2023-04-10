@@ -61,7 +61,7 @@ export default function Navbar() {
           </Link>
           <Link
             to="/checkout"
-            className="transition-all duration-200 hover:scale-105"
+            className="relative transition-all duration-200 hover:scale-105"
           >
             <CartIcon className="w-16 cursor-pointer transition-transform duration-200 hover:scale-110" />
           </Link>
@@ -145,12 +145,9 @@ export default function Navbar() {
           onClick={toggleTheme}
         >
           Theme
-        </button>{" "}
+        </button>
         <Link to="/checkout" className="relative">
-          <CartIcon
-            number={cartNumber}
-            className="w-16 transition-transform duration-200 hover:scale-110"
-          />
+          <CartIcon className="w-16 transition-transform duration-200 hover:scale-110" />
         </Link>
       </div>
     </nav>

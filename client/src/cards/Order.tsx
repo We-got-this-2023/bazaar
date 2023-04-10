@@ -15,7 +15,13 @@ export default function OrderCard({
     "w-fit rounded-md py-1 pr-1 pl-3 text-end font-display transition-all duration-200 [text-shadow:1px_1px_3px_#00000050] hover:-translate-x-2 " +
     (isSm ? "text-sm" : "text-lg");
   return (
-    <div className="flex h-[10rem] w-[28rem] justify-between rounded-3xl bg-neutral-200 px-12 py-6 shadow-lg transition-all duration-200 dark:bg-neutral-900">
+    <div
+      className={`flex justify-between bg-neutral-200 shadow-lg transition-all duration-200 dark:bg-neutral-900 ${
+        isSm
+          ? "h-[8rem] w-[24rem] rounded-lg px-8 py-4"
+          : "h-[10rem] w-[28rem] rounded-2xl px-12 py-6"
+      }`}
+    >
       <div className="flex flex-col justify-between gap-4 font-display">
         <h2 className={`font-bold ${isSm ? "text-md" : "text-lg"}`}>
           {(() => {

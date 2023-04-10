@@ -1,9 +1,8 @@
 import { SVGProps } from "react";
+import { useMisc } from "../contexts/MiscContext";
 
-export default ({
-  number,
-  ...props
-}: SVGProps<SVGSVGElement> & { number?: number }) => {
+export default ({ ...props }: SVGProps<SVGSVGElement>) => {
+  const { cartNumber } = useMisc();
   return (
     <>
       <svg
@@ -39,9 +38,9 @@ export default ({
           className="stroke-black transition-all duration-200 dark:stroke-white"
         />
       </svg>
-      {number && number > 0 ? (
+      {cartNumber && cartNumber > 0 ? (
         <span className="absolute left-8 top-[1.2rem] bg-transparent font-logo text-black transition-all duration-200 dark:text-white">
-          {number > 9 ? "9+" : number}
+          {cartNumber > 9 ? "9+" : cartNumber}
         </span>
       ) : (
         ""

@@ -69,12 +69,12 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
   return (
     <div
       className={`
-        flex min-h-[20rem] w-[30rem] min-w-fit max-w-full flex-col items-center justify-start gap-6
-        rounded-3xl border-[.5px] border-black bg-neutral-200 
+        flex min-h-[20rem] w-[30rem] min-w-fit max-w-full flex-col items-center justify-start
+        gap-6 border-[.5px] border-black bg-neutral-200
         shadow-[0_0_5px_1px_#00000050] transition-all duration-200 
         hover:shadow-[0_0_8px_2px_#00000070] dark:border-white dark:bg-neutral-900 
         dark:shadow-[0_0_5px_1px_#ffffff80] dark:hover:shadow-[0_0_10px_2px_#ffffff90]
-        ${className || ""} ${isSm ? "p-6" : "p-12"}`}
+        ${className || ""} ${isSm ? "rounded-lg p-3" : "rounded-2xl p-12"}`}
     >
       <>
         <h2 className={`font-bold ${isSm ? "text-xl" : "text-2xl"}`}>
@@ -85,7 +85,7 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
           <Form
             onSubmit={onSubmit}
             className={`grid grid-cols-6 grid-rows-[8] gap-1 gap-x-3 ${
-              isSm ? "w-[24rem]" : "w-[30rem]"
+              isSm ? "w-[20rem]" : "w-[30rem]"
             }`}
           >
             <Input
