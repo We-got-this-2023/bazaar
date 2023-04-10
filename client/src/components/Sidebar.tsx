@@ -1,20 +1,23 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import MoreIcon from "../assets/MoreIcon";
 import OrdersIcon from "../assets/OrdersIcon";
 import ProductsIcon from "../assets/ProductsIcon";
 import UserIcon from "../assets/UserIcon";
 import { useMisc } from "../contexts/MiscContext";
+import { toggleTheme } from "../utils/settings";
 
 export default function Sidebar({ sm }: { sm?: boolean }) {
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const { isSm } = useMisc();
+  const [size, setSize] = useState(isSm ? "w-16 h-full" : "w-24");
   if (sm && !isSm) return null;
   if (!sm && isSm) return null;
-  const [size, setSize] = useState(isSm ? "w-16 h-full" : "w-24");
   return (
     <nav
       className={
         isSm
-          ? "fixed bottom-0 left-0 z-10 w-full bg-neutral-300"
+          ? "fixed bottom-0 left-0 z-10 w-full bg-neutral-300 dark:bg-neutral-800"
           : "absolute right-8 top-8"
       }
     >
@@ -23,6 +26,16 @@ export default function Sidebar({ sm }: { sm?: boolean }) {
           "flex " + (isSm ? "h-full justify-around" : "flex-col gap-12")
         }
       >
+        {isSm && (
+          <button
+            className="w-full rounded-md bg-neutral-300 p-2 font-display font-medium transition-all
+            duration-150 hover:brightness-90 dark:bg-neutral-800 dark:hover:brightness-110
+            "
+            onClick={toggleTheme}
+          >
+            Theme
+          </button>
+        )}
         <NavLink
           to="/profile"
           className={({ isActive }) => {
@@ -41,7 +54,7 @@ export default function Sidebar({ sm }: { sm?: boolean }) {
               `
                 : "") +
               (isSm
-                ? " flex h-full w-full items-center justify-center bg-neutral-300 p-2 transition-all duration-150 hover:brightness-90"
+                ? " flex h-full w-full items-center justify-center bg-neutral-300 p-2 transition-all duration-150 hover:brightness-90 dark:bg-neutral-800 dark:hover:brightness-110"
                 : isActive
                 ? " before:content-[''] after:content-[''] hover:before:opacity-50 hover:after:opacity-20"
                 : " before:content-none after:content-none hover:before:opacity-20 hover:after:opacity-5")
@@ -70,7 +83,7 @@ export default function Sidebar({ sm }: { sm?: boolean }) {
               `
                 : "") +
               (isSm
-                ? " flex h-full w-full items-center justify-center bg-neutral-300 p-2 transition-all duration-150 hover:brightness-90"
+                ? " flex h-full w-full items-center justify-center bg-neutral-300 p-2 transition-all duration-150 hover:brightness-90 dark:bg-neutral-800 dark:hover:brightness-110"
                 : isActive
                 ? " before:content-[''] after:content-[''] hover:before:opacity-50 hover:after:opacity-20"
                 : " before:content-none after:content-none hover:before:opacity-20 hover:after:opacity-5")
@@ -99,7 +112,7 @@ export default function Sidebar({ sm }: { sm?: boolean }) {
               `
                 : "") +
               (isSm
-                ? " flex h-full w-full items-center justify-center bg-neutral-300 p-2 transition-all duration-150 hover:brightness-90"
+                ? " flex h-full w-full items-center justify-center bg-neutral-300 p-2 transition-all duration-150 hover:brightness-90 dark:bg-neutral-800 hover:dark:brightness-110"
                 : isActive
                 ? " before:content-[''] after:content-[''] hover:before:opacity-50 hover:after:opacity-20"
                 : " before:content-none after:content-none hover:before:opacity-20 hover:after:opacity-5")
