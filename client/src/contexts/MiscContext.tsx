@@ -150,6 +150,7 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
   }
 
   useEffect(() => {
+    setSm(window.innerWidth < 1000);
     onresize = () => setSm(window.innerWidth < 1000);
     return () => {
       onresize = null;

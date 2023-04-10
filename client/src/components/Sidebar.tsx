@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import MoreIcon from "../assets/MoreIcon";
 import OrdersIcon from "../assets/OrdersIcon";
@@ -10,7 +10,11 @@ import { toggleTheme } from "../utils/settings";
 export default function Sidebar({ sm }: { sm?: boolean }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { isSm } = useMisc();
-  const [size, setSize] = useState(isSm ? "w-16 h-full" : "w-24");
+  const [size, setSize] = useState(isSm ? "w-12 h-full" : "w-24");
+  useEffect(() => {
+    if (isSm) setSize("w-12 h-full");
+    else setSize("w-24");
+  }, [isSm]);
   if (sm && !isSm) return null;
   if (!sm && isSm) return null;
   return (
