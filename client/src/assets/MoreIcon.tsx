@@ -13,7 +13,7 @@ export default function MoreIcon({ className }: { className?: string }) {
         width="95"
         height="12"
         rx="3"
-        className="fill-black dark:fill-white"
+        className="fill-black transition-all duration-200 dark:fill-white"
       />
       <rect
         x="2"
@@ -21,7 +21,7 @@ export default function MoreIcon({ className }: { className?: string }) {
         width="73"
         height="11"
         rx="3"
-        className="fill-black dark:fill-white"
+        className="fill-black transition-all duration-200 dark:fill-white"
       />
       <rect
         x="2"
@@ -29,7 +29,7 @@ export default function MoreIcon({ className }: { className?: string }) {
         width="95"
         height="12"
         rx="3"
-        className="fill-black dark:fill-white"
+        className="duration-200a fill-black transition-all dark:fill-white"
       />
     </svg>
   );
