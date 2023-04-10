@@ -8,7 +8,7 @@ import { Product, useMisc } from "../contexts/MiscContext";
 export default function Checkout() {
   const { user } = useAuth();
   // Leaving cartAddItem to add mock data for now
-  const { cart: items, checkoutPrice, trashCart } = useMisc();
+  const { cart: items, checkoutPrice, trashCart, isSm } = useMisc();
 
   return (
     <div className="flex w-full justify-between px-8">
@@ -17,7 +17,12 @@ export default function Checkout() {
           <div className="flex w-full">
             <div className="m-4 flex w-full max-w-3xl flex-col gap-8">
               <div className="flex flex-col">
-                <h1 className="self-center pb-12 pt-6 text-2xl font-bold">
+                <h1
+                  className={
+                    "self-center font-bold " +
+                    (isSm ? "pt-3 pb-6 text-xl" : "pt-6 pb-12 text-2xl")
+                  }
+                >
                   Review Items
                 </h1>
                 <div>
