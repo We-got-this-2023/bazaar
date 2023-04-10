@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useAuth } from "../contexts/AuthContext";
+import { useMisc } from "../contexts/MiscContext";
 import Form from "../formElements/Form";
 import Input from "../formElements/Input";
 import TextArea from "../formElements/TextArea";
@@ -29,6 +30,7 @@ interface FormData {
 export default function DeliveryForm({ title, className }: DeliveryFormProps) {
   const { user, isLoading, setUserInformation } = useAuth();
   const [delivery, setDelivery] = useState<FormData>();
+  const { isSm } = useMisc();
   const getDeliveryInformation = async () => {
     if (isLoading) return;
     if (!user) return;
@@ -67,20 +69,24 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
   return (
     <div
       className={`
-        flex min-h-[20rem] min-w-[30rem] flex-col items-center justify-start gap-6
-        rounded-3xl border-[.5px] border-black bg-neutral-200 p-12 
+        flex min-h-[20rem] w-[30rem] min-w-fit max-w-full flex-col items-center justify-start gap-6
+        rounded-3xl border-[.5px] border-black bg-neutral-200 
         shadow-[0_0_5px_1px_#00000050] transition-all duration-200 
         hover:shadow-[0_0_8px_2px_#00000070] dark:border-white dark:bg-neutral-900 
         dark:shadow-[0_0_5px_1px_#ffffff80] dark:hover:shadow-[0_0_10px_2px_#ffffff90]
-        ${className || ""}`}
+        ${className || ""} ${isSm ? "p-6" : "p-12"}`}
     >
       <>
-        <h2 className="text-2xl font-bold">{title || "Shipping Form"}</h2>
+        <h2 className={`font-bold ${isSm ? "text-xl" : "text-2xl"}`}>
+          {title || "Shipping Form"}
+        </h2>
         {!user && <p className="mt-16">Please sign in.</p>}
         {user && (
           <Form
             onSubmit={onSubmit}
-            className="grid w-[34em] grid-cols-6 grid-rows-[8] gap-1 gap-x-3"
+            className={`grid grid-cols-6 grid-rows-[8] gap-1 gap-x-3 ${
+              isSm ? "w-[24rem]" : "w-[30rem]"
+            }`}
           >
             <Input
               type="text"

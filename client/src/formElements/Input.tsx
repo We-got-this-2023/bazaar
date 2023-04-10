@@ -2,6 +2,7 @@ import { ErrorMessage } from "@hookform/error-message";
 import { InputHTMLAttributes, useEffect, useRef, useState } from "react";
 import { FieldErrors, RegisterOptions, useFormContext } from "react-hook-form";
 import Warning from "../assets/WarningIcon";
+import { useMisc } from "../contexts/MiscContext";
 import File from "./File";
 
 interface FancyInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -26,6 +27,7 @@ export default function FancyInput({
   setFileNamesOutlet,
   ...rest
 }: FancyInputProps) {
+  const { isSm } = useMisc();
   if (type === "file")
     return (
       <File
@@ -70,7 +72,7 @@ export default function FancyInput({
   });
   return (
     <div className={`mb-2 flex flex-col ${placementClassName}`}>
-      <div className="relative flex flex-col gap-2">
+      <div className="relative flex flex-col gap-1">
         <input
           {...rest}
           {...(ref ? regRest : {})}
@@ -86,19 +88,22 @@ export default function FancyInput({
           onFocus={() => handleFocus(true)}
           onBlur={() => handleFocus(false)}
           className={`
-            rounded-md bg-white-bright p-4 pb-2 shadow-blue-200 transition-all duration-200 
+            rounded-md bg-white-bright shadow-blue-200 transition-all duration-200 
             focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px] hover:shadow-[0_0_10px_2px_#bfdbfe] 
             focus:shadow-[0_0_10px_2px_#bfdbfe] focus:outline-none focus:ring-2 
             dark:bg-neutral-800 dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1 
             dark:hover:shadow-[0_0_10px_0px_#bfdbfe] dark:focus:shadow
             ${
               name && errors && errors[name]
-                ? "border-1 border-red-500 ring-red-300"
-                : "ring-blue-300"
+                ? " border-1 border-red-500 ring-red-300"
+                : " ring-blue-300"
             }
             ${
-              isNumber ? "appearance-none pt-2 [-moz-appearance:textfield]" : ""
+              isNumber
+                ? " appearance-none pt-2 [-moz-appearance:textfield]"
+                : ""
             }
+            ${isSm ? " p-2 pt-3 pb-1 text-xs" : " p-4 pb-2 text-base"}
             ${cOverrides ?? ""}
           `}
           placeholder={
@@ -118,8 +123,14 @@ export default function FancyInput({
             className={`
               pointer-events-none absolute top-1/2 -translate-y-1/2 
               select-none pl-3 text-base capitalize opacity-60 
-              transition-all duration-300 ease-out 
-              ${labelSmall ? "top-2 pl-2 text-xs opacity-80" : ""}`}
+              transition-all duration-300 ease-out
+              ${
+                labelSmall
+                  ? (isSm ? "text-[.5rem]" : "text-xs") +
+                    " top-2 pl-2 opacity-80"
+                  : (isSm ? "text-xs" : "text-base") + " top-2 pl-2 opacity-90"
+              }
+              `}
             htmlFor={placeholder ?? name}
           >
             {placeholder ?? name}

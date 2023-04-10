@@ -14,7 +14,7 @@ export default function ProductPreview({
   type?: string;
 }) {
   const { user, userLoggedIn } = useAuth();
-  const { cartAddItem, changeQuantity } = useMisc();
+  const { cartAddItem, changeQuantity, isSm } = useMisc();
   const [isOwner, setIsOwner] = useState(false);
   const { id, price, name, description, userId } = product;
   useEffect(() => {
@@ -37,7 +37,11 @@ export default function ProductPreview({
   let c = second;
   if (second.length === 1) c = `${second}0`;
 
-  const checkout = type === "checkout" ? "py-4 px-8" : "py-6 px-8";
+  const checkout = (() => {
+    if (isSm) {
+      return type === "checkout" ? "py-2 px-4" : "py-3 px-4";
+    } else return type === "checkout" ? "py-4 px-8" : "py-6 px-8";
+  })();
 
   return (
     <div className="flex h-fit gap-2">
@@ -52,10 +56,11 @@ export default function ProductPreview({
       )} */}
       <div
         className={`
-      ${checkout} relative flex w-full rounded-3xl bg-neutral-200
+      ${checkout} relative flex w-full bg-neutral-200
       shadow-[3px_3px_10px_1px_#00000060] transition-all duration-200 
       hover:shadow-[0_0_12px_2px_#00000060] hover:brightness-105 
       dark:bg-neutral-900 dark:hover:brightness-110
+      ${isSm ? "rounded-xl" : "rounded-2xl"}
       `}
       >
         <div>
@@ -63,8 +68,14 @@ export default function ProductPreview({
           <div className="flex justify-start gap-4">
             <div className="flex flex-col">
               <div className="flex w-32 items-start">
-                <span className="py-[.5rem] text-2xl font-bold">{d}</span>
-                <span className="text-lg">{c}</span>
+                <span
+                  className={`py-[.5rem] font-bold ${
+                    isSm ? "text-md" : "text-2xl"
+                  }`}
+                >
+                  {d}
+                </span>
+                <span className={isSm ? "text-sm" : "text-lg"}>{c}</span>
               </div>
               {type === "checkout" && (
                 <Form
@@ -87,8 +98,11 @@ export default function ProductPreview({
           </div>
         </div>
         {type === "products-page" && (
-          <Link to={`/edit/${id}`} className="absolute top-3 right-3">
-            <EditIcon className="w-12" />
+          <Link
+            to={`/edit/${id}`}
+            className={"absolute " + (isSm ? "top-1 right-1" : "top-3 right-3")}
+          >
+            <EditIcon className={isSm ? "w-10" : "w-12"} />
           </Link>
         )}
         {type === "search-page" && (
