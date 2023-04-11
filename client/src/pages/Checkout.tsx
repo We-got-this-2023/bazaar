@@ -8,16 +8,23 @@ import { Product, useMisc } from "../contexts/MiscContext";
 export default function Checkout() {
   const { user } = useAuth();
   // Leaving cartAddItem to add mock data for now
-  const { cart: items, checkoutPrice, trashCart } = useMisc();
+  const { cart: items, checkoutPrice, trashCart, isSm } = useMisc();
 
   return (
     <div className="flex w-full justify-between px-8">
       {items.length ? (
         <div className="flex w-full flex-col items-center p-2">
-          <div className="flex w-full">
+          <div
+            className={"flex w-full items-center " + (isSm ? "flex-col" : "")}
+          >
             <div className="m-4 flex w-full max-w-3xl flex-col gap-8">
-              <div className="flex flex-col">
-                <h1 className="self-center pb-12 pt-6 text-2xl font-bold">
+              <div className="flex flex-col items-center">
+                <h1
+                  className={
+                    "self-center font-bold " +
+                    (isSm ? "pt-3 pb-6 text-xl" : "pt-6 pb-12 text-2xl")
+                  }
+                >
                   Review Items
                 </h1>
                 <div>
@@ -37,13 +44,10 @@ export default function Checkout() {
               <DeliveryForm
                 title="Shipping"
                 user={user}
-                className="w-fit self-center"
+                className="self-center"
               />
             </div>
-            <CheckoutSummary
-              className="w-[25rem]"
-              price={checkoutPrice.toString()}
-            />
+            <CheckoutSummary price={checkoutPrice.toString()} />
           </div>
           <button
             onClick={trashCart}

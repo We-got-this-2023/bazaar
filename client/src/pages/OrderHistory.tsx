@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Order } from "../cards/Checkout";
 import OrderCard from "../cards/Order";
 import { useAuth } from "../contexts/AuthContext";
+import { useMisc } from "../contexts/MiscContext";
 export default function Orders() {
+  const { isSm } = useMisc();
   const { user } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   // Leaving this unused variable as it I haven't set up
@@ -36,7 +38,9 @@ export default function Orders() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-3">
-      <h2 className="text-2xl font-bold">Order History</h2>
+      <h2 className={`font-bold ${isSm ? "text-lg" : "text-2xl"}`}>
+        Order History
+      </h2>
       <div className="flex flex-col gap-3">
         {(orders.length &&
           orders.map((order: any) => {

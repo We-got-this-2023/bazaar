@@ -2,6 +2,7 @@ import { ErrorMessage } from "@hookform/error-message";
 import { InputHTMLAttributes, useEffect, useRef, useState } from "react";
 import { FieldErrors, RegisterOptions, useFormContext } from "react-hook-form";
 import Warning from "../assets/WarningIcon";
+import { useMisc } from "../contexts/MiscContext";
 
 interface FancyInputProps extends InputHTMLAttributes<HTMLInputElement> {
   errors?: FieldErrors;
@@ -22,6 +23,7 @@ export default function FancyInput({
 }: FancyInputProps) {
   if (initialValue && typeof initialValue === "string")
     throw new Error("initialValue must be a File.");
+  const { isSm } = useMisc();
   const form = useFormContext();
   let formState, register, errors, ref: any, regRest: any;
   const [files, setFiles] = useState<FileList>([] as unknown as FileList);
@@ -83,7 +85,9 @@ export default function FancyInput({
           duration-200 focus-within:shadow-[0_0_10px_2px_#bfdbfe] focus-within:ring-[2px]
           hover:shadow-[0_0_10px_2px_#bfdbfe] focus:shadow-[0_0_10px_2px_#bfdbfe] focus:outline-none focus:ring-2
           dark:bg-neutral-800 dark:focus-within:shadow-[0_0_5px_#bfdbfe] dark:focus-within:ring-1
-          dark:hover:shadow-[0_0_10px_0px_#bfdbfe] dark:focus:shadow
+          dark:hover:shadow-[0_0_10px_0px_#bfdbfe] dark:focus:shadow ${
+            isSm ? "text-sm" : ""
+          }
         ${cOverrides || ""}`}
         onClick={() => inputRef.current?.click()}
       >

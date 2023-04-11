@@ -4,10 +4,11 @@ import ReactDOM from "react-dom";
 import { Link, useParams } from "react-router-dom";
 import ProductPreview from "../cards/Product";
 import { useAuth } from "../contexts/AuthContext";
-import { Product } from "../contexts/MiscContext";
+import { Product, useMisc } from "../contexts/MiscContext";
 
 export default function ProductsPage() {
   const { user } = useAuth();
+  const { isSm } = useMisc();
 
   const userId = user?.id;
   const {
@@ -41,20 +42,12 @@ export default function ProductsPage() {
   });
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      {!isLoading && user && (
-        <Link
-          to="/edit"
-          className="absolute top-24 left-12 rounded-lg bg-silk-blue p-2 text-white transition-all duration-200 hover:brightness-95"
-        >
-          Add a product
-        </Link>
-      )}
-      <h1 className="text-2xl font-bold">
+    <div className={`flex flex-col items-center gap-4`}>
+      <h1 className={`font-bold ${isSm ? "text-lg" : "text-2xl"}`}>
         {!isLoading && user && "Your "}
         Products
       </h1>
-      <div className="flex w-[40rem] flex-col gap-4">
+      <div className="flex w-[40rem] max-w-[90%] flex-col items-center gap-4">
         {isLoading ? (
           <div>Loading...</div>
         ) : error ? (
@@ -69,6 +62,16 @@ export default function ProductsPage() {
               />
             );
           })
+        )}
+        {!isLoading && user && (
+          <Link
+            to="/edit"
+            className={`w-fit bg-silk-blue p-2 text-white transition-all duration-200 hover:brightness-95 ${
+              isSm ? "rounded-md" : "rounded-lg"
+            }`}
+          >
+            Add a product
+          </Link>
         )}
       </div>
     </div>
