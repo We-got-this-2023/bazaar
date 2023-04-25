@@ -5,21 +5,18 @@ import { ProductParamsDto } from './dto/productParams.dto';
 import { addProductDto } from './dto/addProduct.dto';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { response } from 'express';
-import { StreamableFile } from '@nestjs/common';
+import { updateProductDto } from './dto/updateProduct.dto';
 
 @Injectable()
 export class ProductService {
   constructor(private prisma: PrismaService) {}
 
   async getProducts(id: any) {
-    console.log(Number(id));
     const ownProducts = await this.prisma.product.findMany({
       where: {
         userId: Number(id.userId),
       },
     });
-    console.log(ownProducts);
     return ownProducts;
   }
 
@@ -85,7 +82,6 @@ export class ProductService {
         }
       }
 
-      console.log('images path bitch', updatedPath);
       const product = await this.prisma.product.create({
         data: {
           userId: Number(userId),
@@ -97,7 +93,6 @@ export class ProductService {
         },
       });
 
-      console.log(product);
       let productTags;
       if (tags) {
         productTags = await this.prisma.productTags.createMany({
@@ -174,8 +169,6 @@ export class ProductService {
           const productIds = productTags.map(
             (productTag) => productTag.productId,
           );
-
-          console.log(productIds);
 
           // const products = await this.prisma.product.findMany({
           //   skip: page - 1,
@@ -266,7 +259,6 @@ export class ProductService {
 
           products = tempProducts;
 
-          console.log(products);
           // console.log(products);
 
           // console.log(`products: ${newProducts}`);    !!!why does this give back [object Object]????!!!
@@ -319,10 +311,13 @@ export class ProductService {
     }
   }
 
-  async updateProduct(id: string, productDto: ProductDto) {
+  async updateProduct(id: string, updatedProduct: updateProductDto) {
     try {
-      const { name, description, price, categoryName, tags, ratings, orderId } =
-        productDto;
+      const { name, description, price, categoryName, tags, ratings } =
+        updatedProduct;
+
+      console.log('updatedProduct:');
+      console.log(updatedProduct);
 
       const updatedTags = tags ? tags.split(' ') : [];
 
@@ -371,7 +366,6 @@ export class ProductService {
           price,
           categoryId: category.id,
           ratings,
-          orderId,
         },
       });
 
