@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import FilterForm from "../cards/Filters";
 import SearchResults from "../components/SearchResults";
+import useSearch from "../utils/useSearch";
 
 interface FormData {
   t: "Today" | "This Week" | "This Month" | "This Year" | "All Time"; // Filter by time
@@ -20,33 +21,6 @@ interface FormData {
 export default function Search() {
   const [results, setResults] = useState([]);
 
-  function useSearch(cleanQueryString: string) {
-    const query = useQuery(["search"], {
-      queryFn: async () => {
-        try {
-          const url = encodeURI(
-            `${
-              import.meta.env.VITE_API
-              //need to update page number on pagination
-            }/product/params?p=${page}${cleanQueryString}`
-          );
-          const res = await fetch(url, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          console.log(res);
-
-          if (res.json) return await res.json();
-        } catch (err) {
-          console.error(err);
-          return [];
-        }
-      },
-    });
-    return query;
-  }
   const sessionParams: FormData = JSON.parse(
     sessionStorage.getItem("searchParams") || "{}"
   );
@@ -57,15 +31,11 @@ export default function Search() {
 
   const [page, setPage] = useState(1);
 
-  const { data, isLoading } = useSearch(cleanQueryString);
+  const { data, isLoading } = useSearch(cleanQueryString, page);
 
   useEffect(() => {
     if (data) setResults(data.products); // need to set image and display it
   }, [data]);
-
-  // useEffect(() => {
-  //   useSearch(cleanQueryString);
-  // }, [page]);
 
   async function setSessionParams(data: FormData) {
     console.log(data);
@@ -83,11 +53,14 @@ export default function Search() {
               <SearchResults data={results} />
               <div className="absolute left-[48%] bottom-[-280px] flex flex-row">
                 {/* updating page number for pagination */}
-                <button className="" onClick={() => setPage(page - 1)}>
+                <button
+                  className=""
+                  onClick={() => setPage((prev) => prev - 1)}
+                >
                   -
                 </button>
                 <div className="">{page}</div>
-                <button onClick={() => setPage(page + 1)}> + </button>
+                <button onClick={() => setPage((prev) => prev + 1)}> + </button>
               </div>
             </>
           )}

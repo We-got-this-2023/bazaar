@@ -41,7 +41,7 @@ export class SingleProductController {
     return this.productService.updateProduct(id, updatedProduct);
   }
 
-  @Post(':id')
+  @Post()
   @UseInterceptors(FileInterceptor('file', { dest: './uploads' }))
   addProduct(
     @UploadedFile(
