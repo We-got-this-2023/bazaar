@@ -67,7 +67,7 @@ export default function EditProduct() {
       if (id) {
         const res = await fetch(import.meta.env.VITE_API + "/single/" + id, {
           method: "PATCH",
-          body: formData,
+          body: JSON.stringify(data),
           headers: {
             Authorization:
               "Bearer " +
@@ -75,6 +75,7 @@ export default function EditProduct() {
                 .split(";")
                 .filter((item) => item.startsWith("token="))[0]
                 .split("=")[1],
+            "Content-Type": "application/json",
           },
         });
         if (!res.ok) throw new Error(res.statusText);

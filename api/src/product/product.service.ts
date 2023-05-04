@@ -363,8 +363,8 @@ export class ProductService {
         data: {
           name,
           description,
-          price,
-          categoryId: category.id,
+          price: Number(price),
+          categoryId: category.id ?? 1,
           ratings,
         },
       });
