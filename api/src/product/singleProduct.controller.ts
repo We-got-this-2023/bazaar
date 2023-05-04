@@ -18,6 +18,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { addProductDto } from './dto/addProduct.dto';
 import { Response } from 'express';
 import { ProductDto } from './dto/product.dto';
+import { updateProductDto } from './dto/updateProduct.dto';
 
 @Controller('single')
 export class SingleProductController {
@@ -29,6 +30,15 @@ export class SingleProductController {
     @Res({ passthrough: true }) response: Response,
   ) {
     return this.productService.findOneProduct(id);
+  }
+
+  @Patch(':id')
+  updateProduct(
+    @Body() updatedProduct: updateProductDto,
+    @Param('id') id: string,
+  ) {
+    console.log(updatedProduct);
+    return this.productService.updateProduct(id, updatedProduct);
   }
 
   @Post(':id')
@@ -47,14 +57,6 @@ export class SingleProductController {
     @Body() addProductDto: addProductDto,
   ) {
     return this.productService.addProduct(file, addProductDto);
-  }
-
-  @Patch(':id')
-  updateProduct(
-    @Param('id') id: string,
-    @Body() productDto: ProductDto,
-  ): Promise<ProductDto> {
-    return this.productService.updateProduct(id, productDto);
   }
 
   @Delete(':id')
