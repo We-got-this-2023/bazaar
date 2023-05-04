@@ -50,18 +50,7 @@ export default function Search() {
           {isLoading && <div>Loading...</div>}
           {results && (
             <>
-              <SearchResults data={results} />
-              <div className="absolute left-[48%] bottom-[-280px] flex flex-row">
-                {/* updating page number for pagination */}
-                <button
-                  className=""
-                  onClick={() => setPage((prev) => prev - 1)}
-                >
-                  -
-                </button>
-                <div className="">{page}</div>
-                <button onClick={() => setPage((prev) => prev + 1)}> + </button>
-              </div>
+              <SearchResults data={results} setPage={setPage} page={page} />
             </>
           )}
         </>
