@@ -6,7 +6,7 @@ import {
   Req,
   UseGuards,
   Delete,
-  Body,
+  Body, Post,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { UsersService } from './users.service';
@@ -16,7 +16,7 @@ import { UserDto } from './dto/user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get('me/:id')
   getMyUser(@Param() params: { id: number }, @Req() req) {
     return this.usersService.getMyUser(params.id, req);
@@ -43,5 +43,9 @@ export class UsersController {
   @Get('details/:id')
   getUserDetails(@Param() params: { id: number }) {
     return this.usersService.getUserDetails(params.id);
+  }
+  @Post('address')
+  addAddress(@Body() addressDto) {
+    return this.usersService.addAddress(addressDto);
   }
 }
