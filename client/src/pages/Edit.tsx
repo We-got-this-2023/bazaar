@@ -81,7 +81,7 @@ export default function EditProduct() {
         if (!res.ok) throw new Error(res.statusText);
         navigate("/products");
       } else {
-        const res = await fetch(import.meta.env.VITE_API + "/single/" + id, {
+        const res = await fetch(import.meta.env.VITE_API + "/single", {
           method: "POST",
           body: formData,
           headers: {
