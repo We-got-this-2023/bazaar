@@ -131,7 +131,7 @@ export class ProductService {
     try {
       if (updatedQuery === '') {
         let products = await this.prisma.product.findMany({
-          skip: page ? page - 1 : 1,
+          skip: page ? page - 1 + (page - 1) * 10 : 1,
           take: 10,
         });
 
@@ -211,7 +211,7 @@ export class ProductService {
           // });
 
           let products = await this.prisma.product.findMany({
-            skip: page - 1,
+            skip: page - 1 + (page - 1) * 10,
             take: 10,
             where: {
               OR: [
