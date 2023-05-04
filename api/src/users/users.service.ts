@@ -6,6 +6,7 @@ import {
 import { Request } from 'express';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserDto } from './dto/user.dto';
+import {AddressDto} from "./dto/address.dto";
 
 @Injectable()
 export class UsersService {
@@ -85,5 +86,29 @@ export class UsersService {
     delete foundUser.password;
 
     return { user: foundUser };
+  }
+  async addAddress(addressDto: AddressDto) {
+    const address = await this.prisma.address.create({
+      data: {
+        id: addressDto.id,
+        addressLine1: addressDto.addressLine1,
+        addressLine2: addressDto.addressLine2,
+        city: addressDto.city,
+        region: addressDto.region,
+        postalCode: addressDto.postalCode,
+        country: addressDto.country,
+      },
+    });
+
+    const user = await this.prisma.user.update({
+      where: { id: addressDto.userId },
+      data: {
+        address: {
+          connect: {
+            id: address.id,
+          },
+        },
+      },
+    });
   }
 }
