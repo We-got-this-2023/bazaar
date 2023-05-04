@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import isEmptySearch from "../utils/isEmptySearch";
 
 interface MiscContextI extends Context<{}> {
-  searchEmpty: boolean;
   cart: Product[];
   cartNumber: number;
   cartAddItem: (item: Product) => void;
@@ -13,6 +12,7 @@ interface MiscContextI extends Context<{}> {
   setCart: (cart: Product[]) => void;
   updateCartInfo: (cart: Product[]) => void;
   trashCart: () => void;
+  isSm: boolean;
 }
 
 export type Product = {
@@ -33,9 +33,7 @@ export type Product = {
 const MiscContext = createContext({}) as MiscContextI;
 
 export function MiscProvider({ children }: { children: JSX.Element }) {
-  // leaving this unused function for now
-  // This is because I haven't set up the search for no results yet
-  const [searchIsEmpty, setSearchIsEmpty] = useState<boolean>(isEmptySearch());
+  const [sm, setSm] = useState<boolean>(window.innerWidth < 1000);
   const [cartNumber, setCartNumber] = useState<number>(0);
   const [cart, setCart] = useState<Product[]>([]);
   const [checkoutPrice, setCheckoutPrice] = useState<string>("0.00");
@@ -151,8 +149,15 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
     navigate("/search");
   }
 
+  useEffect(() => {
+    setSm(window.innerWidth < 1000);
+    onresize = () => setSm(window.innerWidth < 1000);
+    return () => {
+      onresize = null;
+    };
+  }, []);
+
   const value = {
-    searchIsEmpty,
     cart,
     cartAddItem,
     cartRemoveItem,
@@ -162,6 +167,7 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
     setCart,
     updateCartInfo,
     trashCart,
+    isSm: sm,
   };
 
   return <MiscContext.Provider value={value}>{children}</MiscContext.Provider>;

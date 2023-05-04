@@ -20,6 +20,7 @@ function LayoutWithNavbar() {
     <>
       <Navbar />
       <Outlet />
+      <Sidebar sm />
     </>
   );
 }

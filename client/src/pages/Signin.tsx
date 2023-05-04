@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useMisc } from "../contexts/MiscContext";
 import Form from "../formElements/Form";
 import Input from "../formElements/Input";
 
@@ -10,6 +11,7 @@ type FormData = {
 };
 
 export default function Signin() {
+  const { isSm } = useMisc();
   const { signin } = useAuth();
 
   const onSubmit = async (data: FormData) => {
@@ -27,7 +29,13 @@ export default function Signin() {
       dark:shadow-[0_0_5px_1px_#ffffff80] dark:hover:shadow-[0_0_10px_2px_#ffffff90]
       "
       >
-        <h1 className="mt-4 mb-8 text-2xl font-bold">Sign In</h1>
+        <h1
+          className={`font-bold ${
+            isSm ? "mt-2 mb-4 text-lg" : "mt-4 mb-8 text-2xl"
+          }`}
+        >
+          Sign In
+        </h1>
         <Form
           onSubmit={onSubmit}
           className="flex w-4/5 flex-col items-center justify-center gap-4"

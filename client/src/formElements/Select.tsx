@@ -8,6 +8,7 @@ import {
 } from "react";
 import { FieldErrors, RegisterOptions, useFormContext } from "react-hook-form";
 import Warning from "../assets/WarningIcon";
+import { useMisc } from "../contexts/MiscContext";
 
 interface FancySelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   errors?: FieldErrors;
@@ -30,6 +31,7 @@ export default function FancySelect({
   initialValue,
   ...rest
 }: FancySelectProps) {
+  const { isSm } = useMisc();
   const form = useFormContext();
   let formState, register, errors, ref: any, regRest: any;
   if (form) {
@@ -74,9 +76,8 @@ export default function FancySelect({
           hover:shadow-[0_0_10px_2px_#bfdbfe] focus:shadow-[0_0_10px_2px_#bfdbfe] 
           focus:outline-none focus:ring-2 dark:bg-neutral-800 
           dark:focus-within:ring-1 dark:hover:shadow-[0_0_10px_0px_#bfdbfe] dark:focus:shadow-[0_0_10px_0px_#bfdbfe]
-          ${
-            name && errors && errors[name] ? "border-red-500 ring-red-300" : ""
-          } 
+          ${name && errors && errors[name] ? "border-red-500 ring-red-300" : ""}
+          ${isSm ? "text-sm" : ""}
           ${cOverrides ?? ""} 
         `}
         placeholder=""

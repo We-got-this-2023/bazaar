@@ -15,11 +15,11 @@ export default function SearchIcon(props: SVGProps<SVGSVGElement>) {
         height="55.0397"
         rx="4"
         transform="rotate(-45 55.4207 61.0771)"
-        className="fill-black dark:fill-white"
+        className="fill-black transition-all duration-200 dark:fill-white"
       />
       <path
         d="M74 37C74 57.4345 57.4345 74 37 74C16.5655 74 0 57.4345 0 37C0 16.5655 16.5655 0 37 0C57.4345 0 74 16.5655 74 37ZM8.29808 37C8.29808 52.8516 21.1484 65.7019 37 65.7019C52.8516 65.7019 65.7019 52.8516 65.7019 37C65.7019 21.1484 52.8516 8.29808 37 8.29808C21.1484 8.29808 8.29808 21.1484 8.29808 37Z"
-        className="fill-black dark:fill-white"
+        className="fill-black transition-all duration-200 dark:fill-white"
       />
     </svg>
   );

@@ -1,10 +1,12 @@
 import { useState } from "react";
 import UserImage from "../components/UserImage";
 import { useAuth, User } from "../contexts/AuthContext";
+import { useMisc } from "../contexts/MiscContext";
 import Form from "../formElements/Form";
 import Input from "../formElements/Input";
 
 export default function AccountCard({ user }: { user: User }) {
+  const { isSm } = useMisc();
   const [createdAt] = useState(
     new Date(user.createdAt).toLocaleDateString("default", {
       year: "numeric",
@@ -21,16 +23,20 @@ export default function AccountCard({ user }: { user: User }) {
 
   return (
     <div
-      className="
-      relative flex flex-col items-center justify-center gap-6 
-      rounded-3xl border-[.5px] border-black bg-neutral-200 p-12
+      className={`
+      relative flex max-w-full flex-col items-center justify-center gap-6 
+      rounded-3xl border-[.5px] border-black bg-neutral-200 ${
+        isSm ? "p-6" : "p-12"
+      }
       shadow-[0_0_5px_1px_#00000050] transition-all duration-200 
       hover:shadow-[0_0_8px_2px_#00000070] 
       dark:border-white dark:bg-neutral-900 dark:shadow-[0_0_5px_1px_#ffffff80] 
       dark:hover:shadow-[0_0_10px_2px_#ffffff90]
-    "
+    `}
     >
-      <h1 className="text-2xl font-bold">My Profile</h1>
+      <h1 className={`font-bold ${isSm ? "text-xl" : "text-2xl"}`}>
+        My Profile
+      </h1>
       <span
         onClick={signout}
         className="absolute top-6 right-8 cursor-pointer text-blue-400 hover:underline"

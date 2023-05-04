@@ -2,6 +2,7 @@ import { ErrorMessage } from "@hookform/error-message";
 import { TextareaHTMLAttributes, useEffect, useRef, useState } from "react";
 import { FieldErrors, RegisterOptions, useFormContext } from "react-hook-form";
 import Warning from "../assets/WarningIcon";
+import { useMisc } from "../contexts/MiscContext";
 
 interface FancyInputProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   errors?: FieldErrors;
@@ -21,6 +22,7 @@ export default function TextArea({
   placementClassName,
   ...rest
 }: FancyInputProps) {
+  const { isSm } = useMisc();
   const form = useFormContext();
   let formState, register, errors, ref: any, regRest: any;
   if (form) {
@@ -84,9 +86,9 @@ export default function TextArea({
             }}
             onFocus={() => handleFocus(true)}
             onBlur={() => handleFocus(false)}
-            className={
-              "relative h-full w-full resize-none bg-transparent p-2 outline-none"
-            }
+            className={`relative h-full w-full resize-none bg-transparent p-2 outline-none ${
+              isSm ? "text-sm" : ""
+            }`}
             placeholder=""
             aria-placeholder={placeholder ?? ""}
             defaultValue={initialValue}
@@ -99,8 +101,9 @@ export default function TextArea({
               transition-all duration-300 ease-out
               ${
                 labelSmall
-                  ? "top-2 pl-2 text-xs opacity-80"
-                  : "top-6 opacity-60"
+                  ? (isSm ? "text-[.5rem]" : "text-xs") +
+                    " top-2 pl-2 opacity-80"
+                  : (isSm ? "text-xs" : "text-base") + " top-6 pl-2 opacity-60"
               }`}
           htmlFor={placeholder ?? name}
         >
