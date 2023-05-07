@@ -9,7 +9,7 @@ import { useMisc } from "../contexts/MiscContext";
 import { toggleTheme } from "../utils/settings";
 
 export default function Navbar() {
-  const { cart, cartNumber, isSm } = useMisc();
+  const { isSm } = useMisc();
   const [centerSearchBar, setCenterSearchBar] = useState();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -54,7 +54,7 @@ export default function Navbar() {
             className="w-10 cursor-pointer transition-transform duration-200 hover:scale-110"
           />
           <Link
-            to="/products"
+            to="/search"
             className="transition-all duration-200 hover:scale-105"
           >
             <Logo isSmall />
