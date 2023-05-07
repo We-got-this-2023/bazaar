@@ -92,7 +92,6 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   ) => {
     try {
       setIsLoading(true);
-      console.log("try");
       const res = await fetch(import.meta.env.VITE_API + url, {
         method,
         headers: headers ?? { "Content-Type": "application/json" },
@@ -103,7 +102,6 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
 
       if (res.ok) {
         const json = await res.json();
-        console.log(json);
         return json;
       } else {
         setError(
@@ -114,12 +112,10 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
         throw new Error(error);
       }
     } catch (err: any) {
-      console.log("catch");
       console.log(err);
       setError(err);
     } finally {
       setIsLoading(false);
-      console.log("finally");
     }
   };
 
@@ -193,7 +189,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
 
   async function signin(data: { email: string; password: string }) {
     data.email = data.email.toLowerCase().trim();
-    await fetchWrapper(`/auth/signin`, {
+    const res = await fetchWrapper(`/auth/signin`, {
       method: "POST",
       headers: {
         "access-control-allow-credentials": "true",
@@ -202,12 +198,14 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       data,
       credentials: "include",
     });
-    navigate("/");
+    if (res.ok) navigate("/");
+    else throw new Error(res.error);
+    alert();
   }
 
   async function signout() {
     await fetchWrapper(`/auth/signout`, {
-      method: "POST",
+      method: "GET",
       headers: {
         "access-control-allow-credentials": "true",
         "Content-Type": "application/json",
