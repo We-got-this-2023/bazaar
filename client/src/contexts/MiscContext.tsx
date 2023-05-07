@@ -13,6 +13,9 @@ interface MiscContextI extends Context<{}> {
   updateCartInfo: (cart: Product[]) => void;
   trashCart: () => void;
   isSm: boolean;
+  isMd: boolean;
+  toggleFilters: () => void;
+  filtersOpen: boolean;
 }
 
 export type Product = {
@@ -34,6 +37,8 @@ const MiscContext = createContext({}) as MiscContextI;
 
 export function MiscProvider({ children }: { children: JSX.Element }) {
   const [sm, setSm] = useState<boolean>(window.innerWidth < 1000);
+  const [md, setMd] = useState<boolean>(window.innerWidth < 1200);
+  const [filtersOpen, setFiltersOpen] = useState(!sm);
   const [cartNumber, setCartNumber] = useState<number>(0);
   const [cart, setCart] = useState<Product[]>([]);
   const [checkoutPrice, setCheckoutPrice] = useState<string>("0.00");
@@ -151,11 +156,19 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
 
   useEffect(() => {
     setSm(window.innerWidth < 1000);
-    onresize = () => setSm(window.innerWidth < 1000);
+    setMd(window.innerWidth < 1200);
+    onresize = () => {
+      setSm(window.innerWidth < 1000);
+      setMd(window.innerWidth < 1200);
+    };
     return () => {
       onresize = null;
     };
   }, []);
+
+  function toggleFilters() {
+    setFiltersOpen((prev) => !prev);
+  }
 
   const value = {
     cart,
@@ -168,6 +181,9 @@ export function MiscProvider({ children }: { children: JSX.Element }) {
     updateCartInfo,
     trashCart,
     isSm: sm,
+    toggleFilters,
+    filtersOpen,
+    isMd: md,
   };
 
   return <MiscContext.Provider value={value}>{children}</MiscContext.Provider>;
