@@ -47,21 +47,21 @@ export default function Sidebar({ sm }: { sm?: boolean }) {
               "flex flex-col items-center gap-1" +
               (!isSm
                 ? `
-              relative before:absolute before:-left-4 before:top-0 
-              before:right-0 before:bottom-0 before:m-auto before:h-32 before:w-32
-              before:rounded-2xl before:border-4 before:border-black before:opacity-50 
-              before:transition-all before:duration-200 after:absolute after:-left-4 
-              after:top-0 after:right-0 after:bottom-0 after:m-auto after:h-32 
-              after:w-32 after:rounded-2xl after:bg-black after:opacity-10 
-              after:transition-all after:duration-200 hover:before:content-[''] 
-              hover:after:content-[''] dark:before:border-white dark:after:bg-white
+              relative before:absolute before:-left-6 before:top-0 
+              before:right-0 before:bottom-0 before:m-auto before:h-36 before:w-36
+              before:rounded-2xl before:border-4 before:border-black
+              before:transition-all before:duration-200 before:content-[''] after:absolute 
+              after:-left-6 after:top-0 after:right-0 after:bottom-0 after:m-auto 
+              after:h-36 after:w-36 after:rounded-2xl after:bg-black 
+              after:transition-all after:duration-200
+              after:content-[''] dark:before:border-white dark:after:bg-white
               `
                 : "") +
               (isSm
                 ? " flex h-full w-full items-center justify-center bg-neutral-300 p-2 transition-all duration-150 hover:brightness-90 dark:bg-neutral-800 dark:hover:brightness-110"
                 : isActive
-                ? " before:content-[''] after:content-[''] hover:before:opacity-50 hover:after:opacity-20"
-                : " before:content-none after:content-none hover:before:opacity-20 hover:after:opacity-5")
+                ? " before:opacity-25 after:opacity-5 hover:before:opacity-50 hover:after:opacity-20"
+                : " before:opacity-0 after:opacity-0 hover:before:opacity-20 hover:after:opacity-5")
             );
           }}
         >
@@ -76,21 +76,21 @@ export default function Sidebar({ sm }: { sm?: boolean }) {
               "flex flex-col items-center gap-1" +
               (!isSm
                 ? `
-              relative before:absolute before:-left-4 before:top-0 before:right-0 
-              before:bottom-0 before:m-auto before:h-32 before:w-32 
-              before:rounded-2xl before:border-4 before:border-black before:opacity-50 
-              before:transition-all before:duration-200 after:absolute after:-left-4 
-              after:top-0 after:right-0 after:bottom-0 after:m-auto after:h-32 
-              after:w-32 after:rounded-2xl after:bg-black after:opacity-10 
-              after:transition-all after:duration-200 hover:before:content-[''] 
-              hover:after:content-[''] dark:before:border-white dark:after:bg-white
+              relative before:absolute before:-left-6 before:top-0 
+              before:right-0 before:bottom-0 before:m-auto before:h-36 before:w-36
+              before:rounded-2xl before:border-4 before:border-black
+              before:transition-all before:duration-200 before:content-[''] after:absolute 
+              after:-left-6 after:top-0 after:right-0 after:bottom-0 after:m-auto 
+              after:h-36 after:w-36 after:rounded-2xl after:bg-black 
+              after:transition-all after:duration-200
+              after:content-[''] dark:before:border-white dark:after:bg-white
               `
                 : "") +
               (isSm
                 ? " flex h-full w-full items-center justify-center bg-neutral-300 p-2 transition-all duration-150 hover:brightness-90 dark:bg-neutral-800 dark:hover:brightness-110"
                 : isActive
-                ? " before:content-[''] after:content-[''] hover:before:opacity-50 hover:after:opacity-20"
-                : " before:content-none after:content-none hover:before:opacity-20 hover:after:opacity-5")
+                ? " before:opacity-25 after:opacity-5 hover:before:opacity-50 hover:after:opacity-20"
+                : " before:opacity-0 after:opacity-0 hover:before:opacity-20 hover:after:opacity-5")
             );
           }}
         >
@@ -105,21 +105,21 @@ export default function Sidebar({ sm }: { sm?: boolean }) {
               "flex flex-col items-center gap-1" +
               (!isSm
                 ? `
-              relative before:absolute before:-left-4 before:top-0 before:right-0 
-              before:bottom-0 before:m-auto before:h-32 before:w-32 
-              before:rounded-2xl before:border-4 before:border-black before:opacity-50 
-              before:transition-all before:duration-200 after:absolute after:-left-4 
-              after:top-0 after:right-0 after:bottom-0 after:m-auto after:h-32 
-              after:w-32 after:rounded-2xl after:bg-black after:opacity-10 
-              after:transition-all after:duration-200 hover:before:content-[''] 
-              hover:after:content-[''] dark:before:border-white dark:after:bg-white
+              relative before:absolute before:-left-6 before:top-0 
+              before:right-0 before:bottom-0 before:m-auto before:h-36 before:w-36
+              before:rounded-2xl before:border-4 before:border-black
+              before:transition-all before:duration-200 before:content-[''] after:absolute 
+              after:-left-6 after:top-0 after:right-0 after:bottom-0 after:m-auto 
+              after:h-36 after:w-36 after:rounded-2xl after:bg-black 
+              after:transition-all after:duration-200
+              after:content-[''] dark:before:border-white dark:after:bg-white
               `
                 : "") +
               (isSm
-                ? " flex h-full w-full items-center justify-center bg-neutral-300 p-2 transition-all duration-150 hover:brightness-90 dark:bg-neutral-800 hover:dark:brightness-110"
+                ? " flex h-full w-full items-center justify-center bg-neutral-300 p-2 transition-all duration-150 hover:brightness-90 dark:bg-neutral-800 dark:hover:brightness-110"
                 : isActive
-                ? " before:content-[''] after:content-[''] hover:before:opacity-50 hover:after:opacity-20"
-                : " before:content-none after:content-none hover:before:opacity-20 hover:after:opacity-5")
+                ? " before:opacity-25 after:opacity-5 hover:before:opacity-50 hover:after:opacity-20"
+                : " before:opacity-0 after:opacity-0 hover:before:opacity-20 hover:after:opacity-5")
             );
           }}
         >
