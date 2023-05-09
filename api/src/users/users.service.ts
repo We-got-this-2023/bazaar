@@ -12,12 +12,15 @@ import {AddressDto} from "./dto/address.dto";
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async getMyUser(id: string, req: Request): Promise<{ user: UserDto }> {
+  async getMyUser(id: string, req: Request) {
     const decodedUserInfo = req.user as { id: number; email: string };
     decodedUserInfo.id = Number(decodedUserInfo.id);
 
     const foundUser = await this.prisma.user.findUnique({
       where: { id: Number(id) },
+    });
+    const address = await this.prisma.address.findMany({
+      where: { userId: Number(id) },
     });
 
     if (!foundUser) {
@@ -30,7 +33,7 @@ export class UsersService {
 
     delete foundUser.password;
 
-    return { user: foundUser };
+    return { user: foundUser, address };
   }
 
   async getUsers(): Promise<{ users: UserDto[] }> {
