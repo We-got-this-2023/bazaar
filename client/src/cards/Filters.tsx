@@ -1,3 +1,4 @@
+import { useMisc } from "../contexts/MiscContext";
 import Form from "../formElements/Form";
 import Input from "../formElements/Input";
 import Select from "../formElements/Select";
@@ -20,13 +21,22 @@ export default function FilterForm({
   }) => Promise<void>;
   session: any;
 }) {
+  const { isSm, filtersOpen } = useMisc();
   return (
     <div
-      className="
-    flex w-[16rem] flex-col items-center rounded-2xl 
-    bg-neutral-200 p-4 shadow-[3px_3px_10px_1px_#00000060] 
-    transition-colors duration-200 dark:bg-neutral-900 max-md:hidden
-    "
+      className={`
+    z-10 flex w-[16rem] flex-col items-center 
+    rounded-2xl bg-neutral-200 p-4 
+    shadow-[3px_3px_10px_1px_#00000060] transition-all
+    duration-200 dark:bg-neutral-900
+    ${
+      isSm
+        ? filtersOpen
+          ? "fixed translate-x-0"
+          : "fixed -translate-x-full"
+        : "translate-x-0"
+    }
+    `}
     >
       <h2 className="text-lg font-semibold">Filters</h2>
       <div className="flex justify-between gap-20 p-3">

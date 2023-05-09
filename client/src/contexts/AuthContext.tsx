@@ -13,7 +13,7 @@ interface AuthContextI extends Context<{}> {
   user: User;
   isLoading: boolean;
   error: string;
-  setUserInformation: (user: any) => Promise<void>;
+  setUserInformation: (user: any, delivery: any) => Promise<void>;
   updateUser: () => Promise<void>;
   signout: () => Promise<void>;
 }
@@ -25,7 +25,21 @@ export interface User {
   ratings: [];
   createdAt: string;
   updatedAt: string;
+  address: Address;
 }
+
+export type Address = {
+  country: string;
+  city: string;
+  region: string;
+  addressLine1: string;
+  addressLine2: string;
+  postalCode: string;
+  // firstName: string;
+  // lastName: string;
+  // phoneNumber: string,
+  // countryCallingCode: string,
+};
 
 const AuthContext = createContext({}) as AuthContextI;
 
@@ -78,7 +92,6 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   ) => {
     try {
       setIsLoading(true);
-      console.log("try");
       const res = await fetch(import.meta.env.VITE_API + url, {
         method,
         headers: headers ?? { "Content-Type": "application/json" },
@@ -89,7 +102,6 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
 
       if (res.ok) {
         const json = await res.json();
-        console.log(json);
         return json;
       } else {
         setError(
@@ -100,12 +112,10 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
         throw new Error(error);
       }
     } catch (err: any) {
-      console.log("catch");
       console.log(err);
       setError(err);
     } finally {
       setIsLoading(false);
-      console.log("finally");
     }
   };
 
@@ -128,8 +138,16 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     return val;
   };
 
-  async function setUserInformation(data: { name: string; email: string }) {
+  async function setUserInformation(
+    data: {
+      name: string;
+      email: string;
+    },
+    address?: Address
+  ) {
     data.email = data.email.toLowerCase().trim();
+    const addressData: any = address;
+    addressData.userId = user?.id;
     const val = await fetchWrapper(`/users/${user?.id}`, {
       method: "PATCH",
       data,
@@ -147,13 +165,31 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
         500: "Something went wrong while updating your profile. Please try again later.",
       },
     });
+    const val2 = await fetchWrapper(`/users/address`, {
+      method: "POST",
+      data: addressData,
+      headers: {
+        Authorization:
+          "Bearer " +
+          document.cookie
+            .split(";")
+            .filter((val) => val.startsWith("token="))[0]
+            .split("=")[1],
+        "Content-Type": "application/json",
+      },
+      errors: {
+        401: "Invalid token.",
+        500: "Something went wrong while updating your profile. Please try again later.",
+      },
+    });
+
     setUser(val.user);
     navigate("/signin");
   }
 
   async function signin(data: { email: string; password: string }) {
     data.email = data.email.toLowerCase().trim();
-    await fetchWrapper(`/auth/signin`, {
+    const res = await fetchWrapper(`/auth/signin`, {
       method: "POST",
       headers: {
         "access-control-allow-credentials": "true",
@@ -162,12 +198,14 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       data,
       credentials: "include",
     });
-    navigate("/");
+    if (res.ok) navigate("/");
+    else throw new Error(res.error);
+    alert();
   }
 
   async function signout() {
     await fetchWrapper(`/auth/signout`, {
-      method: "POST",
+      method: "GET",
       headers: {
         "access-control-allow-credentials": "true",
         "Content-Type": "application/json",

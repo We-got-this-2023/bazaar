@@ -91,22 +91,21 @@ export class UsersService {
   async addAddress(addressDto: AddressDto) {
     const address = await this.prisma.address.create({
       data: {
-        id: addressDto.id,
         addressLine1: addressDto.addressLine1,
         addressLine2: addressDto.addressLine2,
         city: addressDto.city,
         region: addressDto.region,
-        postalCode: addressDto.postalCode,
+        postalCode: Number(addressDto.postalCode),
         country: addressDto.country,
       },
     });
 
     const user = await this.prisma.user.update({
-      where: { id: addressDto.userId },
+      where: { id: Number(addressDto.userId) },
       data: {
         address: {
           connect: {
-            id: address.id,
+            id: Number(address.id),
           },
         },
       },
