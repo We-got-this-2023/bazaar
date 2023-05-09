@@ -40,10 +40,10 @@ export default function SearchResults({ data, setPage, page }: any) {
         <div className="group relative flex w-fit cursor-pointer items-center justify-center">
           <div className="pointer-events-none absolute left-0 right-0 bottom-0 top-0 m-auto aspect-square w-14 rounded-full bg-black opacity-20 transition-all duration-200 group-hover:opacity-30 dark:bg-white" />
           <button
-            onClick={() => setPage((prev: any) => prev - 1)}
+            onClick={() => page != 1 && setPage((prev: any) => prev - 1)}
             className="aspect-square w-14 font-logo text-3xl"
           >
-            -
+            {page != 1 && "-"}
           </button>
         </div>
         <span className="inline w-14 text-center align-middle font-logo text-3xl">
@@ -52,10 +52,10 @@ export default function SearchResults({ data, setPage, page }: any) {
         <div className="group relative flex w-fit cursor-pointer items-center justify-center">
           <div className="pointer-events-none absolute left-0 right-0 bottom-0 top-0 m-auto aspect-square w-14 rounded-full bg-black opacity-20 transition-all duration-200 group-hover:opacity-30 dark:bg-white" />
           <button
-            onClick={() => setPage((prev: any) => prev + 1)}
+            onClick={() => data.length > 0 && setPage((prev: any) => prev + 1)}
             className="aspect-square w-14 font-logo text-3xl"
           >
-            +
+            {data.length > 0 && "+"}
           </button>
         </div>
       </div>

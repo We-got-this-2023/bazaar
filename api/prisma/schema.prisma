@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,88 +6,86 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model User {
- id        Int      @default(autoincrement()) @id
- name      String
- email     String   @unique
- ratings   Int[]
- password  String
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
- products  Product[]
- address Address[]
- orders Order[]
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  ratings   Int[]
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  address   Address[]
+  orders    Order[]
+  products  Product[]
 }
 
-
 model Product {
- id        Int      @default(autoincrement()) @id
- userId Int?
- user User? @relation(fields: [userId], references: [id])
- categoryId Int?
- category Category? @relation(fields: [categoryId], references: [id])
- orderId Int?
- order Order? @relation(fields: [orderId], references: [id])
- name     String
- description String?
- ratings  Int[]
- imagesPath String?
- price     Float
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
- productTags ProductTags[]
+  id          Int           @id @default(autoincrement())
+  userId      Int?
+  categoryId  Int?
+  orderId     Int?
+  name        String
+  description String?
+  ratings     Int[]
+  imagesPath  String?
+  price       Float
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  category    Category?     @relation(fields: [categoryId], references: [id])
+  order       Order?        @relation(fields: [orderId], references: [id])
+  user        User?         @relation(fields: [userId], references: [id])
+  productTags ProductTags[]
 }
 
 model Category {
-  id        Int      @default(autoincrement()) @id
-  categoryName String @unique
-  description String?
-  products Product[]
+  id           Int       @id @default(autoincrement())
+  categoryName String    @unique
+  description  String?
+  products     Product[]
 }
 
 model Tags {
-  id       Int      @default(autoincrement()) @id
-  name     String
+  id          Int           @id @default(autoincrement())
+  name        String
   productTags ProductTags[]
 }
 
 model ProductTags {
-  id       Int      @default(autoincrement()) @id
+  id        Int      @id @default(autoincrement())
   productId Int?
-  product Product? @relation(fields: [productId], references: [id])
-  tagId Int?
-  tag Tags? @relation(fields: [tagId], references: [id])
+  tagId     Int?
+  product   Product? @relation(fields: [productId], references: [id])
+  tag       Tags?    @relation(fields: [tagId], references: [id])
 }
 
 model Address {
- id        Int      @default(autoincrement()) @id
- userId Int?
- user User? @relation(fields: [userId], references: [id])
- addressLine1 String
- addressLine2 String
- city String
- region String
- postalCode Int
- country String 
+  id           Int    @id @default(autoincrement())
+  userId       Int?
+  addressLine1 String
+  addressLine2 String
+  city         String
+  region       String
+  postalCode   Int
+  country      String
+  user         User?  @relation(fields: [userId], references: [id])
 }
-
 
 model PaymentMethod {
- id        Int      @default(autoincrement()) @id
- methodName String
- accountAddress Int
- orders Order[]
+  id             Int     @id @default(autoincrement())
+  methodName     String
+  accountAddress Int
+  orders         Order[]
 }
 
-
 model Order {
- id        Int      @default(autoincrement()) @id
- paymentMethodId Int?
- paymentMethod PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
- userId Int?
- user User? @relation(fields: [userId], references: [id])
- orderStatus String
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
- products Product[]
+  id              Int            @id @default(autoincrement())
+  paymentMethodId Int?
+  userId          Int?
+  orderStatus     String
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  paymentMethod   PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
+  user            User?          @relation(fields: [userId], references: [id])
+  products        Product[]
 }

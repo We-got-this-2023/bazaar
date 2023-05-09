@@ -16,8 +16,8 @@ interface FormData {
   country?: string;
   city?: string;
   region?: string;
-  address?: string;
-  address2?: string;
+  addressLine1?: string;
+  addressLine2?: string;
   postalCode?: string;
   firstName?: string;
   lastName?: string;
@@ -34,27 +34,28 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
   const getDeliveryInformation = async () => {
     if (isLoading) return;
     if (!user) return;
-
-    // return user.address
+    return {
+      ...user?.address,
+    };
 
     // Temporary solution
-    return {
-      country: "United States",
-      city: "San Francisco",
-      region: "California",
-      address: "123 Main St",
-      address2: "Apt 1",
-      postalCode: "94107",
-      firstName: "Jane",
-      lastName: "Doe",
-      email: user.email,
-      countryCallingCode: "+1",
-      phoneNumber: "555-555-5555",
-    };
+    // return {
+    //   country: "United States",
+    //   city: "San Francisco",
+    //   region: "California",
+    //   address: "123 Main St",
+    //   address2: "Apt 1",
+    //   postalCode: "94107",
+    //   firstName: "Jane",
+    //   lastName: "Doe",
+    //   email: user.email,
+    //   countryCallingCode: "+1",
+    //   phoneNumber: "555-555-5555",
+    // };
   };
 
   const onSubmit = async (data: FormData) => {
-    await setUserInformation({ ...user, ...data });
+    await setUserInformation(user, data);
   };
 
   useEffect(() => {
@@ -131,18 +132,19 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
 
             <Input
               type="text"
-              name="address"
+              name="addressLine1"
               options={{
                 required: "Please enter an address.",
               }}
-              initialValue={delivery?.address}
+              initialValue={delivery?.addressLine1}
               placementClassName="row-start-3 col-span-3"
             />
 
             <Input
               type="text"
-              name="Address 2"
-              initialValue={delivery?.address2}
+              name="addressLine2"
+              placeholder="Address 2"
+              initialValue={delivery?.addressLine2}
               placementClassName="row-start-3 col-start-4 col-span-3"
             />
 
