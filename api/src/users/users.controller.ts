@@ -16,12 +16,11 @@ import { UserDto } from './dto/user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('me/:id')
-  getMyUser(@Param() params: { id: number }, @Req() req) {
-    return this.usersService.getMyUser(params.id, req);
+  getMyUser(@Param('id') id: string, @Req() req) {
+    return this.usersService.getMyUser(id, req);
   }
-
   @Get()
   getUsers() {
     return this.usersService.getUsers();

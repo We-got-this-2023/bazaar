@@ -12,12 +12,13 @@ import {AddressDto} from "./dto/address.dto";
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async getMyUser(id: number, req: Request): Promise<{ user: UserDto }> {
+  async getMyUser(id: string, req: Request): Promise<{ user: UserDto }> {
     const decodedUserInfo = req.user as { id: number; email: string };
-    id = Number(id);
     decodedUserInfo.id = Number(decodedUserInfo.id);
 
-    const foundUser = await this.prisma.user.findUnique({ where: { id } });
+    const foundUser = await this.prisma.user.findUnique({
+      where: { id: Number(id) },
+    });
 
     if (!foundUser) {
       throw new NotFoundException();
