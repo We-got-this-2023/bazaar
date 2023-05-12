@@ -17,5 +17,7 @@ export class ProductDto {
 
   ratings?: number[];
 
+  ratingsAvg?: number;
+
   categoryName?: string;
 }

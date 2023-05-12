@@ -1,19 +1,19 @@
-import { Controller, Query } from '@nestjs/common';
-import { ProductService } from './product.service';
 import {
-  Post,
-  UseInterceptors,
-  UploadedFile,
   Body,
-  ParseFilePipe,
-  MaxFileSizeValidator,
-  FileTypeValidator,
-  Param,
-  Patch,
-  Get,
-  Res,
+  Controller,
   Delete,
+  FileTypeValidator,
+  Get,
+  MaxFileSizeValidator,
+  Param,
+  ParseFilePipe,
+  Patch,
+  Post,
+  Res,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { ProductService } from './product.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { addProductDto } from './dto/addProduct.dto';
 import { Response } from 'express';
@@ -37,7 +37,6 @@ export class SingleProductController {
     @Body() updatedProduct: updateProductDto,
     @Param('id') id: string,
   ) {
-    console.log(updatedProduct);
     return this.productService.updateProduct(id, updatedProduct);
   }
 

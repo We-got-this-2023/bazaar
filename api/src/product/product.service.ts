@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-import { ProductDto } from './dto/product.dto';
 import { ProductParamsDto } from './dto/productParams.dto';
 import { addProductDto } from './dto/addProduct.dto';
 import { readFileSync } from 'fs';
@@ -136,7 +135,7 @@ export class ProductService {
         });
 
         // check if product has been ordered
-        let tempProducts = [];
+        const tempProducts = [];
         products.map((product) => {
           if (product.orderId) {
             return;
@@ -248,7 +247,7 @@ export class ProductService {
           });
 
           // check if product has been ordered
-          let tempProducts = [];
+          const tempProducts = [];
           products.map((product) => {
             if (product.orderId) {
               return;
@@ -263,7 +262,7 @@ export class ProductService {
 
           // console.log(`products: ${newProducts}`);    !!!why does this give back [object Object]????!!!
 
-          let images = [];
+          const images = [];
           const files = products.map((product) => {
             const imagePath = product.imagesPath;
             const image = readFileSync(
@@ -316,9 +315,6 @@ export class ProductService {
       const { name, description, price, categoryName, tags, ratings } =
         updatedProduct;
 
-      console.log('updatedProduct:');
-      console.log(updatedProduct);
-
       const updatedTags = tags ? tags.split(' ') : [];
 
       const category = await this.prisma.category.findFirst({
@@ -356,6 +352,23 @@ export class ProductService {
         }
       }
 
+      const ratingAverage = await this.prisma.product.findUnique({
+        where: {
+          id: Number(id),
+        },
+        select: {
+          ratings: true,
+        },
+      });
+
+      const ratingsSum = ratingAverage.ratings.reduce((a, b) => a + b, 0);
+      let newAverage = ratingsSum / ratingAverage.ratings.length;
+      if (isNaN(newAverage)) {
+        newAverage = 0;
+      } else {
+        return newAverage;
+      }
+
       const product = await this.prisma.product.update({
         where: {
           id: Number(id),
@@ -365,6 +378,7 @@ export class ProductService {
           description,
           price: Number(price),
           categoryId: category.id ?? 1,
+          ratingsAvg: newAverage ?? 0,
           ratings,
         },
       });

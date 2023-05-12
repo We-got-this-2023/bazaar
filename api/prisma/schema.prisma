@@ -28,6 +28,7 @@ model Product {
   name        String
   description String?
   ratings     Int[]
+  ratingsAvg  Float?
   imagesPath  String?
   price       Float
   createdAt   DateTime      @default(now())
