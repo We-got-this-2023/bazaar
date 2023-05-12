@@ -2,11 +2,13 @@ import ProductPreview from "../cards/Product";
 import { useMisc } from "../contexts/MiscContext";
 
 export default function SearchResults({ data, setPage, page }: any) {
-  const { isSm } = useMisc();
+  const { isSm, filtersOpen } = useMisc();
   return (
     <div
       className={
-        "m-10 ml-0 mt-0 flex w-full flex-col gap-2" + (isSm ? "" : " mr-40")
+        "m-10 mt-0 flex w-full flex-col gap-2 transition-all duration-200" +
+        (isSm ? "" : " mr-40") +
+        (filtersOpen ? " ml-[20rem]" : " ml-0")
       }
     >
       {(Array.isArray(data) &&
@@ -35,7 +37,7 @@ export default function SearchResults({ data, setPage, page }: any) {
           </h1>
         </div>
       )}
-      <div className="mb-20 mt-4 flex flex-row items-center justify-center">
+      <div className="mb-20 mt-4 flex w-[30rem] max-w-full flex-row items-center justify-center">
         {/* updating page number for pagination */}
         <div className="group relative flex w-fit cursor-pointer items-center justify-center">
           <div className="pointer-events-none absolute left-0 right-0 bottom-0 top-0 m-auto aspect-square w-14 rounded-full bg-black opacity-20 transition-all duration-200 group-hover:opacity-30 dark:bg-white" />
