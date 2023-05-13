@@ -35,7 +35,7 @@ export default function FilterForm({
       <span
         className={`absolute top-0 bottom-0 m-auto h-fit w-fit ${
           filtersOpen ? "right-1" : "-right-1 translate-x-full"
-        } transition-all duration-200`}
+        } cursor-pointer rounded-lg p-2 transition-all duration-200 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black`}
         onClick={toggleFilters}
       >
         {filtersOpen ? "Close" : "Filters"}

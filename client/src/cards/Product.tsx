@@ -64,7 +64,10 @@ export default function ProductPreview({
       `}
       >
         <div>
-          <Link to={`/product/${id}`}>
+          <Link
+            className="hover:text-blue-300 hover:underline"
+            to={`/product/${id}`}
+          >
             <h2 className="w-fit font-body text-lg">{name}</h2>
           </Link>
           <div className="flex justify-start gap-4">
