@@ -64,7 +64,9 @@ export default function ProductPreview({
       `}
       >
         <div>
-          <h2 className="w-fit font-body text-lg">{name}</h2>
+          <Link to={`/product/${id}`}>
+            <h2 className="w-fit font-body text-lg">{name}</h2>
+          </Link>
           <div className="flex justify-start gap-4">
             <div className="flex flex-col">
               <div className="flex w-32 items-start">
