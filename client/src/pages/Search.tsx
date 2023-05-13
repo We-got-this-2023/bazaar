@@ -62,7 +62,7 @@ export default function Search() {
     setParamsUsed(true);
     const cleanQueryString = cleanQuery(queryString);
     setCleanQueryString(cleanQueryString);
-    navigate("/search" + cleanQueryString, {
+    navigate("/search?" + cleanQueryString, {
       replace: true,
     });
   }, [page, searchParams, sessionParams]);
@@ -149,39 +149,39 @@ function buildQuery(
     [
       "stags",
       !paramsUsed
-        ? searchParams?.get("stags") ?? sessionParams?.stags ?? defaults.stags
-        : sessionParams?.stags ?? defaults.stags,
+        ? searchParams?.get("stags") ?? sessionParams?.stags
+        : sessionParams?.stags,
     ],
     [
       "atags",
       !paramsUsed
-        ? searchParams?.get("atags") ?? sessionParams?.atags ?? defaults.atags
-        : sessionParams?.atags ?? defaults.atags,
+        ? searchParams?.get("atags") ?? sessionParams?.atags
+        : sessionParams?.atags,
     ],
     [
       "ntags",
       !paramsUsed
-        ? searchParams?.get("ntags") ?? sessionParams?.ntags ?? defaults.ntags
-        : sessionParams?.ntags ?? defaults.ntags,
+        ? searchParams?.get("ntags") ?? sessionParams?.ntags
+        : sessionParams?.ntags,
     ],
   ];
   const queryString = queryParams
     .filter(([, value]) => value)
     .map(([key, value]) => `${key}=${value}`)
     .join("&");
-  return queryString ? `?${queryString}` : "";
+  return queryString ? `${queryString}` : "";
 }
 
 function cleanQuery(query: string) {
   const replacements = [
-    ["This Week", "week"],
-    ["This Month", "month"],
-    ["This Year", "year"],
-    ["All Time", "time"],
-    ["Today", "today"],
-    ["Date", "date"],
-    ["Rating", "rating"],
-    ["Cost", "cost"],
+    ["This Week", "1683401027064"],
+    ["This Month", "1681376027063"],
+    ["This Year", "1652448227063"],
+    ["All Time", "0"],
+    ["Today", "86400000"],
+    ["Date", "createdAt"],
+    ["Rating", "ratingAvg"],
+    ["Cost", "price"],
     ["Ascending", "asc"],
     ["Descending", "desc"],
   ];

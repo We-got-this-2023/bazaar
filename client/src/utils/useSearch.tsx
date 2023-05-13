@@ -18,13 +18,17 @@ async function fetchProducts(page: number, cleanQueryString: string) {
         //need to update page number on pagination
       }/product/params?${cleanQueryString}`
     );
+    console.log(url);
     const res = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     });
-    if (res.json) return await res.json();
+    if (res.ok) {
+      const data = await res.json();
+      return data;
+    }
   } catch (err) {
     console.error(err);
     return [];
