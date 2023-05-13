@@ -32,14 +32,16 @@ export default function FilterForm({
     ${filtersOpen ? "translate-x-0" : "-translate-x-full"}
     `}
     >
-      <span
-        className={`absolute top-0 bottom-0 m-auto h-fit w-fit ${
-          filtersOpen ? "right-1" : "-right-1 translate-x-full"
-        } cursor-pointer rounded-lg p-2 transition-all duration-200 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black`}
-        onClick={toggleFilters}
-      >
-        {filtersOpen ? "Close" : "Filters"}
-      </span>
+      {!isSm && !filtersOpen && (
+        <span
+          className={`absolute top-0 bottom-0 m-auto h-fit w-fit ${
+            filtersOpen ? "right-1" : "-right-1 translate-x-full"
+          } cursor-pointer rounded-lg p-2 transition-all duration-200 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black`}
+          onClick={toggleFilters}
+        >
+          {filtersOpen ? "Close" : "Filters"}
+        </span>
+      )}
       <h2 className="text-lg font-semibold">Filters</h2>
       <div className="flex justify-between gap-20 p-3">
         <div className="flex gap-2">

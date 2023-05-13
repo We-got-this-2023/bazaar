@@ -18,7 +18,7 @@ export default function SearchResults({ data, setPage, page }: any) {
       className={
         "m-10 mt-0 flex w-full flex-col gap-2 transition-all duration-200" +
         (isSm ? "" : " mr-40") +
-        (filtersOpen ? " ml-[20rem]" : " ml-[5rem]")
+        (filtersOpen ? " ml-[20rem]" : !isSm ? " ml-[5rem]" : " ml-0")
       }
     >
       {(Array.isArray(data) &&

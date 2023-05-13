@@ -9,7 +9,7 @@ import { toggleTheme } from "../utils/settings";
 
 export default function Sidebar({ sm }: { sm?: boolean }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { isSm } = useMisc();
+  const { isSm, toggleFilters } = useMisc();
   const [size, setSize] = useState(isSm ? "w-12 h-full" : "w-24");
   useEffect(() => {
     if (isSm) setSize("w-12 h-full");
@@ -30,6 +30,16 @@ export default function Sidebar({ sm }: { sm?: boolean }) {
           "flex " + (isSm ? "h-full justify-around" : "flex-col gap-12")
         }
       >
+        {isSm && (
+          <button
+            className="w-full rounded-md bg-neutral-300 p-2 font-display font-medium transition-all
+            duration-150 hover:brightness-90 dark:bg-neutral-800 dark:hover:brightness-110
+            "
+            onClick={toggleFilters}
+          >
+            Filters
+          </button>
+        )}
         {isSm && (
           <button
             className="w-full rounded-md bg-neutral-300 p-2 font-display font-medium transition-all
