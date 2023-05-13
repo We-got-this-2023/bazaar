@@ -17,7 +17,7 @@ export default function SearchResults({ data, setPage, page }: any) {
     <div
       className={
         "m-10 mt-0 flex w-full flex-col gap-2 transition-all duration-200" +
-        (isSm ? "" : " mr-40") +
+        (isSm ? " mr-0 items-center" : " mr-40") +
         (filtersOpen ? " ml-[20rem]" : !isSm ? " ml-[5rem]" : " ml-0")
       }
     >

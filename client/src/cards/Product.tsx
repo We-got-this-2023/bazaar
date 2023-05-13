@@ -82,7 +82,7 @@ export default function ProductPreview({
                 </span>
                 <span className={isSm ? "text-sm" : "text-lg"}>{c}</span>
               </div>
-              {type === "checkout" && (
+              {/* {type === "checkout" && (
                 <Form
                   onSubmit={async ({ quantity }) => {
                     changeQuantity(product, Number(quantity));
@@ -97,7 +97,7 @@ export default function ProductPreview({
                   />
                   <button type="submit">Save</button>
                 </Form>
-              )}
+              )} */}
             </div>
             <p className="w-full opacity-50">{description}</p>
           </div>
