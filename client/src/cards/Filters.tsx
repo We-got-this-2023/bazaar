@@ -32,7 +32,7 @@ export default function FilterForm({
     ${filtersOpen ? "translate-x-0" : "-translate-x-full"}
     `}
     >
-      {!isSm && !filtersOpen && (
+      {!isSm && (
         <span
           className={`absolute top-0 bottom-0 m-auto h-fit w-fit ${
             filtersOpen ? "right-1" : "-right-1 translate-x-full"
