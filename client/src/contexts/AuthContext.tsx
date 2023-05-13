@@ -169,6 +169,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     if (address) {
       const addressData: any = address;
       addressData.userId = user?.id;
+      console.log(addressData.userId);
       val2 = await fetchWrapper(`/users/address`, {
         method: "POST",
         data: addressData,
@@ -236,7 +237,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
         "Content-Type": "application/json",
       },
     });
-    return res.user;
+    return { ...res.user, address: res.address[res.address.length - 1] };
   }
 
   async function updateUser() {
