@@ -131,44 +131,44 @@ export class ProductService {
           skip: page ? page - 1 + (page - 1) * 10 : 1,
           take: 10,
           where: {
-              OR: [
-                {
-                  AND: [
-                    {
-                      price: {
-                        gte: costLow,
-                        lte: costHigh,
-                      },
-                    },
-                    {
-                      ratingsAvg: {
-                        gte: ratingLow,
-                        lte: ratingHigh,
-                      }
-                    },
-                    {
-                      createdAt: {
-                        gte: new Date(timeSince),
-                      }
-                    },
-                    
-                  ],
+            AND: [
+              {
+                price: {
+                  gte: costLow,
+                  lte: costHigh,
                 },
-                {
-                  name: {
-                    contains: updatedQuery,
-                    mode: 'insensitive',
+              },
+              {
+                OR: [
+                  {
+                    ratingsAvg: {
+                      gte: ratingLow,
+                      lte: ratingHigh,
+                    }
                   },
-                  //we could make new query for other params if this one is empty
+                  {
+                    ratingsAvg: null
+                  }
+  
+                ],
+              },
+              {
+                createdAt: {
+                  gte: new Date(Number(timeSince)),
+                }
+              },
+              {
+                name: {
+                  contains: updatedQuery,
+                  mode: 'insensitive',
                 },
-              ],
-              // createdAt: {
-              //   gte: new Date(timeSince),
-              // },
-            },
-            orderBy: {
-              [sortBy]: order,
-          }
+                //we could make new query for other params if this one is empty
+              },
+            ],
+          },
+          orderBy: {
+            [sortBy]: order,
+        }
         });
 
         // check if product has been ordered
@@ -250,20 +250,15 @@ export class ProductService {
             skip: page - 1 + (page - 1) * 10,
             take: 10,
             where: {
-              OR: [
+              AND: [
                 {
-                  AND: [
-                    {
-                      id: {
-                        in: productIds,
-                      },
-                    },
-                    {
-                      price: {
-                        gte: costLow,
-                        lte: costHigh,
-                      },
-                    },
+                  price: {
+                    gte: costLow,
+                    lte: costHigh,
+                  },
+                },
+                {
+                  OR: [
                     {
                       ratingsAvg: {
                         gte: ratingLow,
@@ -271,12 +266,15 @@ export class ProductService {
                       }
                     },
                     {
-                      createdAt: {
-                        gte: new Date(timeSince),
-                      }
-                    },
-                    
+                      ratingsAvg: null
+                    }
+    
                   ],
+                },
+                {
+                  createdAt: {
+                    gte: new Date(Number(timeSince)),
+                  }
                 },
                 {
                   name: {
@@ -286,13 +284,10 @@ export class ProductService {
                   //we could make new query for other params if this one is empty
                 },
               ],
-              // createdAt: {
-              //   gte: new Date(timeSince),
-              // },
             },
             orderBy: {
               [sortBy]: order,
-            },
+          }
           });
 
           // check if product has been ordered
