@@ -6,7 +6,8 @@ import {
   Req,
   UseGuards,
   Delete,
-  Body, Post,
+  Body,
+  Post,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { UsersService } from './users.service';
@@ -18,10 +19,9 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @Get('me/:id')
-  getMyUser(@Param() params: { id: number }, @Req() req) {
-    return this.usersService.getMyUser(params.id, req);
+  getMyUser(@Param('id') id: string, @Req() req) {
+    return this.usersService.getMyUser(id, req);
   }
-
   @Get()
   getUsers() {
     return this.usersService.getUsers();

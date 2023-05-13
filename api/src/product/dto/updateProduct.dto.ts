@@ -5,5 +5,6 @@ export class updateProductDto {
   imagesPath?: string;
   tags?: string;
   ratings?: number[];
+  ratingsAvg?: number;
   categoryName?: string;
 }

@@ -1,25 +1,14 @@
 import {
   Controller,
   Get,
-  Query,
   Param,
-  Body,
-  Post,
-  Patch,
-  Delete,
-  UseInterceptors,
-  ParseFilePipe,
-  MaxFileSizeValidator,
-  FileTypeValidator,
-  UploadedFile,
+  Query,
   Res,
   StreamableFile,
 } from '@nestjs/common';
 import { ProductDto } from './dto/product.dto';
 import { ProductService } from './product.service';
 import { ProductParamsDto } from './dto/productParams.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { addProductDto } from './dto/addProduct.dto';
 import { Response } from 'express';
 
 // need to change order of controllers to make this work
