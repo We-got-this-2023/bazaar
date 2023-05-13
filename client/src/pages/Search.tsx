@@ -39,9 +39,9 @@ export default function Search() {
   const [sessionParams, setSessionParams] = useState<FormData>(
     JSON.parse(sessionStorage.getItem("searchParams") ?? "{}")
   );
-  const [page, setPage] = useState(1);
   const [paramsUsed, setParamsUsed] = useState(false);
   const [searchParams] = useSearchParams();
+  const [page, setPage] = useState(Number(searchParams.get("p") ?? 1));
   const navigate = useNavigate();
 
   useEffect(() => {

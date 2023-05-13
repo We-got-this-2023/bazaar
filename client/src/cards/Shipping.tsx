@@ -196,24 +196,13 @@ export default function DeliveryForm({ title, className }: DeliveryFormProps) {
 
             <Input
               type="text"
-              name="countryCallingCode"
-              placeholder="Country Code"
-              options={{
-                required: "Please enter a country calling code.",
-              }}
-              initialValue={delivery?.countryCallingCode}
-              placementClassName="row-start-6 col-start-1 col-span-1"
-            />
-
-            <Input
-              type="text"
               name="phoneNumber"
-              placeholder="Phone Number"
+              placeholder="Full Phone Number"
               options={{
                 required: "Please enter a phone number.",
               }}
               initialValue={delivery?.phoneNumber}
-              placementClassName="row-start-6 col-start-2 col-span-5"
+              placementClassName="row-start-6 col-start-1 col-span-6"
             />
 
             <button

@@ -25,7 +25,7 @@ export default function FilterForm({
   return (
     <div
       className={`
-    z-10 flex ${!isSm ? "w-[16rem]" : "fixed w-full"} absolute flex-col 
+    z-10 flex ${!isSm ? "w-[17rem]" : "fixed w-full"} absolute flex-col
     items-center rounded-2xl bg-neutral-200 p-4
     shadow-[3px_3px_10px_1px_#00000060] transition-all
     duration-200 dark:bg-neutral-900
