@@ -35,7 +35,7 @@ const defaults = {
 
 export default function Search() {
   const [results, setResults] = useState([]);
-  const [cleanQueryString, setCleanQueryString] = useState("");
+  const [apiString, setApiString] = useState("");
   const [sessionParams, setSessionParams] = useState<FormData>(
     JSON.parse(sessionStorage.getItem("searchParams") ?? "{}")
   );
@@ -61,13 +61,14 @@ export default function Search() {
     );
     setParamsUsed(true);
     const cleanQueryString = cleanQuery(queryString);
-    setCleanQueryString(cleanQueryString);
+    const apiString = prepareForApi(cleanQueryString);
+    setApiString(apiString);
     navigate("/search?" + cleanQueryString, {
       replace: true,
     });
   }, [page, searchParams, sessionParams]);
 
-  const { data, isLoading } = useSearch(cleanQueryString, page);
+  const { data, isLoading } = useSearch(apiString, page);
 
   useEffect(() => {
     if (data) setResults(data.products); // need to set image and display it
@@ -174,16 +175,35 @@ function buildQuery(
 
 function cleanQuery(query: string) {
   const replacements = [
-    ["This Week", "1683401027064"],
-    ["This Month", "1681376027063"],
-    ["This Year", "1652448227063"],
-    ["All Time", "0"],
-    ["Today", "86400000"],
-    ["Date", "createdAt"],
-    ["Rating", "ratingAvg"],
+    ["This Week", "thisweek"],
+    ["This Month", "thismonth"],
+    ["This Year", "thisyear"],
+    ["All Time", "alltime"],
+    ["Today", "today"],
+    ["Time", "time"],
+    ["Date", "date"],
+    ["Rating", "rating"],
     ["Cost", "price"],
     ["Ascending", "asc"],
     ["Descending", "desc"],
+  ];
+  let cleanQuery = query;
+  for (const [from, to] of replacements)
+    cleanQuery = cleanQuery.replaceAll(from, to);
+  return cleanQuery;
+}
+
+function prepareForApi(query: string) {
+  const replacements = [
+    ["thisweek", "1683401027064"],
+    ["thismonth", "1681376027063"],
+    ["thisyear", "1652448227063"],
+    ["alltime", "0"],
+    ["today", "86400000"],
+    ["time", "createdAt"],
+    ["date", "createdAt"],
+    ["rating", "ratingAvg"],
+    ["price", "price"],
   ];
   let cleanQuery = query;
   for (const [from, to] of replacements)
